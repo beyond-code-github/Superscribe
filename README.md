@@ -44,7 +44,7 @@ We can specify that a route segment represents a controller in three ways:
 
 When route parsing is complete, the ControllerSelector will use whatever value is set for ControllerName. Routes can include multiple controller segments and the value will be overwritten. This is useful for defining nested routes, for example:
 
-   ʃ.Route(o => o / "blog" / "posts".Controller("blogposts") / ~"id".int() / ~"tags".controller("blogposttags"));
+    ʃ.Route(o => o / "blog" / "posts".Controller("blogposts") / ~"id".int() / ~"tags".controller("blogposttags"));
    
 Due to the optional nature of the later segments, this will match the following routes:
 
@@ -57,11 +57,11 @@ Due to the optional nature of the later segments, this will match the following 
 We can also have our route specify action names explicitly in an MVC style if needed:
 
     // Match any valid identifier and set ActionName to segment text
-    ʃ.Route(o => o / "api" / ʃ.Controller);
+    ʃ.Route(o => o / "api" / ʃ.Controller / ʃ.Action);
     // Match a specific string and set ControllerName to it
-    ʃ.Route(o => o / "api" / "blog".Controller());
+    ʃ.Route(o => o / "api" / "blog" / "posts".Controller() / ~"first".Action());
     // Match a specific string and set ControllerName to the specified text
-    ʃ.Route(o => o / "api" / "blog".Controller("blogposts"));
+    ʃ.Route(o => o / "api" / "blog" / "posts".Controller() / ~"first".Action("getfirst"));
 
 Just like controllers, the ActionSelector will use the final value set by any action segments.
 
