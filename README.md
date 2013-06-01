@@ -82,8 +82,8 @@ The definition produces a very simple state machine, with only one valid transit
 
 Lets say we access the following url in our API: *http://localhost/api/values/2*
   
-The url is broken down into it's three segments "api", "values", 2. Our first transition is valid, as the initial segment matches the text "api". As this is just a route literal, there is no action to be taken and we simply move on to the next state and the next segment. The next transition requires a valid controller identifier, which 'values' satisifes. 
+The url is broken down into it's three segments "api", "values", 2. Our first transition is valid, as the initial segment matches the text "api". As this is just a route literal, there is no action to be taken and we simply move on to the next state and the next segment. 
 
-In this part of the definition, ʃ.Controller contains an implicit action - to set the ControllerName property. This value is then passed to the ControllerSelector once the route processing is complete. 
+The next part of the definition, ʃ.Controller has an implicit regex condition specifying a valid controller identifier, which 'values' satisifes. In addition, ʃ.Controller also contains an implicit action - to set the ControllerName property to the value of the segment. This is then passed to the ControllerSelector once route processing is complete. 
 
-The final state is the optional id parameter. In our case, we do have an id parameter, so when we enter the penultimate state this value will be added to the Parameters dictionary and then later used in Action Selection.
+The final state is the optional id parameter. In our case, we do have an id parameter, so when we enter the penultimate state this value will be added to the Parameters dictionary and then later used in Action Selection. If the parameter was omitted, we would just progress straight to the sucess state. For all non-optional states, a missing or invalid segment will cause us to jump to the Error state instead.
