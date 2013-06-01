@@ -66,6 +66,42 @@ Because routes are defined programatically, we can take this one step further an
     }
     
 ###Concise syntax
+
+At it's core, superscribe route definition is built on a fluent API, which is encapsulated by several layers of abstraction, using extention methods, operator overloading and implicit casts to make syntax as concise as possible. The following are all equivilent:
+
+    Superscribe.Base.Transitions.Enqueue(
+                new ConstantState("api")
+                .Slash(new ControllerState { Pattern = new Regex("([a-z]|[A-Z]|[0-9])+") })
+                .Slash(new ParamState<int>("id")).Optional());
+
+    ʃ.Route(o => o.Slash(ʃ.Constant("api")).Slash(ʃ.Controller).Slash(ʃ.Int("id")).Optional());
+
+    ʃ.Route(o => o / "api" / ʃ.Controller / ~"id".Int());
+    
+In these last two, we are using ʃ.Route to attach route segment definitions to the list of base transitions. Notice how we are utilising the 'o' parameter of the lambda expression... this causes the chain of segments we define to be attached to the base object.
+
+We can also use ʃ.Route **without** referencing 'o' to establish derived routes. The following blocks are equivilent:
+
+    var sites = ʃ.Constant("api")
+        .Slash(ʃ.Constant("sites"))
+        .Slash(ʃ.Int("id"));
+    sites.Slash(ʃ.Constant("blog"))
+        .Slash(ʃ.Controller)
+    Superscribe.Base.Transitions.Enqueue(sites);
+    
+    var sites = ʃ.Route(o => o / "api" / "sites" / "id".Int());
+    ʃ.Route(o => sites / "blog" / "posts".Controller());
+    
+    var sites = ʃ.Route(o => o / "api" / "sites" / "id".Int());
+    var blogposts = sites / "blog" / "posts".Controller());
+       
+It is a little harder to see how these are all equivilent, particularly as the third features an assignment rather than a call to ʃ.Route, so how does the partial definition end up attached to the rest of the chain in the framework?
+
+The reason this works is that the / operators are equivilent to Slash() method chains, but a side effect of this syntax however is that we must assign the result of the / expression to a variable otherwise it is not valid c#. So the assignment in this case is purely there to appease the compiler, and the same effect can be achieved by using a lambda as in the second block.
+
+####Types of state####
+
+####Providing alternatives####
     
 ###State machine based routing
 
