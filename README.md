@@ -10,7 +10,7 @@ Superscribe addresses these issues and more by offering:
 * Hierarchical routes - stored as a tree to reduce processing
 * Composite definitions - build nested routes using others as a base
 * Programatical definition - store parts of routes as variables and build your routes using custom algorithms
-* Advanced action matching - match actions based on differing parameter names
+* Improved action matching - match actions based on parameter names as well as types
 * Concise syntax - specify nice clean routes without the weight of config.Routes.MapHttpRoute(..)
 * State-Machine based routing - an entirely new concept which gives absolute control in how routes are processed
 
@@ -32,7 +32,7 @@ The ~ before the id parameter defines this segment as optional.
 
 ###Defining hierarchical routes
 
-In Superscribe, we can store parts of routes in variables, and then use these to compose other routes. Consider the following contrived example:
+In Superscribe, we can store parts of routes in variables, and then use these to compose other routes. Consider the following example:
 
     var site = ʃ.Route(o => o / "sites" / "siteId".Int());
     
@@ -41,19 +41,19 @@ In Superscribe, we can store parts of routes in variables, and then use these to
     
     ʃ.Route(o => portfolio / "categories".Controller("portfoliocategories"));
     ʃ.Route(o => portfolio / "tags".Controller("portfoliotags"));
-    ʃ.Route(o => blog / "categories".ʃ(i => i.ControllerName = "blogcategories"));
-    ʃ.Route(o => blog / "tags".ʃ(i => i.ControllerName = "blogtags"));
+    ʃ.Route(o => blog / "categories".Controller("blogcategories"));
+    ʃ.Route(o => blog / "tags".Controller("blogtags"));
 
 This provides the following routes:
 
-    http://api/sites/blog/categories
-    http://api/sites/blog/tags
-    http://api/sites/portfolio/categories
-    http://api/sites/portfolio/tags
+    http://api/sites/{id}/blog/categories
+    http://api/sites/{id}/blog/tags
+    http://api/sites/{id}/portfolio/categories
+    http://api/sites/{id}/portfolio/tags
 
 ###Programatical definition
 
-In the previous example, we re-used the site part of the route as a base for blog and portfolio, and then extendd both of these again. We didn't gain much through re-use, but the definitions are much more readable than the existing Web API equivilent.
+In the previous example, we re-used the site part of the route as a base for blog and portfolio, and then extend both of these again. We didn't gain much through re-use, but the definitions are much more readable than the existing Web API equivilent.
 
 Because routes are defined programatically, we can take this one step further and re-write the example as follows for the same results. This opens up a world of possibilities as we are free to define routes via whatever algorithms we choose, for example by traversing an API hierarchy.
 
@@ -61,8 +61,8 @@ Because routes are defined programatically, we can take this one step further an
     
     foreach (var routeName in new [] { "blog", "portfolio" }) {
         var route = ʃ.Route(o => site / routeName);
-        ʃ.Route(o => route / "categories".ʃ(i => i.ControllerName = routeName + "categories"));
-        ʃ.Route(o => route / "tags".ʃ(i => i.ControllerName = routeName + "tags"));
+        ʃ.Route(o => route / "categories".Controller(routeName + "categories"));
+        ʃ.Route(o => route / "tags".Controller(routeName + "tags"));
     }
     
 ###Concise syntax
@@ -86,4 +86,4 @@ The url is broken down into it's three segments "api", "values", 2. Our first tr
 
 In this part of the definition, ʃ.Controller contains an implicit action - to set the ControllerName property. This value is then passed to the ControllerSelector once the route processing is complete. 
 
-The final state is the optional id parameter. In our case, we do have an id parameter, so when we enter the penultimate state this value will be added to the Paremeters dictionary and then later used in Action Selection.
+The final state is the optional id parameter. In our case, we do have an id parameter, so when we enter the penultimate state this value will be added to the Parameters dictionary and then later used in Action Selection.
