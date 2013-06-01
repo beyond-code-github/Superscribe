@@ -65,7 +65,42 @@ Because routes are defined programatically, we can take this one step further an
         ʃ.Route(o => route / "tags".Controller(routeName + "tags"));
     }
     
-###Concise syntax
+###Definition Syntax
+
+The cornerstone of Superscribe route definitions is the ʃ.Route() method. We use this method to register routes and partial routes with the framework.
+
+    ʃ.Route(o => o / "api" / ʃ.Controller / ~"id".Int());
+    
+####Choosing controllers
+
+####Choosing actions
+
+####Parameters and Querystring
+    
+####Alternatives
+    
+###State machine based routing
+
+Superscribe introduces a brand new concept... 'state machine based routing'. As the name suggests, routes are parsed by means of a finitie state machine. Defined routes are stored as a tree structure, with each node defining a potential segment of the route. The children of each node define the possible transitions in the state machine.
+
+Urls are broken down into *route segments*, denoted by each / in the path. We then attempt to find a match for each segment in turn, according to the valid transitions as determined by the state machine. If we find a match and progress to the next state, an action can be taken based on the value of that route segment.
+
+For example:
+
+    ʃ.Route(o => o / "api" / ʃ.Controller / ~"id".Int());
+
+The definition produces a very simple state machine, with only one valid transition at each state apart from the optional nature of the id parameter:
+![alt text](https://raw.github.com/Roysvork/Superscribe/master/Documentation/Images/basicstatemachine.png "Basic state machine")
+
+Lets say we access the following url in our API: *http://localhost/api/values/2*
+  
+The url is broken down into it's three segments "api", "values", 2. Our first transition is valid, as the initial segment matches the text "api". As this is just a route literal, there is no action to be taken and we simply move on to the next state and the next segment. 
+
+The next part of the definition, ʃ.Controller has an implicit regex condition specifying a valid controller identifier, which 'values' satisifes. In addition, ʃ.Controller also contains an implicit action - to set the ControllerName property to the value of the segment. This is then passed to the ControllerSelector once route processing is complete. 
+
+The final state is the optional id parameter. In our case, we do have an id parameter, so when we enter the penultimate state this value will be added to the Parameters dictionary and then later used in Action Selection. If the parameter was omitted, we would just progress straight to the sucess state. For all non-optional states, a missing or invalid segment will cause us to jump to the Error state instead.
+
+###Syntax in-depth
 
 At it's core, superscribe route definition is built on a fluent API, which is encapsulated by several layers of abstraction, using extention methods, operator overloading and implicit casts to make syntax as concise as possible. The following are all equivilent:
 
@@ -99,27 +134,3 @@ It is a little harder to see how these are all equivilent, particularly as the t
 
 The reason this works is that the / operators are equivilent to Slash() method chains, but a side effect of this syntax however is that we must assign the result of the / expression to a variable otherwise it is not valid c#. So the assignment in this case is purely there to appease the compiler, and the same effect can be achieved by using a lambda as in the second block.
 
-####Types of state####
-
-####Providing alternatives####
-    
-###State machine based routing
-
-Superscribe introduces a brand new concept... 'state machine based routing'. As the name suggests, routes are parsed by means of a finitie state machine. Defined routes are stored as a tree structure, with each node defining a potential segment of the route. The children of each node define the possible transitions in the state machine.
-
-Urls are broken down into *route segments*, denoted by each / in the path. We then attempt to find a match for each segment in turn, according to the valid transitions as determined by the state machine. If we find a match and progress to the next state, an action can be taken based on the value of that route segment.
-
-For example:
-
-    ʃ.Route(o => o / "api" / ʃ.Controller / ~"id".Int());
-
-The definition produces a very simple state machine, with only one valid transition at each state apart from the optional nature of the id parameter:
-![alt text](https://raw.github.com/Roysvork/Superscribe/master/Documentation/Images/basicstatemachine.png "Basic state machine")
-
-Lets say we access the following url in our API: *http://localhost/api/values/2*
-  
-The url is broken down into it's three segments "api", "values", 2. Our first transition is valid, as the initial segment matches the text "api". As this is just a route literal, there is no action to be taken and we simply move on to the next state and the next segment. 
-
-The next part of the definition, ʃ.Controller has an implicit regex condition specifying a valid controller identifier, which 'values' satisifes. In addition, ʃ.Controller also contains an implicit action - to set the ControllerName property to the value of the segment. This is then passed to the ControllerSelector once route processing is complete. 
-
-The final state is the optional id parameter. In our case, we do have an id parameter, so when we enter the penultimate state this value will be added to the Parameters dictionary and then later used in Action Selection. If the parameter was omitted, we would just progress straight to the sucess state. For all non-optional states, a missing or invalid segment will cause us to jump to the Error state instead.
