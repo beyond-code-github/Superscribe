@@ -28,7 +28,46 @@ This is equivilent to the basic route we get when creating a new API project:
             defaults: new { id = RouteParameter.Optional }
     );
 
-The ~ before the id parameter defines this segment as optional.
+
+We use the ʃ.Route() method to register routes and partial routes with the framework. The ~ before the id parameter defines this segment as optional.
+
+####Choosing controllers
+
+We can specify that a route segment represents a controller in three ways:
+
+    // Match any valid identifier and set ControllerName to segment text
+    ʃ.Route(o => o / "api" / ʃ.Controller);
+    // Match a specific string and set ControllerName to it
+    ʃ.Route(o => o / "api" / "blog".Controller());
+    // Match a specific string and set ControllerName to the specified text
+    ʃ.Route(o => o / "api" / "blog".Controller("blogposts"));
+
+When route parsing is complete, the ControllerSelector will use whatever value is set for ControllerName. Routes can include multiple controller segments and the value will be overwritten. This is useful for defining nested routes, for example:
+
+   ʃ.Route(o => o / "blog" / "posts".Controller("blogposts") / ~"id".int() / ~"tags".controller("blogposttags"));
+   
+Due to the optional nature of the later segments, this will match the following routes:
+
+    http://localhost/blog/posts            -> blogposts controller
+    http://localhost/blog/posts/{id}       -> blogposts controller
+    http://localhost/blog/posts/{id}/tags  -> blogposttags controller
+
+####Choosing actions
+
+We can also have our route specify action names explicitly in an MVC style if needed:
+
+    // Match any valid identifier and set ActionName to segment text
+    ʃ.Route(o => o / "api" / ʃ.Controller);
+    // Match a specific string and set ControllerName to it
+    ʃ.Route(o => o / "api" / "blog".Controller());
+    // Match a specific string and set ControllerName to the specified text
+    ʃ.Route(o => o / "api" / "blog".Controller("blogposts"));
+
+Just like controllers, the ActionSelector will use the final value set by any action segments.
+
+####Parameters and Querystring values
+    
+####Alternatives
 
 ###Defining hierarchical routes
 
@@ -64,20 +103,6 @@ Because routes are defined programatically, we can take this one step further an
         ʃ.Route(o => route / "categories".Controller(routeName + "categories"));
         ʃ.Route(o => route / "tags".Controller(routeName + "tags"));
     }
-    
-###Definition Syntax
-
-The cornerstone of Superscribe route definitions is the ʃ.Route() method. We use this method to register routes and partial routes with the framework.
-
-    ʃ.Route(o => o / "api" / ʃ.Controller / ~"id".Int());
-    
-####Choosing controllers
-
-####Choosing actions
-
-####Parameters and Querystring
-    
-####Alternatives
     
 ###State machine based routing
 
