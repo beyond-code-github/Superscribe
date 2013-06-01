@@ -51,16 +51,13 @@ This provides the following routes:
     http://api/sites/portfolio/categories
     http://api/sites/portfolio/tags
 
-###Programtical definition
+###Programatical definition
 
 In the previous example, we re-used the site part of the route as a base for blog and portfolio, and then extendd both of these again. We didn't gain much through re-use, but the definitions are much more readable than the existing Web API equivilent.
 
 Because routes are defined programatically, we can take this one step further and re-write the example as follows for the same results. This opens up a world of possibilities as we are free to define routes via whatever algorithms we choose, for example by traversing an API hierarchy.
 
     var site = ʃ.Route(o => o / "sites" / "siteId".Int());
-    
-    var blog =  
-    var portfolio = ʃ.Route(o => site / "portfolio");
     
     foreach (var routeName in new [] { "blog", "portfolio" }) {
         var route = ʃ.Route(o => site / routeName);
@@ -72,9 +69,9 @@ Because routes are defined programatically, we can take this one step further an
     
 ###State machine based routing
 
-Superscribe introduces a brand new concept... 'state machine based routing'. As the name suggests, routes are parsed by means of a finitie state machine. Defined routes are stored as a tree structure, with each node representing a potential *route segment*. The children of each node become the possible 'transitions' in the state machine.
+Superscribe introduces a brand new concept... 'state machine based routing'. As the name suggests, routes are parsed by means of a finitie state machine. Defined routes are stored as a tree structure, with each node defining a potential segment of the route. The children of each node define the possible transitions in the state machine.
 
-Urls are broken down into *route segments*, denoted by each / in the path. We then attempt to find a match for each segment in turn, according to the valid transitions as determined by the state machine. Id we find a match and progress to the next state, an action can be taken based on the value of that route segment.
+Urls are broken down into *route segments*, denoted by each / in the path. We then attempt to find a match for each segment in turn, according to the valid transitions as determined by the state machine. If we find a match and progress to the next state, an action can be taken based on the value of that route segment.
 
 For example:
 
@@ -85,9 +82,8 @@ The definition produces a very simple state machine, with only one valid transit
 
 Lets say we access the following url in our API: *http://localhost/api/values/2*
   
-The url is broken down into it's three segments "api", "values", 2. Our first transition is valid, as the first segment matches the condition and there is no action to be taken, we simply move on to the next state, and the next segment. The next transition requires a valid controller identifier, which 'values' satisifes. 
+The url is broken down into it's three segments "api", "values", 2. Our first transition is valid, as the initial segment matches the text "api". As this is just a route literal, there is no action to be taken and we simply move on to the next state and the next segment. The next transition requires a valid controller identifier, which 'values' satisifes. 
 
-In the route definition, ʃ.Controller contains an implicit action - to set the ControllerName property. This value is then passed to the ControllerSelector once the route processing is complete. The final state is the optional id parameter. In our case, we do have an id parameter, so when we enter the penultimate state this value will be added to the Paremeters dictionary and used in Action Selection. 
+In this part of the definition, ʃ.Controller contains an implicit action - to set the ControllerName property. This value is then passed to the ControllerSelector once the route processing is complete. 
 
-
-
+The final state is the optional id parameter. In our case, we do have an id parameter, so when we enter the penultimate state this value will be added to the Paremeters dictionary and then later used in Action Selection.
