@@ -74,18 +74,20 @@ Because routes are defined programatically, we can take this one step further an
 
 Superscribe introduces a brand new concept... 'state machine based routing'. As the name suggests, routes are parsed by means of a finitie state machine. Defined routes are stored as a tree structure, with each node representing a potential *route segment*. The children of each node become the possible 'transitions' in the state machine.
 
-Urls are broken down into *route segments*, denoted by each / in the path. We then attempt to find a match for each segment in turn, according to the valid transitions as determined by the state machine. For example:
+Urls are broken down into *route segments*, denoted by each / in the path. We then attempt to find a match for each segment in turn, according to the valid transitions as determined by the state machine. Id we find a match and progress to the next state, an action can be taken based on the value of that route segment.
 
-    // Url: http://localhost/api/values/2
-    
+For example:
+
     ʃ.Route(o => o / "api" / ʃ.Controller / ~"id".Int());
-    
-This url is broken down into it's three segments "api", "values", 2. The definition produces a very simple state machine, with only one transition at each state:
+
+The definition produces a very simple state machine, with only one valid transition at each state apart from the optional nature of the id parameter:
+![alt text](https://raw.github.com/Roysvork/Superscribe/master/Documentation/Images/basicstatemachine.png "Basic state machine")
+
+Lets say we access the following url in our API: *http://localhost/api/values/2*
+  
+The url is broken down into it's three segments "api", "values", 2. Our first transition is valid, as the first segment matches the condition and there is no action to be taken, we simply move on to the next state, and the next segment. The next transition requires a valid controller identifier, which 'values' satisifes. 
+
+In the route definition, ʃ.Controller contains an implicit action - to set the ControllerName property. This value is then passed to the ControllerSelector once the route processing is complete. The final state is the optional id parameter. In our case, we do have an id parameter, so when we enter the penultimate state this value will be added to the Paremeters dictionary and used in Action Selection. 
 
 
-
-
-
-
-When defining routes, superscribe lets you specify an action delegate for each segment in the tree. Just as in a traditional finite state machine, we can control which state we transition to next. This allows for extremely complex routing strategies, even based on aggregated values from multiple route segments if needed.
 
