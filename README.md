@@ -55,7 +55,7 @@ This provides the following routes:
 
 In the previous example, we re-used the site part of the route as a base for blog and portfolio, and then extend both of these again. We didn't gain much through re-use, but the definitions are much more readable than the existing Web API equivilent.
 
-Because routes are defined programatically, we can take this one step further and re-write the example as follows for the same results. This opens up a world of possibilities as we are free to define routes via whatever algorithms we choose, for example by traversing an API hierarchy.
+Because routes are defined programatically, we can take this one step further and re-write the example as follows for the same results. This opens up a world of possibilities as we are free to define routes via whatever algorithms we choose, for example by traversing an API hierarchy... something which was technically possible yet onerous with traditional routing.
 
     var site = ʃ.Route(o => o / "sites" / "siteId".Int());
     
