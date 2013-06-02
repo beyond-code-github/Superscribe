@@ -3,8 +3,7 @@
     using System;
     using System.Web.Http;
 
-    using global::Superscribe.Models;
-    using global::Superscribe.Utils;
+    using Superscribe.Utils;
 
     public static class BenchmarkConfig
     {
@@ -28,40 +27,39 @@
             // sites/{siteId}/blog/posts/{postId}
             // sites/{siteId}/blog/posts/{postId}/media
             // sites/{siteId}/blog/posts/{postId}/media/{id}
-            ʃ.Route(o => blogposts / ~"postId".Int() / ~"media".Controller("blogpostmedia") / ~"id".Int());
+            ʃ.Route(o => blogposts / -"postId".Int() / -"media".Controller("blogpostmedia") / -"id".Int());
 
             // sites/{siteId}/blog/tags
             ʃ.Route(o => blog / "tags".ʃ(i => i.ControllerName = "blogtags"));
 
             // sites/{siteId}/blog/posts/archives
             // sites/{siteId}/blog/posts/archives/{year}/{month}
-            ʃ.Route(o => blogposts / "archives".Controller("blogpostarchives") / ~"year".Int() / "month".Int());
+            ʃ.Route(o => blogposts / "archives".Controller("blogpostarchives") / -"year".Int() / "month".Int());
 
             //for (var i = 0; i < 50; i++)
             //{
             //    GenerateRoutes(site, Guid.NewGuid().ToString());
             //}
-
         }
 
         private static void GenerateRoutes(ʃ site, string name)
         {
             var baseroute = site / name;
 
-            var projectsroute = baseroute / "projects".Controller(name + "projects") / ~"projectId".Int();
+            var projectsroute = baseroute / "projects".Controller(name + "projects") / -"projectId".Int();
 
             // sites/{siteId}/portfolio/projects
             // sites/{siteId}/portfolio/projects/{projectId}
             // sites/{siteId}/portfolio/projects/{projectId}/media
             // sites/{siteId}/portfolio/projects/{projectId}/media/{id}
-            ʃ.Route(o => projectsroute / ~"media".Controller(name + "projectmedia") / ~"id".Int());
+            ʃ.Route(o => projectsroute / -"media".Controller(name + "projectmedia") / -"id".Int());
 
             // sites/{siteId}/portfolio/tags
             ʃ.Route(o => baseroute / "tags".Controller(name + "tags"));
 
             // sites/{siteId}/portfolio/categories
             // sites/{siteId}/portfolio/categories/{id}
-            ʃ.Route(o => baseroute / "categories".Controller(name + "categories") / ~"id".Int());
+            ʃ.Route(o => baseroute / "categories".Controller(name + "categories") / -"id".Int());
         }
     }
 }

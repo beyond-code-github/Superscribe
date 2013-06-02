@@ -168,6 +168,12 @@
             return this;
         }
 
+        private ʃ MatchAsRegex()
+        {
+            this.Pattern = new Regex(this.Template);
+            return this;
+        }
+
         public virtual bool IsMatch(string segment)
         {
             if (this.Pattern != null)
@@ -255,7 +261,7 @@
         /// </summary>
         /// <param name="state">Current state</param>
         /// <returns>The state at the base of the current transition chain</returns>
-        public static ʃ operator -(ʃ state)
+        public static ʃ operator +(ʃ state)
         {
             return Base(state, state.Parent);
         }
@@ -264,9 +270,19 @@
         /// Shorthand for calling .Optional
         /// </summary>
         /// <param name="state">Transition to be made optional</param>
-        public static ʃ operator ~(ʃ state)
+        public static ʃ operator -(ʃ state)
         {
             state.Optional();
+            return state;
+        }
+
+        /// <summary>
+        /// Shorthand for calling .MatchAsRegex
+        /// </summary>
+        /// <param name="state">Transition to be made optional</param>
+        public static ʃ operator ~(ʃ state)
+        {
+            state.MatchAsRegex();
             return state;
         }
 

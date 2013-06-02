@@ -17,6 +17,11 @@
             return new ControllerState { Template = pattern, ControllerName = controllerName };
         }
 
+        public static ActionState Action(this Regex pattern)
+        {
+            return new ActionState { Pattern = pattern };
+        }
+
         public static ActionState Action(this string pattern)
         {
             return new ActionState { Template = pattern };
