@@ -11,6 +11,8 @@ using Superscribe.Demo.WebAPI.Areas.HelpPage.Models;
 
 namespace Superscribe.Demo.WebAPI.Areas.HelpPage
 {
+    using Superscribe.Demo.WebApi.Areas.HelpPage.SampleGeneration;
+
     public static class HelpPageConfigurationExtensions
     {
         private const string ApiModelPrefix = "MS_HelpPageApiModel_";

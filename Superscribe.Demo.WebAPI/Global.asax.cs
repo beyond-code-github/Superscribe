@@ -5,6 +5,8 @@
     using System.Web.Optimization;
     using System.Web.Routing;
 
+    using Superscribe.Demo.WebApi.App_Start;
+
     using global::Superscribe.Demo.WebAPI.App_Start;
 
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 

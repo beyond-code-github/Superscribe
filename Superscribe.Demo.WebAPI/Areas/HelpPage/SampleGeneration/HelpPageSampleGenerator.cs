@@ -1,20 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Formatting;
-using System.Net.Http.Headers;
-using System.Web.Http.Description;
-using System.Xml.Linq;
-using Newtonsoft.Json;
-
-namespace Superscribe.Demo.WebAPI.Areas.HelpPage
+namespace Superscribe.Demo.WebApi.Areas.HelpPage.SampleGeneration
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+    using System.Net.Http;
+    using System.Net.Http.Formatting;
+    using System.Net.Http.Headers;
+    using System.Web.Http.Description;
+    using System.Xml.Linq;
+
+    using Newtonsoft.Json;
+
     /// <summary>
     /// This class will generate the samples for the help page.
     /// </summary>
@@ -25,9 +26,9 @@ namespace Superscribe.Demo.WebAPI.Areas.HelpPage
         /// </summary>
         public HelpPageSampleGenerator()
         {
-            ActualHttpMessageTypes = new Dictionary<HelpPageSampleKey, Type>();
-            ActionSamples = new Dictionary<HelpPageSampleKey, object>();
-            SampleObjects = new Dictionary<Type, object>();
+            this.ActualHttpMessageTypes = new Dictionary<HelpPageSampleKey, Type>();
+            this.ActionSamples = new Dictionary<HelpPageSampleKey, object>();
+            this.SampleObjects = new Dictionary<Type, object>();
         }
 
         /// <summary>
@@ -52,7 +53,7 @@ namespace Superscribe.Demo.WebAPI.Areas.HelpPage
         /// <returns>The samples keyed by media type.</returns>
         public IDictionary<MediaTypeHeaderValue, object> GetSampleRequests(ApiDescription api)
         {
-            return GetSample(api, SampleDirection.Request);
+            return this.GetSample(api, SampleDirection.Request);
         }
 
         /// <summary>
@@ -62,7 +63,7 @@ namespace Superscribe.Demo.WebAPI.Areas.HelpPage
         /// <returns>The samples keyed by media type.</returns>
         public IDictionary<MediaTypeHeaderValue, object> GetSampleResponses(ApiDescription api)
         {
-            return GetSample(api, SampleDirection.Response);
+            return this.GetSample(api, SampleDirection.Response);
         }
 
         /// <summary>
@@ -81,11 +82,11 @@ namespace Superscribe.Demo.WebAPI.Areas.HelpPage
             string actionName = api.ActionDescriptor.ActionName;
             IEnumerable<string> parameterNames = api.ParameterDescriptions.Select(p => p.Name);
             Collection<MediaTypeFormatter> formatters;
-            Type type = ResolveType(api, controllerName, actionName, parameterNames, sampleDirection, out formatters);
+            Type type = this.ResolveType(api, controllerName, actionName, parameterNames, sampleDirection, out formatters);
             var samples = new Dictionary<MediaTypeHeaderValue, object>();
 
             // Use the samples provided directly for actions
-            var actionSamples = GetAllActionSamples(controllerName, actionName, parameterNames, sampleDirection);
+            var actionSamples = this.GetAllActionSamples(controllerName, actionName, parameterNames, sampleDirection);
             foreach (var actionSample in actionSamples)
             {
                 samples.Add(actionSample.Key.MediaType, WrapSampleIfString(actionSample.Value));
@@ -95,19 +96,19 @@ namespace Superscribe.Demo.WebAPI.Areas.HelpPage
             // Here we cannot rely on formatters because we don't know what's in the HttpResponseMessage, it might not even use formatters.
             if (type != null && !typeof(HttpResponseMessage).IsAssignableFrom(type))
             {
-                object sampleObject = GetSampleObject(type);
+                object sampleObject = this.GetSampleObject(type);
                 foreach (var formatter in formatters)
                 {
                     foreach (MediaTypeHeaderValue mediaType in formatter.SupportedMediaTypes)
                     {
                         if (!samples.ContainsKey(mediaType))
                         {
-                            object sample = GetActionSample(controllerName, actionName, parameterNames, type, formatter, mediaType, sampleDirection);
+                            object sample = this.GetActionSample(controllerName, actionName, parameterNames, type, formatter, mediaType, sampleDirection);
 
                             // If no sample found, try generate sample using formatter and sample object
                             if (sample == null && sampleObject != null)
                             {
-                                sample = WriteSampleObjectUsingFormatter(formatter, sampleObject, type, mediaType);
+                                sample = this.WriteSampleObjectUsingFormatter(formatter, sampleObject, type, mediaType);
                             }
 
                             samples.Add(mediaType, WrapSampleIfString(sample));
@@ -137,9 +138,9 @@ namespace Superscribe.Demo.WebAPI.Areas.HelpPage
             // First, try get sample provided for a specific mediaType, controllerName, actionName and parameterNames.
             // If not found, try get the sample provided for a specific mediaType, controllerName and actionName regardless of the parameterNames
             // If still not found, try get the sample provided for a specific type and mediaType 
-            if (ActionSamples.TryGetValue(new HelpPageSampleKey(mediaType, sampleDirection, controllerName, actionName, parameterNames), out sample) ||
-                ActionSamples.TryGetValue(new HelpPageSampleKey(mediaType, sampleDirection, controllerName, actionName, new[] { "*" }), out sample) ||
-                ActionSamples.TryGetValue(new HelpPageSampleKey(mediaType, type), out sample))
+            if (this.ActionSamples.TryGetValue(new HelpPageSampleKey(mediaType, sampleDirection, controllerName, actionName, parameterNames), out sample) ||
+                this.ActionSamples.TryGetValue(new HelpPageSampleKey(mediaType, sampleDirection, controllerName, actionName, new[] { "*" }), out sample) ||
+                this.ActionSamples.TryGetValue(new HelpPageSampleKey(mediaType, type), out sample))
             {
                 return sample;
             }
@@ -157,7 +158,7 @@ namespace Superscribe.Demo.WebAPI.Areas.HelpPage
         {
             object sampleObject;
 
-            if (!SampleObjects.TryGetValue(type, out sampleObject))
+            if (!this.SampleObjects.TryGetValue(type, out sampleObject))
             {
                 // Try create a default sample object
                 ObjectGenerator objectGenerator = new ObjectGenerator();
@@ -188,8 +189,8 @@ namespace Superscribe.Demo.WebAPI.Areas.HelpPage
                 throw new ArgumentNullException("api");
             }
             Type type;
-            if (ActualHttpMessageTypes.TryGetValue(new HelpPageSampleKey(sampleDirection, controllerName, actionName, parameterNames), out type) ||
-                ActualHttpMessageTypes.TryGetValue(new HelpPageSampleKey(sampleDirection, controllerName, actionName, new[] { "*" }), out type))
+            if (this.ActualHttpMessageTypes.TryGetValue(new HelpPageSampleKey(sampleDirection, controllerName, actionName, parameterNames), out type) ||
+                this.ActualHttpMessageTypes.TryGetValue(new HelpPageSampleKey(sampleDirection, controllerName, actionName, new[] { "*" }), out type))
             {
                 // Re-compute the supported formatters based on type
                 Collection<MediaTypeFormatter> newFormatters = new Collection<MediaTypeFormatter>();
@@ -345,7 +346,7 @@ namespace Superscribe.Demo.WebAPI.Areas.HelpPage
         private IEnumerable<KeyValuePair<HelpPageSampleKey, object>> GetAllActionSamples(string controllerName, string actionName, IEnumerable<string> parameterNames, SampleDirection sampleDirection)
         {
             HashSet<string> parameterNamesSet = new HashSet<string>(parameterNames, StringComparer.OrdinalIgnoreCase);
-            foreach (var sample in ActionSamples)
+            foreach (var sample in this.ActionSamples)
             {
                 HelpPageSampleKey sampleKey = sample.Key;
                 if (String.Equals(controllerName, sampleKey.ControllerName, StringComparison.OrdinalIgnoreCase) &&

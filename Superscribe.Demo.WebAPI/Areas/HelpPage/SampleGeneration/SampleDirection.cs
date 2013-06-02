@@ -1,4 +1,4 @@
-namespace Superscribe.Demo.WebAPI.Areas.HelpPage
+namespace Superscribe.Demo.WebApi.Areas.HelpPage.SampleGeneration
 {
     /// <summary>
     /// Indicates whether the sample is used for request or response

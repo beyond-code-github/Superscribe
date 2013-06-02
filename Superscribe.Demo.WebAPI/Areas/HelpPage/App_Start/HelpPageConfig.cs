@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Net.Http.Headers;
-using System.Web;
-using System.Web.Http;
-
-namespace Superscribe.Demo.WebAPI.Areas.HelpPage
+namespace Superscribe.Demo.WebApi.Areas.HelpPage.App_Start
 {
+    using System.Web.Http;
+
     /// <summary>
     /// Use this class to customize the Help Page.
     /// For example you can set a custom <see cref="System.Web.Http.Description.IDocumentationProvider"/> to supply the documentation

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe", "Superscribe\Superscribe.csproj", "{0882D762-CA4D-48A5-956E-2121DECE000E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.Demo.WebAPI", "Superscribe.Demo.WebAPI\Superscribe.Demo.WebAPI.csproj", "{5E0E68C0-8CF9-493F-9783-9D685DBE1E2D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.Demo.WebApi", "Superscribe.Demo.WebApi\Superscribe.Demo.WebApi.csproj", "{5E0E68C0-8CF9-493F-9783-9D685DBE1E2D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.Tests.WebApi", "Superscribe.Tests.WebApi\Superscribe.Tests.WebApi.csproj", "{76CF0F79-4342-430E-8B10-F62A1ACB6DC3}"
 EndProject
@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.Testing", "Supe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.Tests.Unit", "Superscribe.Tests.Unit\Superscribe.Tests.Unit.csproj", "{2525A68D-BA86-45DF-9C16-0DC5C6AD7F7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.WebAPI", "Superscribe.WebAPI\Superscribe.WebAPI.csproj", "{4589FE86-FF6A-4A97-ACB9-5E4D5F813A04}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.WebApi", "Superscribe.WebAPI\Superscribe.WebApi.csproj", "{4589FE86-FF6A-4A97-ACB9-5E4D5F813A04}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{F747D0F2-F10C-41C3-8DDB-F913BE39943B}"
 EndProject

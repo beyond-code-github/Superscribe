@@ -1,7 +1,7 @@
-using System;
-
-namespace Superscribe.Demo.WebAPI.Areas.HelpPage
+namespace Superscribe.Demo.WebApi.Areas.HelpPage.SampleGeneration
 {
+    using System;
+
     /// <summary>
     /// This represents an invalid sample on the help page. There's a display template named InvalidSample associated with this class.
     /// </summary>
@@ -13,7 +13,7 @@ namespace Superscribe.Demo.WebAPI.Areas.HelpPage
             {
                 throw new ArgumentNullException("errorMessage");
             }
-            ErrorMessage = errorMessage;
+            this.ErrorMessage = errorMessage;
         }
 
         public string ErrorMessage { get; private set; }
@@ -21,17 +21,17 @@ namespace Superscribe.Demo.WebAPI.Areas.HelpPage
         public override bool Equals(object obj)
         {
             InvalidSample other = obj as InvalidSample;
-            return other != null && ErrorMessage == other.ErrorMessage;
+            return other != null && this.ErrorMessage == other.ErrorMessage;
         }
 
         public override int GetHashCode()
         {
-            return ErrorMessage.GetHashCode();
+            return this.ErrorMessage.GetHashCode();
         }
 
         public override string ToString()
         {
-            return ErrorMessage;
+            return this.ErrorMessage;
         }
     }
 }

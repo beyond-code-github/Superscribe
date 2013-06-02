@@ -1,4 +1,4 @@
-﻿namespace Superscribe.Demo.WebAPI
+﻿namespace Superscribe.Demo.WebApi.App_Start
 {
     using System.Web.Optimization;
 

@@ -1,10 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Net.Http.Headers;
-
-namespace Superscribe.Demo.WebAPI.Areas.HelpPage
+namespace Superscribe.Demo.WebApi.Areas.HelpPage.SampleGeneration
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Net.Http.Headers;
+
     /// <summary>
     /// This is used to identify the place where the sample should be applied.
     /// </summary>
@@ -25,11 +25,11 @@ namespace Superscribe.Demo.WebAPI.Areas.HelpPage
             {
                 throw new ArgumentNullException("type");
             }
-            ControllerName = String.Empty;
-            ActionName = String.Empty;
-            ParameterNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            ParameterType = type;
-            MediaType = mediaType;
+            this.ControllerName = String.Empty;
+            this.ActionName = String.Empty;
+            this.ParameterNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            this.ParameterType = type;
+            this.MediaType = mediaType;
         }
 
         /// <summary>
@@ -57,10 +57,10 @@ namespace Superscribe.Demo.WebAPI.Areas.HelpPage
             {
                 throw new ArgumentNullException("parameterNames");
             }
-            ControllerName = controllerName;
-            ActionName = actionName;
-            ParameterNames = new HashSet<string>(parameterNames, StringComparer.OrdinalIgnoreCase);
-            SampleDirection = sampleDirection;
+            this.ControllerName = controllerName;
+            this.ActionName = actionName;
+            this.ParameterNames = new HashSet<string>(parameterNames, StringComparer.OrdinalIgnoreCase);
+            this.SampleDirection = sampleDirection;
         }
 
         /// <summary>
@@ -93,11 +93,11 @@ namespace Superscribe.Demo.WebAPI.Areas.HelpPage
             {
                 throw new ArgumentNullException("parameterNames");
             }
-            ControllerName = controllerName;
-            ActionName = actionName;
-            MediaType = mediaType;
-            ParameterNames = new HashSet<string>(parameterNames, StringComparer.OrdinalIgnoreCase);
-            SampleDirection = sampleDirection;
+            this.ControllerName = controllerName;
+            this.ActionName = actionName;
+            this.MediaType = mediaType;
+            this.ParameterNames = new HashSet<string>(parameterNames, StringComparer.OrdinalIgnoreCase);
+            this.SampleDirection = sampleDirection;
         }
 
         /// <summary>
@@ -144,30 +144,30 @@ namespace Superscribe.Demo.WebAPI.Areas.HelpPage
                 return false;
             }
 
-            return String.Equals(ControllerName, otherKey.ControllerName, StringComparison.OrdinalIgnoreCase) &&
-                String.Equals(ActionName, otherKey.ActionName, StringComparison.OrdinalIgnoreCase) &&
-                (MediaType == otherKey.MediaType || (MediaType != null && MediaType.Equals(otherKey.MediaType))) &&
-                ParameterType == otherKey.ParameterType &&
-                SampleDirection == otherKey.SampleDirection &&
-                ParameterNames.SetEquals(otherKey.ParameterNames);
+            return String.Equals(this.ControllerName, otherKey.ControllerName, StringComparison.OrdinalIgnoreCase) &&
+                String.Equals(this.ActionName, otherKey.ActionName, StringComparison.OrdinalIgnoreCase) &&
+                (this.MediaType == otherKey.MediaType || (this.MediaType != null && this.MediaType.Equals(otherKey.MediaType))) &&
+                this.ParameterType == otherKey.ParameterType &&
+                this.SampleDirection == otherKey.SampleDirection &&
+                this.ParameterNames.SetEquals(otherKey.ParameterNames);
         }
 
         public override int GetHashCode()
         {
-            int hashCode = ControllerName.ToUpperInvariant().GetHashCode() ^ ActionName.ToUpperInvariant().GetHashCode();
-            if (MediaType != null)
+            int hashCode = this.ControllerName.ToUpperInvariant().GetHashCode() ^ this.ActionName.ToUpperInvariant().GetHashCode();
+            if (this.MediaType != null)
             {
-                hashCode ^= MediaType.GetHashCode();
+                hashCode ^= this.MediaType.GetHashCode();
             }
-            if (SampleDirection != null)
+            if (this.SampleDirection != null)
             {
-                hashCode ^= SampleDirection.GetHashCode();
+                hashCode ^= this.SampleDirection.GetHashCode();
             }
-            if (ParameterType != null)
+            if (this.ParameterType != null)
             {
-                hashCode ^= ParameterType.GetHashCode();
+                hashCode ^= this.ParameterType.GetHashCode();
             }
-            foreach (string parameterName in ParameterNames)
+            foreach (string parameterName in this.ParameterNames)
             {
                 hashCode ^= parameterName.ToUpperInvariant().GetHashCode();
             }

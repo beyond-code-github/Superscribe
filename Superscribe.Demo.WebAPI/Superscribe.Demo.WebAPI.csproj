@@ -11,8 +11,8 @@
     <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Superscribe.Demo.WebAPI</RootNamespace>
-    <AssemblyName>Superscribe.Demo.WebAPI</AssemblyName>
+    <RootNamespace>Superscribe.Demo.WebApi</RootNamespace>
+    <AssemblyName>Superscribe.Demo.WebApi</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
@@ -289,9 +289,9 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Superscribe.WebAPI\Superscribe.WebAPI.csproj">
+    <ProjectReference Include="..\Superscribe.WebAPI\Superscribe.WebApi.csproj">
       <Project>{4589FE86-FF6A-4A97-ACB9-5E4D5F813A04}</Project>
-      <Name>Superscribe.WebAPI</Name>
+      <Name>Superscribe.WebApi</Name>
     </ProjectReference>
     <ProjectReference Include="..\Superscribe\Superscribe.csproj">
       <Project>{0882D762-CA4D-48A5-956E-2121DECE000E}</Project>

@@ -3,6 +3,8 @@ using System.Web.Mvc;
 
 namespace Superscribe.Demo.WebAPI.Areas.HelpPage
 {
+    using Superscribe.Demo.WebApi.Areas.HelpPage.App_Start;
+
     public class HelpPageAreaRegistration : AreaRegistration
     {
         public override string AreaName

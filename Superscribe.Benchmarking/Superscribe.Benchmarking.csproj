@@ -78,9 +78,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Superscribe.Demo.WebAPI\Superscribe.Demo.WebAPI.csproj">
+    <ProjectReference Include="..\Superscribe.Demo.WebAPI\Superscribe.Demo.WebApi.csproj">
       <Project>{5e0e68c0-8cf9-493f-9783-9d685dbe1e2d}</Project>
-      <Name>Superscribe.Demo.WebAPI</Name>
+      <Name>Superscribe.Demo.WebApi</Name>
     </ProjectReference>
     <ProjectReference Include="..\Superscribe.Testing\Superscribe.Testing.csproj">
       <Project>{48D44F6B-7745-4517-B95A-AFAA86AAF835}</Project>
