@@ -1,4 +1,4 @@
-﻿namespace Superscribe.WebAPI.Internals
+﻿namespace Superscribe.WebApi.Internals
 {
     using System;
     using System.Collections.Generic;

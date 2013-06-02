@@ -1,7 +1,7 @@
 using System.Web.Http;
 using System.Web.Mvc;
 
-namespace Superscribe.Demo.WebAPI.Areas.HelpPage
+namespace Superscribe.Demo.WebApi.Areas.HelpPage
 {
     using Superscribe.Demo.WebApi.Areas.HelpPage.App_Start;
 

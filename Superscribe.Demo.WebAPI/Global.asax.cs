@@ -1,4 +1,4 @@
-﻿namespace Superscribe.Demo.WebAPI
+﻿namespace Superscribe.Demo.WebApi
 {
     using System.Web.Http;
     using System.Web.Mvc;
@@ -6,8 +6,6 @@
     using System.Web.Routing;
 
     using Superscribe.Demo.WebApi.App_Start;
-
-    using global::Superscribe.Demo.WebAPI.App_Start;
 
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801

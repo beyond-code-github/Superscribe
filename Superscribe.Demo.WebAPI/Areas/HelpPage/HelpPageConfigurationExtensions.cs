@@ -7,10 +7,11 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Description;
-using Superscribe.Demo.WebAPI.Areas.HelpPage.Models;
+using Superscribe.Demo.WebApi.Areas.HelpPage.Models;
 
-namespace Superscribe.Demo.WebAPI.Areas.HelpPage
+namespace Superscribe.Demo.WebApi.Areas.HelpPage
 {
+    using Superscribe.Demo.WebApi.Areas.HelpPage.Models;
     using Superscribe.Demo.WebApi.Areas.HelpPage.SampleGeneration;
 
     public static class HelpPageConfigurationExtensions

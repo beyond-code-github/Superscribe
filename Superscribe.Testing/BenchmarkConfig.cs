@@ -4,7 +4,7 @@
     using System.Web.Http;
 
     using Superscribe.Models;
-    using Superscribe.WebAPI;
+    using Superscribe.WebApi;
 
     public static class BenchmarkConfig
     {

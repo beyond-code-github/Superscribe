@@ -1,4 +1,4 @@
-﻿namespace Superscribe.Demo.WebAPI.App_Start
+﻿namespace Superscribe.Demo.WebApi.App_Start
 {
     using System.Web.Mvc;
     using System.Web.Routing;

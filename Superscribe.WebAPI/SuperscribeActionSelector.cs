@@ -1,4 +1,4 @@
-﻿namespace Superscribe.WebAPI
+﻿namespace Superscribe.WebApi
 {
     using System;
     using System.Linq;
@@ -6,7 +6,7 @@
     using System.Web.Http.Controllers;
 
     using Superscribe.Models;
-    using Superscribe.WebAPI.Internals;
+    using Superscribe.WebApi.Internals;
 
     public class SuperscribeActionSelector : IHttpActionSelector
     {

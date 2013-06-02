@@ -1,4 +1,4 @@
-﻿namespace Superscribe.WebAPI
+﻿namespace Superscribe.WebApi
 {
     using System.Collections.Generic;
     using System.Linq;

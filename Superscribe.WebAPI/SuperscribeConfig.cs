@@ -1,11 +1,11 @@
-﻿namespace Superscribe.WebAPI
+﻿namespace Superscribe.WebApi
 {
     using System.Web.Http;
     using System.Web.Http.Controllers;
     using System.Web.Http.Dispatcher;
 
     using Superscribe.Utils;
-    using Superscribe.WebAPI.Internals;
+    using Superscribe.WebApi.Internals;
 
     /// <summary>
     /// Superscribe configuration for Web API

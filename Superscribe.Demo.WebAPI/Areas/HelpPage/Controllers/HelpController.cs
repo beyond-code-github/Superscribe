@@ -1,10 +1,12 @@
 using System;
 using System.Web.Http;
 using System.Web.Mvc;
-using Superscribe.Demo.WebAPI.Areas.HelpPage.Models;
+using Superscribe.Demo.WebApi.Areas.HelpPage.Models;
 
-namespace Superscribe.Demo.WebAPI.Areas.HelpPage.Controllers
+namespace Superscribe.Demo.WebApi.Areas.HelpPage.Controllers
 {
+    using Superscribe.Demo.WebApi.Areas.HelpPage.Models;
+
     /// <summary>
     /// The controller that will handle requests for the help page.
     /// </summary>
