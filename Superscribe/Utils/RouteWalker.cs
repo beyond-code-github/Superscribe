@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using global::Superscribe.Models;
+    using Superscribe.Models;
 
     public class RouteWalker
     {

@@ -72,7 +72,7 @@
         private static string HitSuper(string path)
         {
             var config = new HttpConfiguration();
-            SuperscribeConfig.Register(config);
+            SuperscribeTestConfig.Register(config);
 
             return Hit(config, path);
         }

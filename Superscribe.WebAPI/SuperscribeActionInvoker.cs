@@ -7,8 +7,8 @@
     using System.Web.Http;
     using System.Web.Http.Controllers;
 
-    using global::Superscribe.Models;
-    using global::Superscribe.WebAPI.Internals;
+    using Superscribe.Models;
+    using Superscribe.WebAPI.Internals;
 
     public class SuperscribeActionInvoker : IHttpActionInvoker
     {

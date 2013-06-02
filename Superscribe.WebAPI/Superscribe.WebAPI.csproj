@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0882D762-CA4D-48A5-956E-2121DECE000E}</ProjectGuid>
+    <ProjectGuid>{4589FE86-FF6A-4A97-ACB9-5E4D5F813A04}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Superscribe</RootNamespace>
-    <AssemblyName>Superscribe</AssemblyName>
+    <RootNamespace>Superscribe.WebAPI</RootNamespace>
+    <AssemblyName>Superscribe.WebAPI</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -32,11 +32,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,24 +39,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\ActionState.cs" />
-    <Compile Include="Models\ConstantState.cs" />
-    <Compile Include="Models\ControllerState.cs" />
-    <Compile Include="Models\CommandState.cs" />
-    <Compile Include="Models\ParamState.cs" />
-    <Compile Include="Models\SuperscribeState.cs" />
-    <Compile Include="Models\RouteData.cs" />
+    <Compile Include="Internals\ActionSelectorCacheItem.cs" />
+    <Compile Include="Internals\Extensions.cs" />
+    <Compile Include="Internals\HttpControllerTypeCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\SuperList.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="ʃ.cs" />
-    <Compile Include="Utils\RouteWalker.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Superscribe.WebAPI\Superscribe.WebAPI.csproj">
-      <Project>{4589fe86-ff6a-4a97-acb9-5e4d5f813a04}</Project>
-      <Name>Superscribe.WebAPI</Name>
-    </ProjectReference>
+    <Compile Include="SuperscribeActionInvoker.cs" />
+    <Compile Include="SuperscribeActionSelector.cs" />
+    <Compile Include="SuperscribeConfig.cs" />
+    <Compile Include="SuperscribeControllerSelector.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

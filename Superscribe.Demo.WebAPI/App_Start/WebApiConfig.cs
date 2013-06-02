@@ -1,10 +1,7 @@
 ﻿namespace Superscribe.Demo.WebAPI.App_Start
 {
     using System.Web.Http;
-
     using Superscribe.WebAPI;
-
-    using global::Superscribe.Utils;
 
     public static class WebApiConfig
     {

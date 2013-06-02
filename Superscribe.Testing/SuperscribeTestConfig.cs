@@ -2,13 +2,13 @@
 {
     using System.Web.Http;
 
-    using global::Superscribe.Utils;
+    using Superscribe.WebAPI;
 
-    public static class SuperscribeConfig
+    public static class SuperscribeTestConfig
     {
         public static void Register(HttpConfiguration config)
         {
-            WebAPI.SuperscribeConfig.Register(config);
+            SuperscribeConfig.Register(config);
 
             ʃ.Route(s => s / "sites" / "siteId".Int() / (
                 +("blog" / (

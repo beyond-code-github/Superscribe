@@ -3,7 +3,6 @@
     using System;
     using System.Text.RegularExpressions;
 
-    using Superscribe.WebAPI;
     using Superscribe.Models;
 
     /// <summary>
@@ -11,6 +10,8 @@
     /// </summary>
     public class ʃ
     {
+        public static SuperscribeState Base = new SuperscribeState();
+
         #region Static Methods
 
         /// <summary>
@@ -90,7 +91,7 @@
         /// <returns>The last state in the chain</returns>
         public static SuperscribeState Route(Func<SuperscribeState, SuperscribeState> config)
         {
-            return config(SuperscribeConfig.Base);
+            return config(Base);
         }
 
         #endregion

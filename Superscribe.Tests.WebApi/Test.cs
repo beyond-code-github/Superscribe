@@ -17,7 +17,7 @@
         protected Establish context = () =>
         {
             var config = new HttpConfiguration();
-            SuperscribeConfig.Register(config);
+            SuperscribeTestConfig.Register(config);
 
             browser = new Browser(config);
         };
