@@ -4,11 +4,10 @@
     using System.Text.RegularExpressions;
 
     using Superscribe.WebAPI;
-
-    using global::Superscribe.Models;
+    using Superscribe.Models;
 
     /// <summary>
-    /// Superscribe base class
+    /// Superscribe helper class
     /// </summary>
     public class ʃ
     {
@@ -21,7 +20,7 @@
         {
             get
             {
-                return new ControllerState { Pattern = new Regex("([a-z]|[A-Z]|[0-9])+") };
+                return new ControllerState { Pattern = new Regex("([a-z]|[A-Z]|[0-9])+", RegexOptions.Compiled) };
             }
         }
 
@@ -32,7 +31,7 @@
         {
             get
             {
-                return new ActionState { Pattern = new Regex("([a-z]|[A-Z]|[0-9])+") };
+                return new ActionState { Pattern = new Regex("([a-z]|[A-Z]|[0-9])+", RegexOptions.Compiled) };
             }
         }
 
@@ -60,10 +59,28 @@
         /// <summary>
         /// Matches an integer and adds name and value to the parameters dictionary
         /// </summary>
-        /// <param name="id">Parameter name</param>
-        public static SuperscribeState Int(string id)
+        /// <param name="name">Parameter name</param>
+        public static ParamState<int> Int(string name)
         {
-            return new ParamState<int>("id");
+            return new ParamState<int>(name) { Pattern = new Regex("[0-9]+", RegexOptions.Compiled) };
+        }
+
+        /// <summary>
+        /// Matches a boolean and adds the name and value to the parameters dictionary
+        /// </summary>
+        /// <param name="name">Parameter name</param>
+        public static ParamState<bool> Bool(string name)
+        {
+            return new ParamState<bool>(name) { Pattern = new Regex("(true|false)", RegexOptions.Compiled) };
+        }
+
+        /// <summary>
+        /// Matches a string and adds the name and value to the parameters dictionary
+        /// </summary>
+        /// <param name="name">Parameter name</param>
+        public static ParamState<string> String(string name)
+        {
+            return new ParamState<string>(name) { Pattern = new Regex("", RegexOptions.Compiled) };
         }
 
         /// <summary>
