@@ -18,7 +18,7 @@
         {
             var info = new WebApiInfo();
 
-            var walker = Superscribe.Walker();
+            var walker = SuperscribeConfig.Walker();
             walker.WalkRoute(controllerContext.Request.RequestUri.AbsolutePath, info);
 
             var internalSelector = GetInternalSelector(controllerContext.ControllerDescriptor);

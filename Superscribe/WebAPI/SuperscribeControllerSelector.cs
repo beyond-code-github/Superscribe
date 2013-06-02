@@ -16,7 +16,7 @@
         {
             var info = new WebApiInfo();
 
-            var walker = Superscribe.Walker();
+            var walker = SuperscribeConfig.Walker();
             walker.WalkRoute(request.RequestUri.AbsolutePath, info);
 
             // We should have consumed all of the route by now, if we haven't then throw a 404
@@ -42,11 +42,11 @@
 
             if (info.ControllerNameSpecified)
             {
-                var controllerType = Superscribe.ControllerTypeCache.GetControllerTypes(info.ControllerName).FirstOrDefault();
+                var controllerType = SuperscribeConfig.ControllerTypeCache.GetControllerTypes(info.ControllerName).FirstOrDefault();
                 if (controllerType != null)
                 {
                     return new HttpControllerDescriptor(
-                        Superscribe.HttpConfiguration, info.ControllerName, controllerType);
+                        SuperscribeConfig.HttpConfiguration, info.ControllerName, controllerType);
                 }
             }
 

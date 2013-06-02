@@ -3,13 +3,15 @@
     using System.Linq.Expressions;
     using System.Web.Http;
 
+    using Superscribe.WebAPI;
+
     using global::Superscribe.Utils;
 
     public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
         {
-            Superscribe.Register(config);
+            SuperscribeConfig.Register(config);
 
             ʃ.Route(o => o / "api" / "values".Controller() / (
                   ~"id".Int()

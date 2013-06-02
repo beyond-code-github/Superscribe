@@ -61,7 +61,7 @@
     <Compile Include="WebAPI\SuperscribeActionInvoker.cs" />
     <Compile Include="WebAPI\SuperscribeActionSelector.cs" />
     <Compile Include="WebAPI\SuperscribeControllerSelector.cs" />
-    <Compile Include="Superscribe.cs" />
+    <Compile Include="WebAPI\SuperscribeConfig.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

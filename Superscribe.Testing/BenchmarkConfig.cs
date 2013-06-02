@@ -10,7 +10,7 @@
     {
         public static void Register(HttpConfiguration config)
         {
-            Superscribe.Register(config);
+            WebAPI.SuperscribeConfig.Register(config);
 
             var site = ʃ.Route(o => o / "sites" / "siteId".Int());
 

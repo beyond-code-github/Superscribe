@@ -23,7 +23,7 @@
             var controllerContext = actionContext.ControllerContext;
 
             var webApiInfo = new WebApiInfo();
-            var walker = Superscribe.Walker();
+            var walker = SuperscribeConfig.Walker();
             walker.WalkRoute(controllerContext.Request.RequestUri.AbsolutePath, webApiInfo);
 
             foreach (var param in actionContext.ActionArguments)

@@ -3,13 +3,22 @@
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Text.RegularExpressions;
+
+    using Superscribe.WebAPI;
 
     using global::Superscribe.Models;
 
+    /// <summary>
+    /// Superscribe base class
+    /// </summary>
     public class ʃ
     {
+        #region Static Methods
+
+        /// <summary>
+        /// Matches any valid identifier and sets ControllerName
+        /// </summary>
         public static ControllerState Controller
         {
             get
@@ -18,6 +27,9 @@
             }
         }
 
+        /// <summary>
+        /// Matches any valid identifier and sets ActionName
+        /// </summary>
         public static ActionState Action
         {
             get
@@ -26,18 +38,20 @@
             }
         }
 
-        public ʃ()
+        /// <summary>
+        /// Matches a string constant and performs no action
+        /// </summary>
+        /// <param name="value">Constant value to match</param>
+        public static ConstantState Constant(string value)
         {
-            this.Transitions = new ConcurrentQueue<ʃ>();
-            this.QueryString = new ConcurrentQueue<ʃ>();
+            return new ConstantState(value);
         }
 
-        public ConcurrentQueue<ʃ> Transitions { get; set; }
-
-        public bool IsOptional { get; private set; }
-
-        public ConcurrentQueue<ʃ> QueryString { get; set; }
-
+        /// <summary>
+        /// Matches a string constant and performs a custom action
+        /// </summary>
+        /// <param name="value">Constant value to match</param>
+        /// <param name="configure">Action to execute</param>
         public static ConstantState Constant(string value, Action<ConstantState> configure)
         {
             var result = new ConstantState(value);
@@ -45,77 +59,95 @@
             return result;
         }
 
-        public static ConstantState Constant(string value)
+        /// <summary>
+        /// Matches an integer and adds name and value to the parameters dictionary
+        /// </summary>
+        /// <param name="id">Parameter name</param>
+        public static ʃ Int(string id)
         {
-            return new ConstantState(value);
+            return new ParamState<int>("id");
         }
 
+        /// <summary>
+        /// Define a partial route or attach a route to Superscribe's Base State
+        /// </summary>
+        /// <param name="config">Route configuration function</param>
+        /// <returns>The last state in the chain</returns>
         public static ʃ Route(Func<ʃ, ʃ> config)
         {
-            return config(Superscribe.Base);
+            return config(SuperscribeConfig.Base);
         }
 
-        public static ʃ operator /(ʃ state, string other)
+        /// <summary>
+        /// Works backwards up the state\transition chain and returns the topmost state
+        /// </summary>
+        /// <param name="state">State to start from</param>
+        public static ʃ Base(ʃ state)
         {
-            return state.Slash(ʃ.Constant(other));
+            return Base(state, state.Parent);
         }
 
-        public static ʃ operator /(ʃ state, ʃ other)
-        {
-            return state.Slash(other);
-        }
-
-        public static ʃ operator /(ʃ state, List<ʃ> others)
-        {
-            foreach (var s in others)
-            {
-                state.Slash(s);
-            }
-
-            return state;
-        }
-
-        public static ʃ operator &(ʃ state, ʃ other)
-        {
-            return state.Query(other);
-        }
-
-        public static SuperList operator |(ʃ state, ʃ other)
-        {
-            return new SuperList { state, other };
-        }
-
-        public static SuperList operator |(SuperList states, ʃ other)
-        {
-            states.Add(other);
-            return states;
-        }
-
-        private static ʃ ParentOrCurrent(ʃ state, ʃ parent)
+        /// <summary>
+        /// Recursive component of <see cref="Base"/>
+        /// </summary>
+        /// <param name="state">The current state</param>
+        /// <param name="parent">The parent of the current state</param>
+        private static ʃ Base(ʃ state, ʃ parent)
         {
             if (parent == null)
             {
                 return state;
             }
 
-            return ParentOrCurrent(parent, parent.Parent);
+            return Base(parent, parent.Parent);
         }
 
-        public static ʃ operator -(ʃ state)
+        #endregion
+
+        /// <summary>
+        /// Base constructor for superscribe states
+        /// </summary>
+        public ʃ()
         {
-            return ParentOrCurrent(state, state.Parent);
+            this.Transitions = new ConcurrentQueue<ʃ>();
+            this.QueryString = new ConcurrentQueue<ʃ>();
         }
 
-        public static ʃ operator ~(ʃ state)
-        {
-            state.Optional();
-            return state;
-        }
+        #region Properties
 
-        public static implicit operator ʃ(string value)
-        {
-            return ʃ.Constant(value);
-        }
+        /// <summary>
+        /// The parent state
+        /// </summary>
+        protected ʃ Parent { get; set; }
+
+        /// <summary>
+        /// Boolean flag indicating if the transition into this state is optional
+        /// </summary>
+        public bool IsOptional { get; private set; }
+
+        /// <summary>
+        /// Concurrent queue of available transitions from this state
+        /// </summary>
+        public ConcurrentQueue<ʃ> Transitions { get; set; }
+
+        /// <summary>
+        /// Concurrent queue of available querystring transitions
+        /// </summary>
+        public ConcurrentQueue<ʃ> QueryString { get; set; }
+
+        /// <summary>
+        /// Regex pattern to use when matching
+        /// </summary>
+        public Regex Pattern { get; set; }
+
+        /// <summary>
+        /// String template to use when matching
+        /// </summary>
+        public string Template { get; set; }
+
+        #endregion
+
+        #region Methods
 
         public ʃ Slash(ʃ nextState)
         {
@@ -123,12 +155,6 @@
             this.Transitions.Enqueue(nextState);
             return nextState;
         }
-
-        protected ʃ Parent { get; set; }
-
-        public Regex Pattern { get; set; }
-
-        public string Template { get; set; }
 
         private ʃ Query(ʃ queryState)
         {
@@ -151,5 +177,108 @@
 
             return segment == this.Template;
         }
+
+        #endregion
+
+        #region Operator Overloads
+
+        /// <summary>
+        /// Shorthand for .Slash between a state and a transition to a ConstantState
+        /// </summary>
+        /// <param name="state">State</param>
+        /// <param name="other">String used create constant state</param>
+        public static ʃ operator /(ʃ state, string other)
+        {
+            return state.Slash(ʃ.Constant(other));
+        }
+
+        /// <summary>
+        /// Shorthand for .Slash between a state and a transition
+        /// </summary>
+        /// <param name="state">Any state</param>
+        /// <param name="other">Any transition</param>
+        public static ʃ operator /(ʃ state, ʃ other)
+        {
+            return state.Slash(other);
+        }
+
+        /// <summary>
+        /// Shorthand for .Slash between a state and its possible transitions
+        /// </summary>
+        /// <param name="state">State</param>
+        /// <param name="others">IEnumerble of transitions</param>
+        public static ʃ operator /(ʃ state, IEnumerable<ʃ> others)
+        {
+            foreach (var s in others)
+            {
+                state.Slash(s);
+            }
+
+            return state;
+        }
+
+        /// <summary>
+        /// Shorthand for .Slash between a state and a Querystring transition
+        /// </summary>
+        /// <param name="state">State</param>
+        /// <param name="other">Querystring transition</param>
+        public static ʃ operator &(ʃ state, ʃ other)
+        {
+            return state.Query(other);
+        }
+
+        /// <summary>
+        /// Shorthand for creating a transition list from two alternatives
+        /// </summary>
+        /// <param name="state">First transition</param>
+        /// <param name="other">Second transition</param>
+        /// <returns>New list of transitions</returns>
+        public static SuperList operator |(ʃ state, ʃ other)
+        {
+            return new SuperList { state, other };
+        }
+
+        /// <summary>
+        /// Shorthand for adding a transition to an existing list 
+        /// </summary>
+        /// <param name="states">List of transitions</param>
+        /// <param name="other">Alternative transition</param>
+        /// <returns>Modified list of transitions</returns>
+        public static SuperList operator |(SuperList states, ʃ other)
+        {
+            states.Add(other);
+            return states;
+        }
+
+        /// <summary>
+        /// Shorthand for calling .Base
+        /// </summary>
+        /// <param name="state">Current state</param>
+        /// <returns>The state at the base of the current transition chain</returns>
+        public static ʃ operator -(ʃ state)
+        {
+            return Base(state, state.Parent);
+        }
+
+        /// <summary>
+        /// Shorthand for calling .Optional
+        /// </summary>
+        /// <param name="state">Transition to be made optional</param>
+        public static ʃ operator ~(ʃ state)
+        {
+            state.Optional();
+            return state;
+        }
+
+        /// <summary>
+        /// Implicit conversion between string and a ConstantState
+        /// </summary>
+        /// <param name="value">String to create ConstantState from</param>
+        public static implicit operator ʃ(string value)
+        {
+            return ʃ.Constant(value);
+        }
+
+        #endregion
     }
 }

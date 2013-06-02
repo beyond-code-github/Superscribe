@@ -1,15 +1,16 @@
-﻿namespace Superscribe
+﻿namespace Superscribe.WebAPI
 {
     using System.Web.Http;
     using System.Web.Http.Controllers;
     using System.Web.Http.Dispatcher;
 
-    using global::Superscribe.Models;
-    using global::Superscribe.Utils;
-    using global::Superscribe.WebAPI;
-    using global::Superscribe.WebAPI.Internals;
+    using Superscribe.Utils;
+    using Superscribe.WebAPI.Internals;
 
-    public static class Superscribe
+    /// <summary>
+    /// Superscribe configuration for Web API
+    /// </summary>
+    public static class SuperscribeConfig
     {
         public static HttpConfiguration HttpConfiguration { get; private set; }
 
