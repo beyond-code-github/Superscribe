@@ -34,11 +34,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\BlogTagsController.cs" />
@@ -52,9 +47,13 @@
     <Compile Include="BenchmarkConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteConfig.cs" />
-    <Compile Include="SuperscribeConfig.cs" />
+    <Compile Include="SuperscribeTestConfig.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Superscribe.WebAPI\Superscribe.WebAPI.csproj">
+      <Project>{4589FE86-FF6A-4A97-ACB9-5E4D5F813A04}</Project>
+      <Name>Superscribe.WebAPI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Superscribe\Superscribe.csproj">
       <Project>{0882d762-ca4d-48a5-956e-2121dece000e}</Project>
       <Name>Superscribe</Name>

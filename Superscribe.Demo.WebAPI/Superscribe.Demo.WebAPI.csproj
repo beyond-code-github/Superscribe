@@ -289,6 +289,10 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Superscribe.WebAPI\Superscribe.WebAPI.csproj">
+      <Project>{4589FE86-FF6A-4A97-ACB9-5E4D5F813A04}</Project>
+      <Name>Superscribe.WebAPI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Superscribe\Superscribe.csproj">
       <Project>{0882D762-CA4D-48A5-956E-2121DECE000E}</Project>
       <Name>Superscribe</Name>
