@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{CFBF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.Testing", "Superscribe.Testing\Superscribe.Testing.csproj", "{48D44F6B-7745-4517-B95A-AFAA86AAF835}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.Tests.Unit", "Superscribe.Tests.Unit\Superscribe.Tests.Unit.csproj", "{2525A68D-BA86-45DF-9C16-0DC5C6AD7F7A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{48D44F6B-7745-4517-B95A-AFAA86AAF835}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48D44F6B-7745-4517-B95A-AFAA86AAF835}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48D44F6B-7745-4517-B95A-AFAA86AAF835}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2525A68D-BA86-45DF-9C16-0DC5C6AD7F7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2525A68D-BA86-45DF-9C16-0DC5C6AD7F7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2525A68D-BA86-45DF-9C16-0DC5C6AD7F7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2525A68D-BA86-45DF-9C16-0DC5C6AD7F7A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -47,5 +53,6 @@ Global
 		{B14D6D0E-3706-42A9-A2BD-1CF6D1B1B4B2} = {CFBFB689-2965-4344-BE13-F73C3466E9C2}
 		{76CF0F79-4342-430E-8B10-F62A1ACB6DC3} = {CFBFB689-2965-4344-BE13-F73C3466E9C2}
 		{48D44F6B-7745-4517-B95A-AFAA86AAF835} = {CFBFB689-2965-4344-BE13-F73C3466E9C2}
+		{2525A68D-BA86-45DF-9C16-0DC5C6AD7F7A} = {CFBFB689-2965-4344-BE13-F73C3466E9C2}
 	EndGlobalSection
 EndGlobal
