@@ -5,8 +5,8 @@
     using System.Threading;
     using System.Web.Http.Controllers;
 
-    using global::Superscribe.Models;
-    using global::Superscribe.WebAPI.Internals;
+    using Superscribe.Models;
+    using Superscribe.WebAPI.Internals;
 
     public class SuperscribeActionSelector : IHttpActionSelector
     {
@@ -16,7 +16,7 @@
 
         public HttpActionDescriptor SelectAction(HttpControllerContext controllerContext)
         {
-            var info = new WebApiInfo();
+            var info = new RouteData();
 
             var walker = SuperscribeConfig.Walker();
             walker.WalkRoute(controllerContext.Request.RequestUri.AbsolutePath, info);

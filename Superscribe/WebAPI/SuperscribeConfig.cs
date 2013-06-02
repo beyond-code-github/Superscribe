@@ -4,6 +4,7 @@
     using System.Web.Http.Controllers;
     using System.Web.Http.Dispatcher;
 
+    using Superscribe.Models;
     using Superscribe.Utils;
     using Superscribe.WebAPI.Internals;
 
@@ -16,7 +17,7 @@
 
         public static HttpControllerTypeCache ControllerTypeCache { get; private set; }
 
-        public static ʃ Base { get; set; }
+        public static SuperscribeState Base { get; set; }
 
         public static void Register(HttpConfiguration configuration)
         {
@@ -36,7 +37,7 @@
             configuration.Services.Replace(typeof(IHttpControllerSelector), new SuperscribeControllerSelector());
             configuration.Services.Replace(typeof(IHttpActionInvoker), new SuperscribeActionInvoker());
 
-            Base = new ʃ();
+            Base = new SuperscribeState();
         }
 
         public static RouteWalker Walker()

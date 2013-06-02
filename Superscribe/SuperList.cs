@@ -4,9 +4,9 @@
 
     using global::Superscribe.Models;
 
-    public class SuperList : List<ʃ>
+    public class SuperList : List<SuperscribeState>
     {
-        public static ʃ operator /(string name, SuperList others)
+        public static SuperscribeState operator /(string name, SuperList others)
         {
             var state = new ConstantState(name);
             foreach (var s in others)

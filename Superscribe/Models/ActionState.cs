@@ -2,7 +2,7 @@
 {
     using System.Text.RegularExpressions;
 
-    public class ActionState : ʃ
+    public class ActionState : SuperscribeState
     {
         public ActionState()
         {

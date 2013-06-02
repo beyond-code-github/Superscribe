@@ -7,9 +7,9 @@
 
     public class RouteWalker
     {
-        private readonly IEnumerable<ʃ> baseStates;
+        private readonly IEnumerable<SuperscribeState> baseStates;
 
-        public RouteWalker(IEnumerable<ʃ> baseStates)
+        public RouteWalker(IEnumerable<SuperscribeState> baseStates)
         {
             this.baseStates = baseStates;
         }
@@ -22,13 +22,13 @@
 
         public string RemainingRoute { get; private set; }
 
-        public void WalkRoute(string route, WebApiInfo info)
+        public void WalkRoute(string route, RouteData info)
         {
             this.RemainingRoute = route;
             this.WalkRoute(info, baseStates);
         }
 
-        public void WalkRoute(WebApiInfo info, IEnumerable<ʃ> states)
+        public void WalkRoute(RouteData info, IEnumerable<SuperscribeState> states)
         {
             var segment = string.Empty;
 
@@ -101,7 +101,7 @@
             }
         }
 
-        private static ʃ MatchState(string segment, IEnumerable<ʃ> states)
+        private static SuperscribeState MatchState(string segment, IEnumerable<SuperscribeState> states)
         {
             return states.FirstOrDefault(o => o.IsMatch(segment));
         }

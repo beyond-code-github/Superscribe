@@ -3,13 +3,14 @@
     using System;
     using System.Web.Http;
 
+    using Superscribe.Models;
     using Superscribe.Utils;
 
     public static class BenchmarkConfig
     {
         public static void Register(HttpConfiguration config)
         {
-            WebAPI.SuperscribeConfig.Register(config);
+            SuperscribeConfig.Register(config);
 
             var site = ʃ.Route(o => o / "sites" / "siteId".Int());
 
@@ -42,7 +43,7 @@
             //}
         }
 
-        private static void GenerateRoutes(ʃ site, string name)
+        private static void GenerateRoutes(SuperscribeState site, string name)
         {
             var baseroute = site / name;
 

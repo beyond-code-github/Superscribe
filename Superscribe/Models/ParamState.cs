@@ -4,7 +4,7 @@
     using System.ComponentModel;
     using System.Globalization;
 
-    public abstract class ParamState : ʃ
+    public abstract class ParamState : SuperscribeState
     {
         public abstract bool TryParse(string value, out object obj);
 

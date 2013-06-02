@@ -1,13 +1,12 @@
 ﻿namespace Superscribe.Models
 {
     using System;
-    using System.Text.RegularExpressions;
 
-    public class CommandState : ʃ
+    public class CommandState : SuperscribeState
     {
-        public Action<WebApiInfo> Command { get; set; }
+        public Action<RouteData> Command { get; set; }
 
-        public CommandState(string pattern, Action<WebApiInfo> command)
+        public CommandState(string pattern, Action<RouteData> command)
         {
             Command = command;
             this.Template = pattern;

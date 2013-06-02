@@ -8,13 +8,13 @@
     using System.Web.Http.Controllers;
     using System.Web.Http.Dispatcher;
 
-    using global::Superscribe.Models;
+    using Superscribe.Models;
 
     public class SuperscribeControllerSelector : IHttpControllerSelector
     {
         public HttpControllerDescriptor SelectController(HttpRequestMessage request)
         {
-            var info = new WebApiInfo();
+            var info = new RouteData();
 
             var walker = SuperscribeConfig.Walker();
             walker.WalkRoute(request.RequestUri.AbsolutePath, info);

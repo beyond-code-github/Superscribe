@@ -32,7 +32,7 @@
             return new ParamState<int>(name) { Pattern = new Regex("[0-9]+") };
         }
 
-        public static CommandState ʃ(this string pattern, Action<WebApiInfo> command)
+        public static CommandState ʃ(this string pattern, Action<RouteData> command)
         {
             return new CommandState(pattern, command);
         }

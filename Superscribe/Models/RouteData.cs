@@ -2,13 +2,13 @@
 {
     using System.Collections.Generic;
 
-    public class WebApiInfo
+    public class RouteData
     {
         private string actionName;
 
         private string controllerName;
 
-        public WebApiInfo()
+        public RouteData()
         {
             this.Parameters = new Dictionary<string, object>();
         }

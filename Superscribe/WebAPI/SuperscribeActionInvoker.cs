@@ -22,7 +22,7 @@
             var actionDescriptor = actionContext.ActionDescriptor;
             var controllerContext = actionContext.ControllerContext;
 
-            var webApiInfo = new WebApiInfo();
+            var webApiInfo = new RouteData();
             var walker = SuperscribeConfig.Walker();
             walker.WalkRoute(controllerContext.Request.RequestUri.AbsolutePath, webApiInfo);
 

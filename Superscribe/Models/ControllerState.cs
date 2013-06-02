@@ -1,13 +1,7 @@
 ﻿namespace Superscribe.Models
 {
-    using System.Text.RegularExpressions;
-
-    public class ControllerState : ʃ
+    public class ControllerState : SuperscribeState
     {
-        public ControllerState()
-        {
-        }
-
         public string ControllerName { get; set; }
     }
 }
