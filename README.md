@@ -1,6 +1,19 @@
 Superscribe
 ===========
 
+In my mind routing is such a fundamental part of a web app, but it is never really a first class citizen
+
+In Superscribe, you can run arbitrary code as each segment is matched
+
+This can be especially useful when doing javascript routes for SPAs, so you can build models, or set variables or even trigger dom events such as sliding panes or menus
+
+You can also set match conditions for each segment, rather than just matching on the text or a regex
+
+It's essentially a finite state machine!
+
+###Overview
+
+
 Traditional Web API routing relies heavily on pattern matching an entire url which can be slow with complex requirements. Routes are cumbersome to define and don't provide much scope for reusabilty or programatic generation.
 
 Attribute routing goes someway to addressing some of these issues, but can still be hard to manage as your route definitions are somewhat verbose, and split across multiple files. It is also still limited to the action\controller selection mechanisms of standard routing, which although extensible are not particularly powerful out of the box.
