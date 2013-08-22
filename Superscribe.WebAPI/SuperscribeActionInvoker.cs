@@ -36,29 +36,25 @@
 
             var arguments = webApiInfo.Parameters;
 
-            return
-                Extensions.RunSynchronously(
-                    () =>
-                    actionDescriptor.ExecuteAsync(controllerContext, arguments, cancellationToken)
-                                    .Then(
-                                        value => actionDescriptor.ResultConverter.Convert(controllerContext, value),
-                                        cancellationToken),
-                    cancellationToken).Catch(
-                        info =>
-                        {
-                            // Propagate anything which isn't HttpResponseException
-                            var httpResponseException = info.Exception as HttpResponseException;
-                            if (httpResponseException == null)
-                            {
-                                return info.Throw();
-                            }
+            return TaskHelpers.RunSynchronously(() =>
+            {
+                return actionDescriptor.ExecuteAsync(controllerContext, arguments, cancellationToken)
+                                       .Then(value => actionDescriptor.ResultConverter.Convert(controllerContext, value), cancellationToken);
+            }, cancellationToken)
+            .Catch<HttpResponseMessage>(info =>
+            {
+                // Propagate anything which isn't HttpResponseException
+                HttpResponseException httpResponseException = info.Exception as HttpResponseException;
+                if (httpResponseException == null)
+                {
+                    return info.Throw();
+                }
 
-                            var response = httpResponseException.Response;
-                            response.EnsureResponseHasRequest(actionContext.Request);
+                HttpResponseMessage response = httpResponseException.Response;
+                response.EnsureResponseHasRequest(actionContext.Request);
 
-                            return info.Handled(response);
-                        },
-                        cancellationToken);
+                return info.Handled(response);
+            }, cancellationToken);
         }
     }
 }
