@@ -7,11 +7,11 @@
 
     public class RouteWalker
     {
-        private readonly IEnumerable<SuperscribeState> baseStates;
+        private readonly SuperscribeState baseState;
 
-        public RouteWalker(IEnumerable<SuperscribeState> baseStates)
+        public RouteWalker(SuperscribeState baseState)
         {
-            this.baseStates = baseStates;
+            this.baseState = baseState;
         }
 
         public bool ExtraneousMatch { get; private set; }
@@ -24,8 +24,14 @@
 
         public void WalkRoute(string route, RouteData info)
         {
+            if (route == "/" && baseState.OnComplete != null)
+            {
+                baseState.OnComplete(info);
+                return;
+            }
+
             this.RemainingRoute = route;
-            this.WalkRoute(info, baseStates);
+            this.WalkRoute(info, baseState.Transitions);
         }
 
         public void WalkRoute(RouteData info, IEnumerable<SuperscribeState> states)
@@ -59,7 +65,7 @@
             var actionState = match as ActionState;
             if (actionState != null)
             {
-                info.ActionName = segment;
+                info.ActionName = !string.IsNullOrEmpty(actionState.ActionName) ? actionState.ActionName : segment;
             }
 
             var paramState = match as ParamState;
@@ -78,26 +84,34 @@
                 }
             }
 
-            var commandState = match as CommandState;
-            if (commandState != null)
+            if (match != null && match.Command != null)
             {
-                commandState.Command(info);
+                match.Command(info);
             }
 
             if (string.IsNullOrEmpty(this.RemainingRoute) && match != null && match.Transitions.Any()
-                && match.Transitions.All(o => !o.IsOptional))
+                && match.Transitions.All(o => !o.IsOptional) && match.OnComplete == null)
             {
                 IncompleteMatch = true;
+                return;
             }
 
             if (match == null)
             {
                 ExtraneousMatch = true;
+                return;
             }
 
-            if (!string.IsNullOrEmpty(this.RemainingRoute) && match != null)
+            if (!string.IsNullOrEmpty(this.RemainingRoute))
             {
                 WalkRoute(info, match.Transitions);
+            }
+            else
+            {
+                if (match.OnComplete != null)
+                {
+                    match.OnComplete(info);
+                }
             }
         }
 

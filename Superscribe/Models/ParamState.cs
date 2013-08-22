@@ -13,9 +13,9 @@
         public string Name { get; set; }
     }
 
-    public class ParamState<T> : ParamState
+    public abstract class ParamState<T> : ParamState
     {
-        public ParamState(string name)
+        protected ParamState(string name)
         {
             Name = name;
         }

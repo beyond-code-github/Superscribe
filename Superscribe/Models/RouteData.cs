@@ -44,5 +44,7 @@
                 this.controllerName = value;
             }
         }
+
+        public string Response { get; set; }
     }
 }

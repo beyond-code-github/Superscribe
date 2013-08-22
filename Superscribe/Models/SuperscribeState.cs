@@ -1,5 +1,6 @@
 ﻿namespace Superscribe.Models
 {
+    using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
@@ -49,6 +50,10 @@
         /// </summary>
         public string Template { get; set; }
 
+        public Action<RouteData> Command { get; set; }
+
+        public Action<RouteData> OnComplete { get; set; }
+
         #endregion
 
         #region Methods
@@ -72,6 +77,12 @@
             return this;
         }
 
+        public virtual SuperscribeState ʃ(Action<RouteData> command)
+        {
+            this.Command = command;
+            return this;
+        }
+
         private SuperscribeState MatchAsRegex()
         {
             this.Pattern = new Regex(this.Template);
@@ -85,8 +96,9 @@
                 return this.Pattern.IsMatch(segment);
             }
 
-            return segment == this.Template;
+            return string.Equals(this.Template, segment, StringComparison.OrdinalIgnoreCase);
         }
+
 
         /// <summary>
         /// Works backwards up the state\transition chain and returns the topmost state
@@ -122,7 +134,7 @@
         /// <param name="other">String used create constant state</param>
         public static SuperscribeState operator /(SuperscribeState state, string other)
         {
-            return state.Slash(ʃ.Constant(other));
+            return state.Slash(Superscribe.ʃ.Constant(other));
         }
 
         /// <summary>
@@ -144,7 +156,7 @@
         {
             foreach (var s in others)
             {
-                state.Slash(s);
+                state.Slash(s.Base());
             }
 
             return state;
@@ -213,13 +225,19 @@
             return state;
         }
 
+        public static SuperscribeState operator *(SuperscribeState state, Action<RouteData> action)
+        {
+            state.OnComplete = action;
+            return state;
+        }
+
         /// <summary>
         /// Implicit conversion between string and a ConstantState
         /// </summary>
         /// <param name="value">String to create ConstantState from</param>
         public static implicit operator SuperscribeState(string value)
         {
-            return ʃ.Constant(value);
+            return Superscribe.ʃ.Constant(value);
         }
 
         #endregion
