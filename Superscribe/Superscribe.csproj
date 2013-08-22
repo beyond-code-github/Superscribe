@@ -40,6 +40,7 @@
     <Compile Include="Models\ControllerState.cs" />
     <Compile Include="Models\CommandState.cs" />
     <Compile Include="Models\ParamState.cs" />
+    <Compile Include="Models\ShorthandStates.cs" />
     <Compile Include="Models\SuperscribeState.cs" />
     <Compile Include="Models\RouteData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

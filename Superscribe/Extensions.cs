@@ -72,5 +72,10 @@
         {
             return new CommandState(pattern, command);
         }
+
+        public static SuperscribeState ʃ(this string value)
+        {
+            return Superscribe.ʃ.Constant(value);
+        }
     }
 }
