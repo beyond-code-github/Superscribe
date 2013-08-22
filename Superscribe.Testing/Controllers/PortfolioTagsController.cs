@@ -6,7 +6,7 @@
     {
         public string Get(int siteId)
         {
-            return "Get";
+            return string.Format("Get_PortfolioTags_{0}", siteId);
         }
     }
 }

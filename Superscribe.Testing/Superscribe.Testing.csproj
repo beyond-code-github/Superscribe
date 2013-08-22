@@ -40,6 +40,7 @@
     <Compile Include="Controllers\BlogPostsController.cs" />
     <Compile Include="Controllers\BlogPostArchivesController.cs" />
     <Compile Include="Controllers\BlogPostMediaController.cs" />
+    <Compile Include="Controllers\FormsController.cs" />
     <Compile Include="Controllers\PortfolioCategoriesController.cs" />
     <Compile Include="Controllers\PortfolioProjectsController.cs" />
     <Compile Include="Controllers\PortfolioTagsController.cs" />

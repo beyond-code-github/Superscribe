@@ -23,6 +23,67 @@
         };
     }
 
+    public class When_routing_any_url : RouteTestsBase
+    {
+        private Because of = () => response = browser.Get(
+            "/Sites/123/Portfolio/Projects/123/Media/123",
+            (with) =>
+            {
+                with.Header("Accept", "application/json");
+                with.HttpRequest();
+            });
+
+        private It should_be_case_insensitive = () => response.StatusCode.ShouldEqual(HttpStatusCode.OK);
+    }
+
+    public class FormsTest : RouteTestsBase
+    {
+        private Because of = () => response = browser.Get(
+            "/api/2/forms",
+            (with) =>
+            {
+                with.Header("Accept", "application/json");
+                with.HttpRequest();
+            });
+
+        private It should_return_200_ok = () => response.StatusCode.ShouldEqual(HttpStatusCode.OK);
+
+        private It should_hit_the_right_controller =
+            () => response.Content.ReadAsStringAsync().Result.ShouldEqual("\"Get_Forms_2\"");
+    }
+
+    public class FormsIdTest : RouteTestsBase
+    {
+        private Because of = () => response = browser.Get(
+            "/api/2/forms/123",
+            (with) =>
+            {
+                with.Header("Accept", "application/json");
+                with.HttpRequest();
+            });
+
+        private It should_return_200_ok = () => response.StatusCode.ShouldEqual(HttpStatusCode.OK);
+
+        private It should_hit_the_right_controller =
+            () => response.Content.ReadAsStringAsync().Result.ShouldEqual("\"GetById_Forms_2_123\"");
+    }
+
+    public class FormsVisibleForTest : RouteTestsBase
+    {
+        private Because of = () => response = browser.Get(
+            "/api/2/forms/visiblefor/abcde12345",
+            (with) =>
+            {
+                with.Header("Accept", "application/json");
+                with.HttpRequest();
+            });
+
+        private It should_return_200_ok = () => response.StatusCode.ShouldEqual(HttpStatusCode.OK);
+
+        private It should_hit_the_right_controller =
+            () => response.Content.ReadAsStringAsync().Result.ShouldEqual("\"VisibleFor_Forms_2_abcde12345\"");
+    }
+
     public class PortfolioProjectMediaTest : RouteTestsBase
     {
         private Because of = () => response = browser.Get(
@@ -34,6 +95,9 @@
             });
 
         private It should_return_200_ok = () => response.StatusCode.ShouldEqual(HttpStatusCode.OK);
+
+        private It should_hit_the_right_controller =
+            () => response.Content.ReadAsStringAsync().Result.ShouldEqual("\"GetById_PortfolioProjectMedia_123_123_123\"");
     }
 
     public class PortfolioTagsTest : RouteTestsBase
@@ -47,6 +111,9 @@
             });
 
         private It should_return_200_ok = () => response.StatusCode.ShouldEqual(HttpStatusCode.OK);
+
+        private It should_hit_the_right_controller =
+            () => response.Content.ReadAsStringAsync().Result.ShouldEqual("\"Get_PortfolioTags_123\"");
     }
 
     public class PortfolioProjectsTest : RouteTestsBase
@@ -60,6 +127,9 @@
             });
 
         private It should_return_200_ok = () => response.StatusCode.ShouldEqual(HttpStatusCode.OK);
+
+        private It should_hit_the_right_controller =
+            () => response.Content.ReadAsStringAsync().Result.ShouldEqual("\"Get_PortfolioProjects_123\"");
     }
 
     public class PortfolioProjectsIdTest : RouteTestsBase
@@ -73,6 +143,9 @@
             });
 
         private It should_return_200_ok = () => response.StatusCode.ShouldEqual(HttpStatusCode.OK);
+
+        private It should_hit_the_right_controller =
+            () => response.Content.ReadAsStringAsync().Result.ShouldEqual("\"GetById_PortfolioProjects_123_123\"");
     }
 
     public class PortfolioCategoriesTest : RouteTestsBase
@@ -86,6 +159,9 @@
             });
 
         private It should_return_200_ok = () => response.StatusCode.ShouldEqual(HttpStatusCode.OK);
+
+        private It should_hit_the_right_controller =
+            () => response.Content.ReadAsStringAsync().Result.ShouldEqual("\"Get_PortfolioCategories_123\"");
     }
 
     public class PortfolioCategoriesIdTest : RouteTestsBase
@@ -99,6 +175,9 @@
             });
 
         private It should_return_200_ok = () => response.StatusCode.ShouldEqual(HttpStatusCode.OK);
+
+        private It should_hit_the_right_controller =
+            () => response.Content.ReadAsStringAsync().Result.ShouldEqual("\"GetById_PortfolioCategories_123_123\"");
     }
 
     public class BlogPostsTest : RouteTestsBase
@@ -110,6 +189,9 @@
                 with.Header("Accept", "application/json");
                 with.HttpRequest();
             });
+
+        private It should_hit_the_right_controller =
+            () => response.Content.ReadAsStringAsync().Result.ShouldEqual("\"Get_BlogPosts_123\"");
 
         private It should_return_200_ok = () => response.StatusCode.ShouldEqual(HttpStatusCode.OK);
     }
@@ -124,6 +206,9 @@
                 with.HttpRequest();
             });
 
+        private It should_hit_the_right_controller =
+            () => response.Content.ReadAsStringAsync().Result.ShouldEqual("\"GetById_BlogPosts_123_123\"");
+
         private It should_return_200_ok = () => response.StatusCode.ShouldEqual(HttpStatusCode.OK);
     }
 
@@ -136,6 +221,9 @@
                 with.Header("Accept", "application/json");
                 with.HttpRequest();
             });
+
+        private It should_hit_the_right_controller =
+            () => response.Content.ReadAsStringAsync().Result.ShouldEqual("\"Get_BlogPostMedia_123_123\"");
 
         private It should_return_200_ok = () => response.StatusCode.ShouldEqual(HttpStatusCode.OK);
     }
@@ -150,6 +238,9 @@
                 with.HttpRequest();
             });
 
+        private It should_hit_the_right_controller =
+            () => response.Content.ReadAsStringAsync().Result.ShouldEqual("\"GetById_BlogPostMedia_123_123_123\"");
+
         private It should_return_200_ok = () => response.StatusCode.ShouldEqual(HttpStatusCode.OK);
     }
 
@@ -163,6 +254,9 @@
                 with.HttpRequest();
             });
 
+        private It should_hit_the_right_controller =
+            () => response.Content.ReadAsStringAsync().Result.ShouldEqual("\"Get_BlogTags_123\"");
+
         private It should_return_200_ok = () => response.StatusCode.ShouldEqual(HttpStatusCode.OK);
     }
 
@@ -175,6 +269,9 @@
                 with.Header("Accept", "application/json");
                 with.HttpRequest();
             });
+
+        private It should_hit_the_right_controller =
+            () => response.Content.ReadAsStringAsync().Result.ShouldEqual("\"Get_BlogPostArchives_123\"");
 
         private It should_return_200_ok = () => response.StatusCode.ShouldEqual(HttpStatusCode.OK);
     }
@@ -190,5 +287,9 @@
             });
 
         private It should_return_200_ok = () => response.StatusCode.ShouldEqual(HttpStatusCode.OK);
+
+        private It should_hit_the_right_controller =
+            () => response.Content.ReadAsStringAsync().Result.ShouldEqual("\"Get_BlogPostArchives_123\"");
+
     }
 }

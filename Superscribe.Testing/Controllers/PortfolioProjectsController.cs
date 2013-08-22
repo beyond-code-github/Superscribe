@@ -6,12 +6,12 @@
     {
         public string Get(int siteId)
         {
-            return "Get";
+            return string.Format("Get_PortfolioProjects_{0}", siteId);
         }
 
         public string GetById(int siteId, int projectId)
         {
-            return "GetById";
+            return string.Format("GetById_PortfolioProjects_{0}_{1}", siteId, projectId);
         }
     }
 }

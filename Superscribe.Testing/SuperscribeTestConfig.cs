@@ -2,6 +2,7 @@
 {
     using System.Web.Http;
 
+    using Superscribe.Models;
     using Superscribe.WebApi;
 
     public static class SuperscribeTestConfig
@@ -10,16 +11,21 @@
         {
             SuperscribeConfig.Register(config);
 
-            ʃ.Route(s => s / "sites" / "siteId".Int() / (
-                +("blog" / (
-                      +("tags".Controller("blogtags"))
-                    | +("posts".Controller("blogposts") / (
-                          +(-"postId".Int() / -"media".Controller("blogpostmedia") / -"id".Int())
-                        | +("archives".Controller("blogpostarchives") / -"year".Int() / "month".Int())))))
-                | +("portfolio" / (
-                      +("projects".Controller("portfolioprojects") / -"projectId".Int() / -"media".Controller("portfolioprojectmedia") / +"id".Int())
-                    | +("tags".Controller("portfoliotags"))
-                    | +("categories".Controller("portfoliocategories") / -"id".Int())))));
+            ʃ.Route((root, ʅ) => root / "api" / (ʃLong)"parentId" /
+                        "Forms".Controller() / (
+                            ʅ / "VisibleFor".Action() / (ʃString)"appDataId"
+                          | ʅ / -(ʃLong)"id"));
+
+            ʃ.Route((root, ʅ) => root / "sites" / (ʃInt)"siteId" / (
+                ʅ / "blog" / (
+                      ʅ / "tags".Controller("blogtags")
+                    | ʅ / "posts".Controller("blogposts") / (
+                          ʅ / -(ʃInt)"postId" / -"media".Controller("blogpostmedia") / -(ʃInt)"id"
+                        | ʅ / "archives".Controller("blogpostarchives") / -(ʃInt)"year" / (ʃInt)"month"))
+                | ʅ / "portfolio" / (
+                      ʅ / "projects".Controller("portfolioprojects") / -(ʃInt)"projectId" / -"media".Controller("portfolioprojectmedia") / -(ʃInt)"id"
+                    | ʅ / "tags".Controller("portfoliotags")
+                    | ʅ / "categories".Controller("portfoliocategories") / -(ʃInt)"id")));
         }
     }
 }
