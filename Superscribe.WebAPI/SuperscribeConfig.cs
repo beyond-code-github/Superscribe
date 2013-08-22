@@ -16,15 +16,21 @@
 
         public static HttpControllerTypeCache ControllerTypeCache { get; private set; }
 
-        public static void Register(HttpConfiguration configuration)
+        public static void Register(HttpConfiguration configuration, string qualifier = "")
         {
+            var template = "{*wildcard}";
+            if (!string.IsNullOrEmpty(qualifier))
+            {
+                template = qualifier + "/" + template;
+            }
+
             HttpConfiguration = configuration;
 
             // We need a single default route that will match everything
-            configuration.Routes.Clear();
+            // configuration.Routes.Clear();
             configuration.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "{*wildcard}",
+                routeTemplate: template,
                 defaults: new { controller = "values", id = RouteParameter.Optional }
             );
 
@@ -37,7 +43,7 @@
 
         public static RouteWalker Walker()
         {
-            return new RouteWalker(ʃ.Base.Transitions);
+            return new RouteWalker(ʃ.Base);
         }
     }
 }
