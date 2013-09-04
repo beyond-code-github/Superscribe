@@ -1,10 +1,10 @@
 ﻿namespace Superscribe.Models
 {
-    public class ControllerState : SuperscribeState
+    public class ControllerNode : SuperscribeNode
     {
-        public ControllerState()
+        public ControllerNode()
         {
-            this.Command = (data, segment) => data.ControllerName = !string.IsNullOrEmpty(this.ControllerName)
+            this.ActionFunction = (data, segment) => data.ControllerName = !string.IsNullOrEmpty(this.ControllerName)
                         ? this.ControllerName
                         : segment;
         }

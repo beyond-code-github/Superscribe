@@ -12,39 +12,39 @@
         /// <summary>
         /// Matches the given pattern and sets ControllerName
         /// </summary>
-        public static ControllerState Controller(this string pattern)
+        public static ControllerNode Controller(this string pattern)
         {
-            return new ControllerState { Template = pattern };
+            return new ControllerNode { Template = pattern };
         }
 
         /// <summary>
         /// Matches the given pattern then sets controller name to another value
         /// </summary>
-        public static ControllerState Controller(this string pattern, string controllerName)
+        public static ControllerNode Controller(this string pattern, string controllerName)
         {
-            return new ControllerState { Template = pattern, ControllerName = controllerName };
+            return new ControllerNode { Template = pattern, ControllerName = controllerName };
         }
 
         /// <summary>
         /// Matches the given pattern then sets ActionName
         /// </summary>
-        public static ActionState Action(this string pattern)
+        public static ActionNode Action(this string pattern)
         {
-            return new ActionState { Template = pattern };
+            return new ActionNode { Template = pattern };
         }
 
         /// <summary>
         /// Matches the given pattern then sets ActionName to another value
         /// </summary>
-        public static ActionState Action(this string pattern, string actionName)
+        public static ActionNode Action(this string pattern, string actionName)
         {
-            return new ActionState { Template = pattern, ActionName = actionName };
+            return new ActionNode { Template = pattern, ActionName = actionName };
         }
 
         /// <summary>
         /// Matches an integer parameter and adds the name and value to the Parameters dictionary
         /// </summary>
-        public static ParamState<int> Int(this string name)
+        public static ParamNode<int> Int(this string name)
         {
             return Superscribe.ʃ.Int(name);
         }
@@ -52,7 +52,7 @@
         /// <summary>
         /// Matches a boolean parameter and adds the name and value to the Parameters dictionary
         /// </summary>
-        public static ParamState<bool> Bool(this string name)
+        public static ParamNode<bool> Bool(this string name)
         {
             return Superscribe.ʃ.Bool(name);
         }
@@ -60,7 +60,7 @@
         /// <summary>
         /// Matches a string parameter and adds the name and value to the Parameters dictionary
         /// </summary>
-        public static ParamState<string> String(this string name)
+        public static ParamNode<string> String(this string name)
         {
             return Superscribe.ʃ.String(name);
         }
@@ -68,12 +68,12 @@
         /// <summary>
         /// Matches the given pattern and then executes the given command
         /// </summary>
-        public static CommandState ʃ(this string pattern, Action<RouteData, string> command)
+        public static CommandNode ʃ(this string pattern, Action<RouteData, string> command)
         {
-            return new CommandState(pattern, command);
+            return new CommandNode(pattern, command);
         }
 
-        public static SuperscribeState ʃ(this string value)
+        public static SuperscribeNode ʃ(this string value)
         {
             return Superscribe.ʃ.Constant(value);
         }

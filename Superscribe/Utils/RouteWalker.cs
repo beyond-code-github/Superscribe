@@ -8,11 +8,11 @@
 
     public class RouteWalker
     {
-        private readonly SuperscribeState baseState;
+        private readonly SuperscribeNode baseNode;
 
-        public RouteWalker(SuperscribeState baseState)
+        public RouteWalker(SuperscribeNode baseNode)
         {
-            this.baseState = baseState;
+            this.baseNode = baseNode;
         }
 
         public bool ExtraneousMatch { get; private set; }
@@ -26,7 +26,7 @@
         public void WalkRoute(string route, RouteData info)
         {
             this.RemainingSegments = new Queue<string>(route.Split('/'));
-            this.WalkRoute(info, baseState);
+            this.WalkRoute(info, this.baseNode);
         }
 
         public string PeekNextSegment()
@@ -39,31 +39,31 @@
             return string.Empty;
         }
 
-        public void WalkRoute(RouteData info, SuperscribeState match)
+        public void WalkRoute(RouteData info, SuperscribeNode match)
         {
             Action<RouteData> onComplete = null;
             while (match != null)
             {
-                if (match.Command != null)
+                if (match.ActionFunction != null)
                 {
-                    match.Command(info, this.PeekNextSegment());
+                    match.ActionFunction(info, this.PeekNextSegment());
                 }
 
-                if (!(match is NonConsumingState))
+                if (!(match is NonConsumingNode))
                 {
                     this.RemainingSegments.Dequeue();
                 }
 
-                if (match.OnComplete != null)
+                if (match.FinalFunction != null)
                 {
-                    onComplete = match.OnComplete;
+                    onComplete = match.FinalFunction;
                 }
 
-                var nextMatch = MatchState(this.PeekNextSegment(), match.Transitions);
+                var nextMatch = FindNextMatch(this.PeekNextSegment(), match.Edges);
                 if (nextMatch == null
-                    && match.OnComplete == null
-                    && match.Transitions.Any()
-                    && match.Transitions.All(o => !(o.IsOptional || o is NonConsumingState)))
+                    && match.FinalFunction == null
+                    && match.Edges.Any()
+                    && match.Edges.All(o => !(o.IsOptional || o is NonConsumingNode)))
                 {
                     this.IncompleteMatch = true;
                     return;
@@ -84,9 +84,9 @@
             }
         }
 
-        private static SuperscribeState MatchState(string segment, IEnumerable<SuperscribeState> states)
+        private static SuperscribeNode FindNextMatch(string segment, IEnumerable<SuperscribeNode> states)
         {
-            return states.FirstOrDefault(o => o.IsMatch(segment));
+            return states.FirstOrDefault(o => o.ActivationFunction(segment));
         }
     }
 }

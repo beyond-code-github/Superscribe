@@ -1,8 +1,8 @@
 ﻿namespace Superscribe.Models
 {
-    public class ConstantState : SuperscribeState
+    public class ConstantNode : SuperscribeNode
     {
-        public ConstantState(string value)
+        public ConstantNode(string value)
         {
             this.Template = value;
         }

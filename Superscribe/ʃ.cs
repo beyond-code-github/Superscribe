@@ -10,37 +10,37 @@
     /// </summary>
     public class ʃ
     {
-        public static SuperscribeState Base = new SuperscribeState();
+        public static SuperscribeNode Base = new SuperscribeNode();
 
         #region Static Methods
 
         /// <summary>
         /// Matches any valid identifier and sets ControllerName
         /// </summary>
-        public static ControllerState Controller
+        public static ControllerNode Controller
         {
             get
             {
-                return new ControllerState { Pattern = new Regex("([a-z]|[A-Z]|[0-9])+", RegexOptions.Compiled) };
+                return new ControllerNode { Pattern = new Regex("([a-z]|[A-Z]|[0-9])+", RegexOptions.Compiled) };
             }
         }
 
         /// <summary>
         /// Matches any valid identifier and sets ActionName
         /// </summary>
-        public static ActionState Action
+        public static ActionNode Action
         {
             get
             {
-                return new ActionState { Pattern = new Regex("([a-z]|[A-Z]|[0-9])+", RegexOptions.Compiled) };
+                return new ActionNode { Pattern = new Regex("([a-z]|[A-Z]|[0-9])+", RegexOptions.Compiled) };
             }
         }
 
-        public static NullState Option
+        public static RouteGlue Option
         {
             get
             {
-                return new NullState();
+                return new RouteGlue();
             }
         }
 
@@ -56,9 +56,9 @@
         /// Matches a string constant and performs no action
         /// </summary>
         /// <param name="value">Constant value to match</param>
-        public static ConstantState Constant(string value)
+        public static ConstantNode Constant(string value)
         {
-            return new ConstantState(value);
+            return new ConstantNode(value);
         }
 
         /// <summary>
@@ -66,9 +66,9 @@
         /// </summary>
         /// <param name="value">Constant value to match</param>
         /// <param name="configure">Action to execute</param>
-        public static ConstantState Constant(string value, Action<ConstantState> configure)
+        public static ConstantNode Constant(string value, Action<ConstantNode> configure)
         {
-            var result = new ConstantState(value);
+            var result = new ConstantNode(value);
             configure(result);
             return result;
         }
@@ -114,7 +114,7 @@
         /// </summary>
         /// <param name="config">Route configuration function</param>
         /// <returns>The last state in the chain</returns>
-        public static SuperscribeState Route(Func<SuperscribeState, SuperscribeState> config)
+        public static SuperscribeNode Route(Func<SuperscribeNode, SuperscribeNode> config)
         {
             return config(Base);
         }
@@ -124,9 +124,9 @@
         /// </summary>
         /// <param name="config">Route configuration function</param>
         /// <returns>The last state in the chain</returns>
-        public static SuperscribeState Route(Func<SuperscribeState, NullState, SuperscribeState> config)
+        public static SuperscribeNode Route(Func<SuperscribeNode, RouteGlue, SuperscribeNode> config)
         {
-            return config(Base, new NullState());
+            return config(Base, new RouteGlue());
         }
 
         #endregion

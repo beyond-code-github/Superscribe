@@ -4,11 +4,11 @@
     using System.ComponentModel;
     using System.Globalization;
 
-    public abstract class ParamState : SuperscribeState
+    public abstract class ParamNode : SuperscribeNode
     {
-        protected ParamState()
+        protected ParamNode()
         {
-            this.Command = (data, segment) =>
+            this.ActionFunction = (data, segment) =>
             {
                 object value;
                 var success = this.TryParse(segment, out value);
@@ -31,9 +31,9 @@
         public string Name { get; set; }
     }
 
-    public abstract class ParamState<T> : ParamState
+    public abstract class ParamNode<T> : ParamNode
     {
-        protected ParamState(string name)
+        protected ParamNode(string name)
         {
             Name = name;
         }

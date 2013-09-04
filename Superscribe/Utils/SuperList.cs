@@ -4,11 +4,11 @@
 
     using Superscribe.Models;
 
-    public class SuperList : List<SuperscribeState>
+    public class SuperList : List<SuperscribeNode>
     {
-        public static SuperscribeState operator /(string name, SuperList others)
+        public static SuperscribeNode operator /(string name, SuperList others)
         {
-            var state = new ConstantState(name);
+            var state = new ConstantNode(name);
             foreach (var s in others)
             {
                 state.Slash(s);
@@ -18,11 +18,11 @@
         }
     }
 
-    public class DecisionList<T> : List<NonConsumingState<T>>
+    public class DecisionList<T> : List<NonConsumingNode<T>>
     {
-        public static SuperscribeState operator /(string name, DecisionList<T> others)
+        public static SuperscribeNode operator /(string name, DecisionList<T> others)
         {
-            var state = new ConstantState(name);
+            var state = new ConstantNode(name);
             foreach (var s in others)
             {
                 state.Slash(s);

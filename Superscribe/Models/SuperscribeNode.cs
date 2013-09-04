@@ -7,19 +7,19 @@
 
     using Superscribe.Utils;
 
-    public class SuperscribeState
+    public class SuperscribeNode
     {
-        private Predicate<string> isMatch;
+        private Predicate<string> activationFunction;
 
         /// <summary>
         /// Base constructor for superscribe states
         /// </summary>
-        public SuperscribeState()
+        public SuperscribeNode()
         {
-            this.Transitions = new ConcurrentQueue<SuperscribeState>();
-            this.QueryString = new ConcurrentQueue<SuperscribeState>();
+            this.Edges = new ConcurrentQueue<SuperscribeNode>();
+            this.QueryString = new ConcurrentQueue<SuperscribeNode>();
 
-            this.IsMatch = segment =>
+            this.ActivationFunction = segment =>
             {
                 if (this.Pattern != null)
                 {
@@ -35,7 +35,7 @@
         /// <summary>
         /// The parent state
         /// </summary>
-        protected SuperscribeState Parent { get; set; }
+        protected SuperscribeNode Parent { get; set; }
 
         /// <summary>
         /// Boolean flag indicating if the transition into this state is optional
@@ -45,12 +45,12 @@
         /// <summary>
         /// Concurrent queue of available transitions from this state
         /// </summary>
-        public ConcurrentQueue<SuperscribeState> Transitions { get; set; }
+        public ConcurrentQueue<SuperscribeNode> Edges { get; set; }
 
         /// <summary>
         /// Concurrent queue of available querystring transitions
         /// </summary>
-        public ConcurrentQueue<SuperscribeState> QueryString { get; set; }
+        public ConcurrentQueue<SuperscribeNode> QueryString { get; set; }
 
         /// <summary>
         /// Regex pattern to use when matching
@@ -64,19 +64,19 @@
 
         public object Result { get; set; }
 
-        public Action<RouteData, string> Command { get; set; }
+        public Action<RouteData, string> ActionFunction { get; set; }
 
-        public Action<RouteData> OnComplete { get; set; }
+        public Action<RouteData> FinalFunction { get; set; }
 
-        public Predicate<string> IsMatch
+        public Predicate<string> ActivationFunction
         {
             get
             {
-                return this.isMatch;
+                return this.activationFunction;
             }
             set
             {
-                this.isMatch = value;
+                this.activationFunction = value;
             }
         }
 
@@ -84,32 +84,32 @@
 
         #region Methods
 
-        public SuperscribeState Slash(SuperscribeState nextState)
+        public SuperscribeNode Slash(SuperscribeNode nextNode)
         {
-            nextState.Parent = this;
-            this.Transitions.Enqueue(nextState);
-            return nextState;
+            nextNode.Parent = this;
+            this.Edges.Enqueue(nextNode);
+            return nextNode;
         }
 
-        private SuperscribeState Query(SuperscribeState queryState)
+        private SuperscribeNode Query(SuperscribeNode queryNode)
         {
-            this.QueryString.Enqueue(queryState);
-            return queryState;
+            this.QueryString.Enqueue(queryNode);
+            return queryNode;
         }
 
-        public SuperscribeState Optional()
+        public SuperscribeNode Optional()
         {
             this.IsOptional = true;
             return this;
         }
 
-        public virtual SuperscribeState ʃ(Action<RouteData, string> command)
+        public virtual SuperscribeNode ʃ(Action<RouteData, string> command)
         {
-            this.Command = command;
+            this.ActionFunction = command;
             return this;
         }
 
-        private SuperscribeState MatchAsRegex()
+        private SuperscribeNode MatchAsRegex()
         {
             this.Pattern = new Regex(this.Template);
             return this;
@@ -118,7 +118,7 @@
         /// <summary>
         /// Works backwards up the state\transition chain and returns the topmost state
         /// </summary>
-        public SuperscribeState Base()
+        public SuperscribeNode Base()
         {
             return Base(this, this.Parent);
         }
@@ -126,13 +126,13 @@
         /// <summary>
         /// Recursive component of <see cref="Base"/>
         /// </summary>
-        /// <param name="state">The current state</param>
+        /// <param name="node">The current state</param>
         /// <param name="parent">The parent of the current state</param>
-        private SuperscribeState Base(SuperscribeState state, SuperscribeState parent)
+        private SuperscribeNode Base(SuperscribeNode node, SuperscribeNode parent)
         {
             if (parent == null)
             {
-                return state;
+                return node;
             }
 
             return Base(parent, parent.Parent);
@@ -145,57 +145,57 @@
         /// <summary>
         /// Shorthand for .Slash between a state and a transition to a ConstantState
         /// </summary>
-        /// <param name="state">State</param>
+        /// <param name="node">State</param>
         /// <param name="other">String used create constant state</param>
-        public static SuperscribeState operator /(SuperscribeState state, string other)
+        public static SuperscribeNode operator /(SuperscribeNode node, string other)
         {
-            return state.Slash(Superscribe.ʃ.Constant(other));
+            return node.Slash(Superscribe.ʃ.Constant(other));
         }
 
         /// <summary>
         /// Shorthand for .Slash between a state and a transition
         /// </summary>
-        /// <param name="state">Any state</param>
+        /// <param name="node">Any state</param>
         /// <param name="other">Any transition</param>
-        public static SuperscribeState operator /(SuperscribeState state, SuperscribeState other)
+        public static SuperscribeNode operator /(SuperscribeNode node, SuperscribeNode other)
         {
-            return state.Slash(other);
+            return node.Slash(other);
         }
 
         /// <summary>
         /// Shorthand for .Slash between a state and its possible transitions
         /// </summary>
-        /// <param name="state">State</param>
+        /// <param name="node">State</param>
         /// <param name="others">IEnumerble of transitions</param>
-        public static SuperscribeState operator /(SuperscribeState state, IEnumerable<SuperscribeState> others)
+        public static SuperscribeNode operator /(SuperscribeNode node, IEnumerable<SuperscribeNode> others)
         {
             foreach (var s in others)
             {
-                state.Slash(s.Base());
+                node.Slash(s.Base());
             }
 
-            return state;
+            return node;
         }
 
         /// <summary>
         /// Shorthand for .Slash between a state and a Querystring transition
         /// </summary>
-        /// <param name="state">State</param>
+        /// <param name="node">State</param>
         /// <param name="other">Querystring transition</param>
-        public static SuperscribeState operator &(SuperscribeState state, SuperscribeState other)
+        public static SuperscribeNode operator &(SuperscribeNode node, SuperscribeNode other)
         {
-            return state.Query(other);
+            return node.Query(other);
         }
 
         /// <summary>
         /// Shorthand for creating a transition list from two alternatives
         /// </summary>
-        /// <param name="state">First transition</param>
+        /// <param name="node">First transition</param>
         /// <param name="other">Second transition</param>
         /// <returns>New list of transitions</returns>
-        public static SuperList operator |(SuperscribeState state, SuperscribeState other)
+        public static SuperList operator |(SuperscribeNode node, SuperscribeNode other)
         {
-            return new SuperList { state, other };
+            return new SuperList { node, other };
         }
 
         /// <summary>
@@ -204,7 +204,7 @@
         /// <param name="states">List of transitions</param>
         /// <param name="other">Alternative transition</param>
         /// <returns>Modified list of transitions</returns>
-        public static SuperList operator |(SuperList states, SuperscribeState other)
+        public static SuperList operator |(SuperList states, SuperscribeNode other)
         {
             states.Add(other);
             return states;
@@ -213,44 +213,44 @@
         /// <summary>
         /// Shorthand for calling .Base
         /// </summary>
-        /// <param name="state">Current state</param>
+        /// <param name="node">Current state</param>
         /// <returns>The state at the base of the current transition chain</returns>
-        public static SuperscribeState operator +(SuperscribeState state)
+        public static SuperscribeNode operator +(SuperscribeNode node)
         {
-            return state.Base();
+            return node.Base();
         }
 
         /// <summary>
         /// Shorthand for calling .Optional
         /// </summary>
-        /// <param name="state">Transition to be made optional</param>
-        public static SuperscribeState operator -(SuperscribeState state)
+        /// <param name="node">Transition to be made optional</param>
+        public static SuperscribeNode operator -(SuperscribeNode node)
         {
-            state.Optional();
-            return state;
+            node.Optional();
+            return node;
         }
 
         /// <summary>
         /// Shorthand for calling .MatchAsRegex
         /// </summary>
-        /// <param name="state">Transition to be made optional</param>
-        public static SuperscribeState operator ~(SuperscribeState state)
+        /// <param name="node">Transition to be made optional</param>
+        public static SuperscribeNode operator ~(SuperscribeNode node)
         {
-            state.MatchAsRegex();
-            return state;
+            node.MatchAsRegex();
+            return node;
         }
 
-        public static SuperscribeState operator *(SuperscribeState state, Action<RouteData> action)
+        public static SuperscribeNode operator *(SuperscribeNode node, Action<RouteData> action)
         {
-            state.OnComplete = action;
-            return state;
+            node.FinalFunction = action;
+            return node;
         }
 
         /// <summary>
         /// Implicit conversion between string and a ConstantState
         /// </summary>
         /// <param name="value">String to create ConstantState from</param>
-        public static implicit operator SuperscribeState(string value)
+        public static implicit operator SuperscribeNode(string value)
         {
             return Superscribe.ʃ.Constant(value);
         }

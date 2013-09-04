@@ -35,13 +35,13 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\ActionState.cs" />
-    <Compile Include="Models\ConstantState.cs" />
-    <Compile Include="Models\ControllerState.cs" />
-    <Compile Include="Models\CommandState.cs" />
-    <Compile Include="Models\ParamState.cs" />
+    <Compile Include="Models\ActionNode.cs" />
+    <Compile Include="Models\ConstantNode.cs" />
+    <Compile Include="Models\ControllerNode.cs" />
+    <Compile Include="Models\CommandNode.cs" />
+    <Compile Include="Models\ParamNode.cs" />
     <Compile Include="Models\ShorthandStates.cs" />
-    <Compile Include="Models\SuperscribeState.cs" />
+    <Compile Include="Models\SuperscribeNode.cs" />
     <Compile Include="Models\RouteData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\SuperList.cs" />

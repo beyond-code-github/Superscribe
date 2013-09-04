@@ -4,70 +4,70 @@
 
     using Superscribe.Utils;
 
-    public class NonConsumingState : SuperscribeState
+    public class NonConsumingNode : SuperscribeNode
     {
 
     }
 
-    public class NonConsumingState<T> : NonConsumingState
+    public class NonConsumingNode<T> : NonConsumingNode
     {
-        public static NonConsumingState<T> operator ^(NonConsumingState<T> state, DecisionList<T> other)
+        public static NonConsumingNode<T> operator ^(NonConsumingNode<T> node, DecisionList<T> other)
         {
             foreach (var decision in other)
             {
-                decision.Parent = state;
-                state.Transitions.Enqueue(decision);
+                decision.Parent = node;
+                node.Edges.Enqueue(decision);
             }
 
-            return state;
+            return node;
         }
 
-        public static NonConsumingState<T> operator ^(NonConsumingState<T> state, Action<RouteData> other)
+        public static NonConsumingNode<T> operator ^(NonConsumingNode<T> node, Action<RouteData> other)
         {
-            state.OnComplete = other;
-            return state;
+            node.FinalFunction = other;
+            return node;
         }
 
-        public static DecisionList<T> operator |(NonConsumingState<T> state, NonConsumingState<T> other)
+        public static DecisionList<T> operator |(NonConsumingNode<T> node, NonConsumingNode<T> other)
         {
-            return new DecisionList<T> { state, other };
+            return new DecisionList<T> { node, other };
         }
 
         public void SetMatchFromParentValue(Predicate<T> other)
         {
-            this.IsMatch = s => other((T)this.Parent.Result);
+            this.ActivationFunction = s => other((T)this.Parent.Result);
         }
     }
 
-    public class NullState
+    public class RouteGlue
     {
-        public static SuperscribeState operator /(NullState state, string other)
+        public static SuperscribeNode operator /(RouteGlue state, string other)
         {
             return ʃ.Constant(other);
         }
 
-        public static SuperscribeState operator /(NullState state, SuperscribeState other)
+        public static SuperscribeNode operator /(RouteGlue state, SuperscribeNode other)
         {
             return other.Base();
         }
 
-        public static NonConsumingState<double> operator -(NullState state, Func<RouteData, string, double> other)
+        public static NonConsumingNode<double> operator -(RouteGlue state, Func<RouteData, string, double> other)
         {
-            var nonConsuming = new NonConsumingState<double>();
-            nonConsuming.IsMatch = s => true;
-            nonConsuming.Command = (data, segment) => nonConsuming.Result = other(data, segment);
+            var nonConsuming = new NonConsumingNode<double>();
+            nonConsuming.ActivationFunction = s => true;
+            nonConsuming.ActionFunction = (data, segment) => nonConsuming.Result = other(data, segment);
             return nonConsuming;
         }
 
-        public static NonConsumingState<double> operator -(NullState state, Predicate<double> other)
+        public static NonConsumingNode<double> operator -(RouteGlue state, Predicate<double> other)
         {
-            var nonConsuming = new NonConsumingState<double>();
+            var nonConsuming = new NonConsumingNode<double>();
             nonConsuming.SetMatchFromParentValue(other);
             return nonConsuming;
         }
     }
 
-    public class ʃInt : ParamState<int>
+    public class ʃInt : ParamNode<int>
     {
         public ʃInt(string name)
             : base(name)
@@ -80,7 +80,7 @@
         }
     }
 
-    public class ʃLong : ParamState<long>
+    public class ʃLong : ParamNode<long>
     {
         public ʃLong(string name)
             : base(name)
@@ -93,7 +93,7 @@
         }
     }
 
-    public class ʃBool : ParamState<bool>
+    public class ʃBool : ParamNode<bool>
     {
         public ʃBool(string name)
             : base(name)
@@ -106,7 +106,7 @@
         }
     }
 
-    public class ʃString : ParamState<string>
+    public class ʃString : ParamNode<string>
     {
         public ʃString(string name)
             : base(name)
