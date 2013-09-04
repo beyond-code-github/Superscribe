@@ -9,6 +9,8 @@
 
     public class SuperscribeState
     {
+        private Predicate<string> isMatch;
+
         /// <summary>
         /// Base constructor for superscribe states
         /// </summary>
@@ -16,6 +18,16 @@
         {
             this.Transitions = new ConcurrentQueue<SuperscribeState>();
             this.QueryString = new ConcurrentQueue<SuperscribeState>();
+
+            this.IsMatch = segment =>
+            {
+                if (this.Pattern != null)
+                {
+                    return this.Pattern.IsMatch(segment);
+                }
+
+                return string.Equals(this.Template, segment, StringComparison.OrdinalIgnoreCase);
+            };
         }
 
         #region Properties
@@ -54,6 +66,18 @@
 
         public Action<RouteData> OnComplete { get; set; }
 
+        public Predicate<string> IsMatch
+        {
+            get
+            {
+                return this.isMatch;
+            }
+            set
+            {
+                this.isMatch = value;
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -88,17 +112,6 @@
             this.Pattern = new Regex(this.Template);
             return this;
         }
-
-        public virtual bool IsMatch(string segment)
-        {
-            if (this.Pattern != null)
-            {
-                return this.Pattern.IsMatch(segment);
-            }
-
-            return string.Equals(this.Template, segment, StringComparison.OrdinalIgnoreCase);
-        }
-
 
         /// <summary>
         /// Works backwards up the state\transition chain and returns the topmost state
