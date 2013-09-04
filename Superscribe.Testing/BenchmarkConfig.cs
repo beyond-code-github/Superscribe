@@ -31,7 +31,7 @@
             ʃ.Route(o => blogposts / -"postId".Int() / -"media".Controller("blogpostmedia") / -"id".Int());
 
             // sites/{siteId}/blog/tags
-            ʃ.Route(o => blog / "tags".ʃ(i => i.ControllerName = "blogtags"));
+            ʃ.Route(o => blog / "tags".Controller("blogtags"));
 
             // sites/{siteId}/blog/posts/archives
             // sites/{siteId}/blog/posts/archives/{year}/{month}
