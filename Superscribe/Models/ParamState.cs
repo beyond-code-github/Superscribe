@@ -6,6 +6,24 @@
 
     public abstract class ParamState : SuperscribeState
     {
+        protected ParamState()
+        {
+            this.Command = (data, segment) =>
+            {
+                object value;
+                var success = this.TryParse(segment, out value);
+
+                if (success)
+                {
+                    data.Parameters.Add(this.Name, value);
+                }
+                else
+                {
+                    data.ParamConversionError = true;
+                }
+            };
+        }
+
         public abstract bool TryParse(string value, out object obj);
 
         public abstract Type Type { get; }

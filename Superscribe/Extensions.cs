@@ -68,7 +68,7 @@
         /// <summary>
         /// Matches the given pattern and then executes the given command
         /// </summary>
-        public static CommandState ʃ(this string pattern, Action<RouteData> command)
+        public static CommandState ʃ(this string pattern, Action<RouteData, string> command)
         {
             return new CommandState(pattern, command);
         }

@@ -1,5 +1,44 @@
 ﻿namespace Superscribe.Models
 {
+    using System;
+
+    using Superscribe.Utils;
+
+    public class NonConsumingState : SuperscribeState
+    {
+
+    }
+
+    public class NonConsumingState<T> : NonConsumingState
+    {
+        public static NonConsumingState<T> operator ^(NonConsumingState<T> state, DecisionList<T> other)
+        {
+            foreach (var decision in other)
+            {
+                decision.Parent = state;
+                state.Transitions.Enqueue(decision);
+            }
+
+            return state;
+        }
+
+        public static NonConsumingState<T> operator ^(NonConsumingState<T> state, Action<RouteData> other)
+        {
+            state.OnComplete = other;
+            return state;
+        }
+
+        public static DecisionList<T> operator |(NonConsumingState<T> state, NonConsumingState<T> other)
+        {
+            return new DecisionList<T> { state, other };
+        }
+
+        public void SetMatchFromParentValue(Predicate<T> other)
+        {
+            this.IsMatch = s => other((T)this.Parent.Result);
+        }
+    }
+
     public class NullState
     {
         public static SuperscribeState operator /(NullState state, string other)
@@ -10,6 +49,21 @@
         public static SuperscribeState operator /(NullState state, SuperscribeState other)
         {
             return other.Base();
+        }
+
+        public static NonConsumingState<double> operator -(NullState state, Func<RouteData, string, double> other)
+        {
+            var nonConsuming = new NonConsumingState<double>();
+            nonConsuming.IsMatch = s => true;
+            nonConsuming.Command = (data, segment) => nonConsuming.Result = other(data, segment);
+            return nonConsuming;
+        }
+
+        public static NonConsumingState<double> operator -(NullState state, Predicate<double> other)
+        {
+            var nonConsuming = new NonConsumingState<double>();
+            nonConsuming.SetMatchFromParentValue(other);
+            return nonConsuming;
         }
     }
 

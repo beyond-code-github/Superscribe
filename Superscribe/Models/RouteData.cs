@@ -46,5 +46,7 @@
         }
 
         public string Response { get; set; }
+
+        public bool ParamConversionError { get; set; }
     }
 }

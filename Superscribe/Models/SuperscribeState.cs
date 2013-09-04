@@ -62,7 +62,9 @@
         /// </summary>
         public string Template { get; set; }
 
-        public Action<RouteData> Command { get; set; }
+        public object Result { get; set; }
+
+        public Action<RouteData, string> Command { get; set; }
 
         public Action<RouteData> OnComplete { get; set; }
 
@@ -101,7 +103,7 @@
             return this;
         }
 
-        public virtual SuperscribeState ʃ(Action<RouteData> command)
+        public virtual SuperscribeState ʃ(Action<RouteData, string> command)
         {
             this.Command = command;
             return this;

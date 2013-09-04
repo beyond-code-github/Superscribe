@@ -1,5 +1,6 @@
 ﻿namespace Superscribe.Utils
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -20,98 +21,66 @@
 
         public bool ParamConversionError { get; private set; }
 
-        public string RemainingRoute { get; private set; }
+        public Queue<string> RemainingSegments { get; private set; }
 
         public void WalkRoute(string route, RouteData info)
         {
-            if (route == "/" && baseState.OnComplete != null)
-            {
-                baseState.OnComplete(info);
-                return;
-            }
-
-            this.RemainingRoute = route;
-            this.WalkRoute(info, baseState.Transitions);
+            this.RemainingSegments = new Queue<string>(route.Split('/'));
+            this.WalkRoute(info, baseState);
         }
 
-        public void WalkRoute(RouteData info, IEnumerable<SuperscribeState> states)
+        public string PeekNextSegment()
         {
-            var segment = string.Empty;
-
-            while (string.IsNullOrEmpty(segment))
+            if (this.RemainingSegments.Any())
             {
-                var slashIndex = this.RemainingRoute.IndexOf("/", System.StringComparison.Ordinal);
+                return this.RemainingSegments.Peek();
+            }
 
-                if (slashIndex >= 0)
+            return string.Empty;
+        }
+
+        public void WalkRoute(RouteData info, SuperscribeState match)
+        {
+            Action<RouteData> onComplete = null;
+            while (match != null)
+            {
+                if (match.Command != null)
                 {
-                    segment = this.RemainingRoute.Substring(0, slashIndex);
-                    this.RemainingRoute = this.RemainingRoute.Substring(slashIndex + 1);
+                    match.Command(info, this.PeekNextSegment());
                 }
-                else
+
+                if (!(match is NonConsumingState))
                 {
-                    segment = this.RemainingRoute;
-                    this.RemainingRoute = null;
-                    break;
+                    this.RemainingSegments.Dequeue();
                 }
-            }
 
-            var match = MatchState(segment, states);
-            var controllerState = match as ControllerState;
-            if (controllerState != null)
-            {
-                info.ControllerName = !string.IsNullOrEmpty(controllerState.ControllerName) ? controllerState.ControllerName : segment;
-            }
-
-            var actionState = match as ActionState;
-            if (actionState != null)
-            {
-                info.ActionName = !string.IsNullOrEmpty(actionState.ActionName) ? actionState.ActionName : segment;
-            }
-
-            var paramState = match as ParamState;
-            if (paramState != null)
-            {
-                object value;
-                var success = paramState.TryParse(segment, out value);
-
-                if (success)
-                {
-                    info.Parameters.Add(paramState.Name, value);
-                }
-                else
-                {
-                    this.ParamConversionError = true;
-                }
-            }
-
-            if (match != null && match.Command != null)
-            {
-                match.Command(info);
-            }
-
-            if (string.IsNullOrEmpty(this.RemainingRoute) && match != null && match.Transitions.Any()
-                && match.Transitions.All(o => !o.IsOptional) && match.OnComplete == null)
-            {
-                IncompleteMatch = true;
-                return;
-            }
-
-            if (match == null)
-            {
-                ExtraneousMatch = true;
-                return;
-            }
-
-            if (!string.IsNullOrEmpty(this.RemainingRoute))
-            {
-                WalkRoute(info, match.Transitions);
-            }
-            else
-            {
                 if (match.OnComplete != null)
                 {
-                    match.OnComplete(info);
+                    onComplete = match.OnComplete;
                 }
+
+                var nextMatch = MatchState(this.PeekNextSegment(), match.Transitions);
+                if (nextMatch == null
+                    && match.OnComplete == null
+                    && match.Transitions.Any()
+                    && match.Transitions.All(o => !(o.IsOptional || o is NonConsumingState)))
+                {
+                    this.IncompleteMatch = true;
+                    return;
+                }
+
+                match = nextMatch;
+            }
+
+            if (this.RemainingSegments.Any(o => !string.IsNullOrEmpty(o)))
+            {
+                this.ExtraneousMatch = true;
+                return;
+            }
+
+            if (onComplete != null)
+            {
+                onComplete(info);
             }
         }
 
