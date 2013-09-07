@@ -51,6 +51,22 @@
             return other.Base();
         }
 
+        public static NonConsumingNode operator -(RouteGlue state, Action<RouteData> other)
+        {
+            var nonConsuming = new NonConsumingNode<double>();
+            nonConsuming.ActivationFunction = s => true;
+            nonConsuming.ActionFunction = (data, segment) => other(data);
+            return nonConsuming;
+        }
+
+        //public static NonConsumingNode operator -(RouteGlue state, Action<RouteData, string> other)
+        //{
+        //    var nonConsuming = new NonConsumingNode<double>();
+        //    nonConsuming.ActivationFunction = s => true;
+        //    nonConsuming.ActionFunction = other;
+        //    return nonConsuming;
+        //}
+
         public static NonConsumingNode<double> operator -(RouteGlue state, Func<RouteData, string, double> other)
         {
             var nonConsuming = new NonConsumingNode<double>();

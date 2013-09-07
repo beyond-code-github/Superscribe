@@ -1,11 +1,10 @@
 ﻿namespace Superscribe.Demo.Neural
 {
-    using Owin;
+    using global::Owin;
 
     using Superscribe.Demo.Neural.NeuralNetwork;
     using Superscribe.Models;
-
-    using global::Owin;
+    using Superscribe.Owin;
 
     using RouteData = Superscribe.Models.RouteData;
 
@@ -88,8 +87,12 @@
 
             Network.Train(param1, param2, !answer);
 
-            o.Response = string.Format("<p>I'll try to remember that you said {0} XOR {1} is <strong>{2}</strong> and factor that in next time.</p><a href='/'>Try again</a>"
-                , param1, param2, !answer);
+            o.Response =
+                string.Format(
+                    "<p>I'll try to remember that you said {0} XOR {1} is <strong>{2}</strong> and factor that in next time.</p><a href='/'>Try again</a>",
+                    param1,
+                    param2,
+                    !answer);
         }
     }
 }
