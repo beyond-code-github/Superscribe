@@ -282,7 +282,11 @@
             {
                 return false;
             }
-            return Equals(this.Pattern, other.Pattern) && string.Equals(this.Template, other.Template);
+
+            return string.Equals(
+                this.Pattern != null ? this.Pattern.ToString() : string.Empty,
+                this.Pattern != null ? this.Pattern.ToString() : string.Empty) 
+                && string.Equals(this.Template, other.Template);
         }
 
         public override bool Equals(object obj)
