@@ -35,55 +35,7 @@
 
         private It should_be_case_insensitive = () => response.StatusCode.ShouldEqual(HttpStatusCode.OK);
     }
-
-    public class Route_Combination_FormsTest : RouteCombiningTestsBase
-    {
-        private Because of = () => response = browser.Get(
-            "/api/2/forms",
-            (with) =>
-            {
-                with.Header("Accept", "application/json");
-                with.HttpRequest();
-            });
-
-        private It should_return_200_ok = () => response.StatusCode.ShouldEqual(HttpStatusCode.OK);
-
-        private It should_hit_the_right_controller =
-            () => response.Content.ReadAsStringAsync().Result.ShouldEqual("\"Get_Forms_2\"");
-    }
-
-    public class Route_Combination_FormsIdTest : RouteCombiningTestsBase
-    {
-        private Because of = () => response = browser.Get(
-            "/api/2/forms/123",
-            (with) =>
-            {
-                with.Header("Accept", "application/json");
-                with.HttpRequest();
-            });
-
-        private It should_return_200_ok = () => response.StatusCode.ShouldEqual(HttpStatusCode.OK);
-
-        private It should_hit_the_right_controller =
-            () => response.Content.ReadAsStringAsync().Result.ShouldEqual("\"GetById_Forms_2_123\"");
-    }
-
-    public class Route_Combination_FormsVisibleForTest : RouteCombiningTestsBase
-    {
-        private Because of = () => response = browser.Get(
-            "/api/2/forms/visiblefor/abcde12345",
-            (with) =>
-            {
-                with.Header("Accept", "application/json");
-                with.HttpRequest();
-            });
-
-        private It should_return_200_ok = () => response.StatusCode.ShouldEqual(HttpStatusCode.OK);
-
-        private It should_hit_the_right_controller =
-            () => response.Content.ReadAsStringAsync().Result.ShouldEqual("\"VisibleFor_Forms_2_abcde12345\"");
-    }
-
+    
     public class Route_Combination_PortfolioProjectMediaTest : RouteCombiningTestsBase
     {
         private Because of = () => response = browser.Get(

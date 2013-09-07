@@ -31,8 +31,7 @@
             configuration.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: template,
-                defaults: new { controller = "values", id = RouteParameter.Optional }
-            );
+                defaults: new { controller = "values", id = RouteParameter.Optional });
 
             ControllerTypeCache = new HttpControllerTypeCache(configuration);
 

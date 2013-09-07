@@ -10,6 +10,7 @@
         public static void Register(HttpConfiguration config)
         {
             SuperscribeConfig.Register(config);
+            ʃ.Reset();
 
             ʃ.Route((root, ʅ) => root / "api" / (ʃLong)"parentId" /
                         "Forms".Controller() / (

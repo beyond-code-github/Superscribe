@@ -130,5 +130,10 @@
         }
 
         #endregion
+
+        public static void Reset()
+        {
+            Base = new SuperscribeNode();
+        }
     }
 }
