@@ -7,7 +7,7 @@
 
     using Superscribe.Utils;
 
-    public class SuperscribeNode
+    public class SuperscribeNode : IEquatable<SuperscribeNode>
     {
         private Predicate<string> activationFunction;
 
@@ -87,6 +87,15 @@
         public SuperscribeNode Slash(SuperscribeNode nextNode)
         {
             nextNode.Parent = this;
+
+            foreach (var existingNode in this.Edges)
+            {
+                if (existingNode.Equals(nextNode))
+                {
+                    return existingNode;
+                }
+            }
+
             this.Edges.Enqueue(nextNode);
             return nextNode;
         }
@@ -253,6 +262,52 @@
         public static implicit operator SuperscribeNode(string value)
         {
             return Superscribe.ʃ.Constant(value);
+        }
+
+        #endregion
+
+        #region IEquatable Members
+
+        public bool Equals(SuperscribeNode other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+            if (other.GetType() != this.GetType())
+            {
+                return false;
+            }
+            return Equals(this.Pattern, other.Pattern) && string.Equals(this.Template, other.Template);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+            return Equals((SuperscribeNode)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((this.Pattern != null ? this.Pattern.GetHashCode() : 0) * 397) ^ (this.Template != null ? this.Template.GetHashCode() : 0);
+            }
         }
 
         #endregion

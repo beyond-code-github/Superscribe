@@ -46,6 +46,7 @@
     <Compile Include="Controllers\PortfolioTagsController.cs" />
     <Compile Include="Controllers\PortfolioProjectMediaController.cs" />
     <Compile Include="BenchmarkConfig.cs" />
+    <Compile Include="CombinationConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteConfig.cs" />
     <Compile Include="SuperscribeTestConfig.cs" />
