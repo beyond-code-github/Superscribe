@@ -1,6 +1,8 @@
 ﻿namespace Superscribe
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Text.RegularExpressions;
 
     using Superscribe.Models;
@@ -35,15 +37,7 @@
                 return new ActionNode { Pattern = new Regex("([a-z]|[A-Z]|[0-9])+", RegexOptions.Compiled) };
             }
         }
-
-        public static RouteGlue Option
-        {
-            get
-            {
-                return new RouteGlue();
-            }
-        }
-
+        
         public static object ʅ
         {
             get
@@ -116,7 +110,10 @@
         /// <returns>The last state in the chain</returns>
         public static SuperscribeNode Route(Func<SuperscribeNode, SuperscribeNode> config)
         {
-            return config(Base);
+            var leaf = config(Base);
+            leaf.AddAllowedMethod("GET");
+
+            return leaf;
         }
 
         /// <summary>
@@ -126,7 +123,80 @@
         /// <returns>The last state in the chain</returns>
         public static SuperscribeNode Route(Func<SuperscribeNode, RouteGlue, SuperscribeNode> config)
         {
-            return config(Base, new RouteGlue());
+            var leaf = config(Base, new RouteGlue("GET"));
+            leaf.AddAllowedMethod("GET");
+
+            return leaf;
+        }
+
+        public static SuperscribeNode Get(Func<SuperscribeNode, SuperscribeNode> config)
+        {
+            var leaf = config(Base);
+            leaf.AddAllowedMethod("GET");
+            return leaf;
+        }
+
+        public static SuperscribeNode Get(Func<SuperscribeNode, RouteGlue, SuperscribeNode> config)
+        {
+            var leaf = config(Base, new RouteGlue("GET"));
+            leaf.AddAllowedMethod("GET");
+            return leaf;
+        }
+
+        public static SuperscribeNode Post(Func<SuperscribeNode, SuperscribeNode> config)
+        {
+            var leaf = config(Base);
+            leaf.AddAllowedMethod("POST");
+            return leaf;
+        }
+
+        public static SuperscribeNode Post(Func<SuperscribeNode, RouteGlue, SuperscribeNode> config)
+        {
+            var leaf = config(Base, new RouteGlue("POST"));
+            leaf.AddAllowedMethod("POST");
+            return leaf;
+        }
+
+        public static SuperscribeNode Put(Func<SuperscribeNode, SuperscribeNode> config)
+        {
+            var leaf = config(Base);
+            leaf.AddAllowedMethod("PUT");
+            return leaf;
+        }
+
+        public static SuperscribeNode Put(Func<SuperscribeNode, RouteGlue, SuperscribeNode> config)
+        {
+            var leaf = config(Base, new RouteGlue("PUT"));
+            leaf.AddAllowedMethod("PUT");
+            return leaf;
+        }
+
+        public static SuperscribeNode Patch(Func<SuperscribeNode, SuperscribeNode> config)
+        {
+            var leaf = config(Base);
+            leaf.AddAllowedMethod("PATCH");
+            return leaf;
+        }
+
+        public static SuperscribeNode Patch(Func<SuperscribeNode, RouteGlue, SuperscribeNode> config)
+        {
+            var leaf = config(Base, new RouteGlue("PATCH"));
+            leaf.AddAllowedMethod("PATCH");
+            return leaf;
+        }
+
+        public static SuperscribeNode Delete(Func<SuperscribeNode, SuperscribeNode> config)
+        {
+            var leaf = config(Base);
+            leaf.AddAllowedMethod("DELETE");
+            return leaf;
+        }
+
+        public static SuperscribeNode Delete(Func<SuperscribeNode, RouteGlue, SuperscribeNode> config)
+        {
+            var leaf = config(Base, new RouteGlue("DELETE"));
+            leaf.AddAllowedMethod("DELETE");
+            return leaf;
         }
 
         #endregion

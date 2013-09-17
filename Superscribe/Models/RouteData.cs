@@ -2,6 +2,8 @@
 {
     using System.Collections.Generic;
 
+    using Superscribe.Utils;
+
     public class RouteData
     {
         private string actionName;
@@ -10,10 +12,10 @@
 
         public RouteData()
         {
-            this.Parameters = new Dictionary<string, object>();
+            this.Parameters = new DynamicDictionary();
         }
 
-        public Dictionary<string, object> Parameters { get; set; }
+        public dynamic Parameters { get; set; }
 
         public bool ActionNameSpecified { get; private set; }
 

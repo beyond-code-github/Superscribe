@@ -1,9 +1,9 @@
 ﻿namespace Superscribe.Owin
 {
+    using global::Owin;
+
     using Superscribe.Models;
     using Superscribe.Utils;
-
-    using global::Owin;
 
     public static class StartupExtensions
     {
@@ -16,7 +16,7 @@
                     var routeData = new RouteData();
 
                     var walker = new RouteWalker(ʃ.Base);
-                    walker.WalkRoute(path, routeData);
+                    walker.WalkRoute(path, req.Method, routeData);
 
                     if (walker.IncompleteMatch)
                     {

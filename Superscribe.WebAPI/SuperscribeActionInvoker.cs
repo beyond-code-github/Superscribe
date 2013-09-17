@@ -1,6 +1,7 @@
 ﻿namespace Superscribe.WebApi
 {
     using System;
+    using System.Collections.Generic;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -24,7 +25,7 @@
 
             var webApiInfo = new RouteData();
             var walker = SuperscribeConfig.Walker();
-            walker.WalkRoute(controllerContext.Request.RequestUri.AbsolutePath, webApiInfo);
+            walker.WalkRoute(controllerContext.Request.RequestUri.AbsolutePath, controllerContext.Request.Method.ToString(), webApiInfo);
 
             foreach (var param in actionContext.ActionArguments)
             {
@@ -38,7 +39,7 @@
 
             return TaskHelpers.RunSynchronously(() =>
             {
-                return actionDescriptor.ExecuteAsync(controllerContext, arguments, cancellationToken)
+                return actionDescriptor.ExecuteAsync(controllerContext, (IDictionary<string, object>)arguments, cancellationToken)
                                        .Then(value => actionDescriptor.ResultConverter.Convert(controllerContext, value), cancellationToken);
             }, cancellationToken)
             .Catch<HttpResponseMessage>(info =>

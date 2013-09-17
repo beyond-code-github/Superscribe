@@ -11,7 +11,7 @@
 
     public class NonConsumingNode<T> : NonConsumingNode
     {
-        public static NonConsumingNode<T> operator ^(NonConsumingNode<T> node, DecisionList<T> other)
+        public static NonConsumingNode<T> operator *(NonConsumingNode<T> node, DecisionList<T> other)
         {
             foreach (var decision in other)
             {
@@ -22,9 +22,9 @@
             return node;
         }
 
-        public static NonConsumingNode<T> operator ^(NonConsumingNode<T> node, Action<RouteData> other)
+        public static NonConsumingNode<T> operator *(NonConsumingNode<T> node, Action<RouteData> other)
         {
-            node.FinalFunction = other;
+            node.FinalFunctions.Add(new FinalFunction { Function = other });
             return node;
         }
 
@@ -35,51 +35,7 @@
 
         public void SetMatchFromParentValue(Predicate<T> other)
         {
-            this.ActivationFunction = s => other((T)this.Parent.Result);
-        }
-    }
-
-    public class RouteGlue
-    {
-        public static SuperscribeNode operator /(RouteGlue state, string other)
-        {
-            return ʃ.Constant(other);
-        }
-
-        public static SuperscribeNode operator /(RouteGlue state, SuperscribeNode other)
-        {
-            return other.Base();
-        }
-
-        public static NonConsumingNode operator -(RouteGlue state, Action<RouteData> other)
-        {
-            var nonConsuming = new NonConsumingNode<double>();
-            nonConsuming.ActivationFunction = s => true;
-            nonConsuming.ActionFunction = (data, segment) => other(data);
-            return nonConsuming;
-        }
-
-        //public static NonConsumingNode operator -(RouteGlue state, Action<RouteData, string> other)
-        //{
-        //    var nonConsuming = new NonConsumingNode<double>();
-        //    nonConsuming.ActivationFunction = s => true;
-        //    nonConsuming.ActionFunction = other;
-        //    return nonConsuming;
-        //}
-
-        public static NonConsumingNode<double> operator -(RouteGlue state, Func<RouteData, string, double> other)
-        {
-            var nonConsuming = new NonConsumingNode<double>();
-            nonConsuming.ActivationFunction = s => true;
-            nonConsuming.ActionFunction = (data, segment) => nonConsuming.Result = other(data, segment);
-            return nonConsuming;
-        }
-
-        public static NonConsumingNode<double> operator -(RouteGlue state, Predicate<double> other)
-        {
-            var nonConsuming = new NonConsumingNode<double>();
-            nonConsuming.SetMatchFromParentValue(other);
-            return nonConsuming;
+            this.ActivationFunction = (routedata, s) => other((T)this.Parent.Result);
         }
     }
 

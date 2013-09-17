@@ -17,7 +17,7 @@
             var info = new RouteData();
 
             var walker = SuperscribeConfig.Walker();
-            walker.WalkRoute(request.RequestUri.AbsolutePath, info);
+            walker.WalkRoute(request.RequestUri.AbsolutePath, request.Method.ToString(), info);
 
             // We should have consumed all of the route by now, if we haven't then throw a 404
             if (walker.ExtraneousMatch)

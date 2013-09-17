@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text.RegularExpressions;
 
     using Superscribe.Utils;
@@ -18,8 +19,10 @@
         {
             this.Edges = new ConcurrentQueue<SuperscribeNode>();
             this.QueryString = new ConcurrentQueue<SuperscribeNode>();
+            this.AllowedMethods = new ConcurrentQueue<string>();
+            this.FinalFunctions = new List<FinalFunction>();
 
-            this.ActivationFunction = segment =>
+            this.ActivationFunction = (routedata, segment) =>
             {
                 if (this.Pattern != null)
                 {
@@ -66,19 +69,11 @@
 
         public Action<RouteData, string> ActionFunction { get; set; }
 
-        public Action<RouteData> FinalFunction { get; set; }
+        public List<FinalFunction> FinalFunctions { get; set; }
 
-        public Predicate<string> ActivationFunction
-        {
-            get
-            {
-                return this.activationFunction;
-            }
-            set
-            {
-                this.activationFunction = value;
-            }
-        }
+        public Func<RouteData, string, bool> ActivationFunction { get; set; }
+
+        public ConcurrentQueue<string> AllowedMethods { get; set; }
 
         #endregion
 
@@ -129,7 +124,20 @@
         /// </summary>
         public SuperscribeNode Base()
         {
-            return Base(this, this.Parent);
+            return this.Base(this, this.Parent);
+        }
+
+        public void AddAllowedMethod(string method)
+        {
+            if (!this.AllowedMethods.Contains(method))
+            {
+                this.AllowedMethods.Enqueue(method);    
+            }
+
+            if (this.Parent != null)
+            {
+                this.Parent.AddAllowedMethod(method);
+            }
         }
 
         /// <summary>
@@ -184,6 +192,17 @@
             }
 
             return node;
+        }
+
+        /// <summary>
+        /// Allows us to chain activation functions inline with routes
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="activation"></param>
+        /// <returns></returns>
+        public static NodeFuture operator /(SuperscribeNode node, Func<RouteData, string, bool> activation)
+        {
+            return new NodeFuture { Parent = node, ActivationFunction = activation };
         }
 
         /// <summary>
@@ -249,9 +268,23 @@
             return node;
         }
 
-        public static SuperscribeNode operator *(SuperscribeNode node, Action<RouteData> action)
+        public static SuperscribeNode operator *(SuperscribeNode node, Action<RouteData> final)
         {
-            node.FinalFunction = action;
+            node.FinalFunctions.Add(new FinalFunction { Function = final });
+            return node;
+        }
+
+        public static SuperscribeNode operator *(SuperscribeNode node, FinalFunctionList finals)
+        {
+            node.FinalFunctions.AddRange(finals);
+            foreach (var final in finals)
+            {
+                if (!string.IsNullOrEmpty(final.Method))
+                {
+                    node.AddAllowedMethod(final.Method);
+                }
+            }
+
             return node;
         }
 
@@ -285,8 +318,9 @@
 
             return string.Equals(
                 this.Pattern != null ? this.Pattern.ToString() : string.Empty,
-                this.Pattern != null ? this.Pattern.ToString() : string.Empty) 
-                && string.Equals(this.Template, other.Template);
+                this.Pattern != null ? this.Pattern.ToString() : string.Empty)
+                && string.Equals(this.Template, other.Template)
+                && this.FinalFunctions.Select(o => o.Method).SequenceEqual(other.FinalFunctions.Select(o => o.Method));
         }
 
         public override bool Equals(object obj)
@@ -315,5 +349,6 @@
         }
 
         #endregion
+
     }
 }

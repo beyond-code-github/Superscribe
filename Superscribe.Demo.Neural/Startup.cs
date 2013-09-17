@@ -18,9 +18,9 @@
                     ʅ / "YouSaid" / (ʃBool)"Answer" / (
                           ʅ / "AndThatWasCorrect" * this.LearnThatItWasCorrect
                         | ʅ / "ButThatWasWrong" * this.LearnThatItWasWrong)
-                  | ʅ - this.ComputeResult ^ (
-                          ʅ - (o => o >= 0.5) ^ this.RespondTrue
-                        | ʅ - (o => o < 0.5) ^ this.RespondFalse)));
+                  | ʅ / this.ComputeResult / (
+                          ʅ / (o => o >= 0.5) * this.RespondTrue
+                        | ʅ / (o => o < 0.5) * this.RespondFalse)));
 
             app.UseSuperscribe();
         }
@@ -35,12 +35,11 @@
 
         private void ExplainPurpose(RouteData o)
         {
-            o.Response = "<p>I'm trying to learn XOR, and I need your help!<p>" +
-                "<p>Try me out...</p>" +
-                "<ul><li><a href='/xor/false/false'>What is false XOR false?</a></li>" +
-                "<li><a href='/xor/false/true'>What is false XOR true?</a></li>" +
-                "<li><a href='/xor/true/false'>What is true XOR false?</a></li>" +
-                "<li><a href='/xor/true/true'>What is true XOR true?</a></li></ul>";
+            o.Response = "<p>I'm trying to learn XOR, and I need your help!<p>" + "<p>Try me out...</p>"
+                         + "<ul><li><a href='/xor/false/false'>What is false XOR false?</a></li>"
+                         + "<li><a href='/xor/false/true'>What is false XOR true?</a></li>"
+                         + "<li><a href='/xor/true/false'>What is true XOR false?</a></li>"
+                         + "<li><a href='/xor/true/true'>What is true XOR true?</a></li></ul>";
         }
 
         private void RespondTrue(RouteData o)

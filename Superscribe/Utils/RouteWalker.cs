@@ -21,10 +21,13 @@
 
         public bool ParamConversionError { get; private set; }
 
+        public string Method { get; set; }
+
         public Queue<string> RemainingSegments { get; private set; }
 
-        public void WalkRoute(string route, RouteData info)
+        public void WalkRoute(string route, string method, RouteData info)
         {
+            this.Method = method;
             this.RemainingSegments = new Queue<string>(route.Split('/'));
             this.WalkRoute(info, this.baseNode);
         }
@@ -54,14 +57,20 @@
                     this.RemainingSegments.Dequeue();
                 }
 
-                if (match.FinalFunction != null)
+                if (match.FinalFunctions.Count > 0)
                 {
-                    onComplete = match.FinalFunction;
+                    var function = match.FinalFunctions.FirstOrDefault(o => o.Method == this.Method)
+                                   ?? match.FinalFunctions.FirstOrDefault(o => string.IsNullOrEmpty(o.Method));
+
+                    if (function != null)
+                    {
+                        onComplete = function.Function;    
+                    }
                 }
 
-                var nextMatch = FindNextMatch(this.PeekNextSegment(), match.Edges);
+                var nextMatch = this.FindNextMatch(info, this.PeekNextSegment(), match.Edges);
                 if (nextMatch == null
-                    && match.FinalFunction == null
+                    && !match.FinalFunctions.Any(o => string.IsNullOrEmpty(o.Method) || o.Method == this.Method)
                     && match.Edges.Any()
                     && match.Edges.All(o => !(o.IsOptional || o is NonConsumingNode)))
                 {
@@ -84,9 +93,9 @@
             }
         }
 
-        private static SuperscribeNode FindNextMatch(string segment, IEnumerable<SuperscribeNode> states)
+        private SuperscribeNode FindNextMatch(RouteData routeData, string segment, IEnumerable<SuperscribeNode> states)
         {
-            return states.FirstOrDefault(o => o.ActivationFunction(segment));
+            return states.FirstOrDefault(o => o.ActivationFunction(routeData, segment) && (!o.AllowedMethods.Any() || o.AllowedMethods.Contains(this.Method)));
         }
     }
 }

@@ -31,20 +31,25 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MethodSet.cs" />
     <Compile Include="Models\ActionNode.cs" />
     <Compile Include="Models\ConstantNode.cs" />
     <Compile Include="Models\ControllerNode.cs" />
     <Compile Include="Models\CommandNode.cs" />
+    <Compile Include="Models\MethodShorthands.cs" />
+    <Compile Include="Models\NodeFuture.cs" />
     <Compile Include="Models\ParamNode.cs" />
     <Compile Include="Models\ShorthandStates.cs" />
     <Compile Include="Models\SuperscribeNode.cs" />
     <Compile Include="Models\RouteData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SuperscribeModule.cs" />
+    <Compile Include="Utils\DynamicDictionary.cs" />
     <Compile Include="Utils\SuperList.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="ʃ.cs" />

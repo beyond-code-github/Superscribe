@@ -1,6 +1,7 @@
 ﻿namespace Superscribe.WebApi
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Web.Http.Controllers;
@@ -19,16 +20,16 @@
             var info = new RouteData();
 
             var walker = SuperscribeConfig.Walker();
-            walker.WalkRoute(controllerContext.Request.RequestUri.AbsolutePath, info);
+            walker.WalkRoute(controllerContext.Request.RequestUri.AbsolutePath, controllerContext.Request.Method.ToString(), info);
 
             var internalSelector = GetInternalSelector(controllerContext.ControllerDescriptor);
 
             if (info.ActionNameSpecified)
             {
-                return internalSelector.SelectAction(controllerContext, info.Parameters.Select(o => o.Key), info.ActionName);
+                return internalSelector.SelectAction(controllerContext, ((IDictionary<string, object>)info.Parameters).Select(o => o.Key), info.ActionName);
             }
 
-            return internalSelector.SelectAction(controllerContext, info.Parameters.Select(o => o.Key));
+            return internalSelector.SelectAction(controllerContext, ((IDictionary<string, object>)info.Parameters).Select(o => o.Key));
         }
 
         public ILookup<string, HttpActionDescriptor> GetActionMapping(HttpControllerDescriptor controllerDescriptor)
