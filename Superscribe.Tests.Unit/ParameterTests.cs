@@ -24,6 +24,11 @@
             o.Response = string.Format("Hello {0}", o.Parameters.Name);
         }
 
+        protected static void HelloUnknown(RouteData o)
+        {
+            o.Response = "Hello Unknown Person";
+        }
+
         protected static void CommentOnMood(RouteData o)
         {
             o.Response = o.Parameters.Happy ? "Me too!" : "Why so sad?";
@@ -42,6 +47,24 @@
         private Because of = () => subject.WalkRoute("/Hello/Pete", "GET", routeData);
 
         private It should_execute_the_final_function = () => routeData.Response.ShouldEqual("Hello Pete");
+    }
+
+    public class When_there_is_an_absent_optional_string_parameter_at_the_end_of_a_route : ParameterTests
+    {
+        private Establish context = () => ʃ.Route(root => root / "Hello" * HelloUnknown / -(ʃString)"Name" * Hello);
+
+        private Because of = () => subject.WalkRoute("/Hello", "GET", routeData);
+
+        private It should_execute_the_final_function_not_the_optional_part = () => routeData.Response.ShouldEqual("Hello Unknown Person");
+    }
+
+    public class When_there_is_an_absent_optional_string_parameter_at_the_end_of_a_route_invoked_with_a_trailing_slash : ParameterTests
+    {
+        private Establish context = () => ʃ.Route(root => root / "Hello" * HelloUnknown / -(ʃString)"Name" * Hello);
+
+        private Because of = () => subject.WalkRoute("/Hello/", "GET", routeData);
+
+        private It should_execute_the_final_function_not_the_optional_part = () => routeData.Response.ShouldEqual("Hello Unknown Person");
     }
 
     public class When_capturing_a_boolean_parameter_true : ParameterTests

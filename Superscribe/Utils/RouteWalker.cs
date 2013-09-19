@@ -54,7 +54,10 @@
 
                 if (!(match is NonConsumingNode))
                 {
-                    this.RemainingSegments.Dequeue();
+                    if (this.RemainingSegments.Any())
+                    {
+                        this.RemainingSegments.Dequeue();
+                    }
                 }
 
                 if (match.FinalFunctions.Count > 0)
@@ -95,7 +98,9 @@
 
         private SuperscribeNode FindNextMatch(RouteData routeData, string segment, IEnumerable<SuperscribeNode> states)
         {
-            return states.FirstOrDefault(o => o.ActivationFunction(routeData, segment) && (!o.AllowedMethods.Any() || o.AllowedMethods.Contains(this.Method)));
+            return !string.IsNullOrEmpty(segment) ?
+                states.FirstOrDefault(o => o.ActivationFunction(routeData, segment) && (!o.AllowedMethods.Any() || o.AllowedMethods.Contains(this.Method))) 
+                : null;
         }
     }
 }
