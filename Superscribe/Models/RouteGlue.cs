@@ -37,7 +37,7 @@
             return node;
         }
 
-        public static FinalFunction operator *(RouteGlue state, Action<RouteData> other)
+        public static FinalFunction operator *(RouteGlue state, Func<dynamic, object> other)
         {
             var function = new FinalFunction { Method = state.Method, Function = other };
             return function;

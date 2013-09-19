@@ -68,7 +68,7 @@
         /// <summary>
         /// Matches the given pattern and then executes the given command
         /// </summary>
-        public static CommandNode ʃ(this string pattern, Action<RouteData, string> command)
+        public static CommandNode ʃ(this string pattern, Action<dynamic, string> command)
         {
             return new CommandNode(pattern, command);
         }

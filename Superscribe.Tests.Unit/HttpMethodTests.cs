@@ -9,34 +9,34 @@
     {
         protected static RouteData routeData;
 
-        protected static RouteWalker subject;
+        protected static RouteWalker<RouteData> subject;
 
         private Establish context = () =>
         {
             routeData = new RouteData();
             ʃ.Reset();
 
-            subject = new RouteWalker(ʃ.Base);
+            subject = new RouteWalker<RouteData>(ʃ.Base);
         };
 
-        protected static void Hello(RouteData o)
+        protected static object Hello(dynamic o)
         {
-            o.Response = string.Format("Hello {0}", o.Parameters.Name);
-        }
-        
-        protected static void CheckAge(RouteData o)
-        {
-            o.Response = o.Parameters.Age >= 18 ? "Access granted" : "Too young";
+            return string.Format("Hello {0}", o.Parameters.Name);
         }
 
-        protected static void GetProduct(RouteData o)
+        protected static object CheckAge(dynamic o)
         {
-            o.Response = "Product Details";
+            return o.Parameters.Age >= 18 ? "Access granted" : "Too young";
         }
 
-        protected static void UpdateProduct(RouteData o)
+        protected static object GetProduct(dynamic o)
         {
-            o.Response = "Update Product";
+            return "Product Details";
+        }
+
+        protected static object UpdateProduct(dynamic o)
+        {
+            return "Update Product";
         }
     }
 

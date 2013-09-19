@@ -6,7 +6,7 @@
 
     using Superscribe.Models;
 
-    public class RouteWalker
+    public class RouteWalker<T> where T: IRouteData
     {
         private readonly SuperscribeNode baseNode;
 
@@ -25,7 +25,7 @@
 
         public Queue<string> RemainingSegments { get; private set; }
 
-        public void WalkRoute(string route, string method, RouteData info)
+        public void WalkRoute(string route, string method, T info)
         {
             this.Method = method;
             this.RemainingSegments = new Queue<string>(route.Split('/'));
@@ -42,9 +42,9 @@
             return string.Empty;
         }
 
-        public void WalkRoute(RouteData info, SuperscribeNode match)
+        public void WalkRoute(T info, SuperscribeNode match)
         {
-            Action<RouteData> onComplete = null;
+            Func<T, object> onComplete = null;
             while (match != null)
             {
                 if (match.ActionFunction != null)
@@ -67,7 +67,7 @@
 
                     if (function != null)
                     {
-                        onComplete = function.Function;    
+                        onComplete = o => function.Function(o);    
                     }
                 }
 
@@ -92,14 +92,14 @@
 
             if (onComplete != null)
             {
-                onComplete(info);
+                info.Response = onComplete(info);
             }
         }
 
-        private SuperscribeNode FindNextMatch(RouteData routeData, string segment, IEnumerable<SuperscribeNode> states)
+        private SuperscribeNode FindNextMatch(T info, string segment, IEnumerable<SuperscribeNode> states)
         {
             return !string.IsNullOrEmpty(segment) ?
-                states.FirstOrDefault(o => o.ActivationFunction(routeData, segment) && (!o.AllowedMethods.Any() || o.AllowedMethods.Contains(this.Method))) 
+                states.FirstOrDefault(o => o.ActivationFunction(info, segment) && (!o.AllowedMethods.Any() || o.AllowedMethods.Contains(this.Method))) 
                 : null;
         }
     }

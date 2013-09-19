@@ -6,7 +6,7 @@
     {
         public SuperscribeNode Parent { get; set; }
 
-        public Func<RouteData, string, bool> ActivationFunction { get; set; }
+        public Func<dynamic, string, bool> ActivationFunction { get; set; }
 
         public static SuperscribeNode operator *(NodeFuture future, string constant)
         {

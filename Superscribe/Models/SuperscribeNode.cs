@@ -67,11 +67,11 @@
 
         public object Result { get; set; }
 
-        public Action<RouteData, string> ActionFunction { get; set; }
+        public Action<dynamic, string> ActionFunction { get; set; }
 
         public List<FinalFunction> FinalFunctions { get; set; }
 
-        public Func<RouteData, string, bool> ActivationFunction { get; set; }
+        public Func<dynamic, string, bool> ActivationFunction { get; set; }
 
         public ConcurrentQueue<string> AllowedMethods { get; set; }
 
@@ -107,7 +107,7 @@
             return this;
         }
 
-        public virtual SuperscribeNode ʃ(Action<RouteData, string> command)
+        public virtual SuperscribeNode ʃ(Action<dynamic, string> command)
         {
             this.ActionFunction = command;
             return this;
@@ -195,7 +195,7 @@
         /// <param name="node"></param>
         /// <param name="activation"></param>
         /// <returns></returns>
-        public static NodeFuture operator /(SuperscribeNode node, Func<RouteData, string, bool> activation)
+        public static NodeFuture operator /(SuperscribeNode node, Func<dynamic, string, bool> activation)
         {
             return new NodeFuture { Parent = node, ActivationFunction = activation };
         }
@@ -263,9 +263,9 @@
             return node;
         }
 
-        public static SuperscribeNode operator *(SuperscribeNode node, Action<RouteData> final)
+        public static SuperscribeNode operator *(SuperscribeNode node, Func<dynamic, object> final)
         {
-            node.FinalFunctions.Add(new FinalFunction { Function = final });
+            node.FinalFunctions.Add(new FinalFunction { Function = o => o.Response = final(o) });
             return node;
         }
 

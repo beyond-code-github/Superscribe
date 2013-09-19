@@ -6,6 +6,7 @@
     using System.Web.Http.Controllers;
     using System.Web.Http.Dispatcher;
 
+    using Superscribe.Models;
     using Superscribe.Utils;
     using Superscribe.WebApi.Internals;
     using Superscribe.WebApi.Modules;
@@ -67,9 +68,9 @@
             ControllerTypeCache = new HttpControllerTypeCache(configuration);
         }
 
-        public static RouteWalker Walker()
+        public static RouteWalker<T> Walker<T>() where T : IRouteData
         {
-            return new RouteWalker(ʃ.Base);
+            return new RouteWalker<T>(ʃ.Base);
         }
     }
 }

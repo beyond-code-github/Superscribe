@@ -7,7 +7,7 @@ namespace Superscribe.Models
     {
         public string Method { get; set; }
 
-        public Action<RouteData> Function { get; set; }
+        public Func<dynamic, object> Function { get; set; }
 
         public static FinalFunctionList operator |(FinalFunction function, FinalFunction other)
         {

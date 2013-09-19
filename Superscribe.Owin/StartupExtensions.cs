@@ -15,7 +15,7 @@
                     var path = req.Path;
                     var routeData = new RouteData();
 
-                    var walker = new RouteWalker(ʃ.Base);
+                    var walker = new RouteWalker<RouteData>(ʃ.Base);
                     walker.WalkRoute(path, req.Method, routeData);
 
                     if (walker.IncompleteMatch)
@@ -31,7 +31,8 @@
                     }
 
                     res.ContentType = "text/html";
-                    return res.WriteAsync(routeData.Response);
+
+                    return res.WriteAsync(routeData.Response.ToString());
                 });
         }
     }

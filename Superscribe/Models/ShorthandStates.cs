@@ -22,7 +22,7 @@
             return node;
         }
 
-        public static NonConsumingNode<T> operator *(NonConsumingNode<T> node, Action<RouteData> other)
+        public static NonConsumingNode<T> operator *(NonConsumingNode<T> node, Func<dynamic, object> other)
         {
             node.FinalFunctions.Add(new FinalFunction { Function = other });
             return node;

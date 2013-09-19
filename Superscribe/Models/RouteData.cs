@@ -1,10 +1,8 @@
 ﻿namespace Superscribe.Models
 {
-    using System.Collections.Generic;
-
     using Superscribe.Utils;
 
-    public class RouteData
+    public class RouteData : IRouteData
     {
         private string actionName;
 
@@ -47,7 +45,7 @@
             }
         }
 
-        public string Response { get; set; }
+        public object Response { get; set; }
 
         public bool ParamConversionError { get; set; }
     }

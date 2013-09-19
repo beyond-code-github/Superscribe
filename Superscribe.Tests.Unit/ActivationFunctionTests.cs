@@ -9,19 +9,19 @@
     {
         protected static RouteData routeData;
 
-        protected static RouteWalker subject;
+        protected static RouteWalker<RouteData> subject;
 
         private Establish context = () =>
         {
             routeData = new RouteData();
             ʃ.Reset();
 
-            subject = new RouteWalker(ʃ.Base);
+            subject = new RouteWalker<RouteData>(ʃ.Base);
         };
 
-        protected static void HelloWorld(RouteData o)
+        protected static object HelloWorld(dynamic o)
         {
-            o.Response = "Hello world";
+            return "Hello world";
         }
     }
     
