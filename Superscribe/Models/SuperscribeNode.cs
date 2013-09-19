@@ -133,11 +133,6 @@
             {
                 this.AllowedMethods.Enqueue(method);    
             }
-
-            if (this.Parent != null)
-            {
-                this.Parent.AddAllowedMethod(method);
-            }
         }
 
         /// <summary>
@@ -320,6 +315,7 @@
                 this.Pattern != null ? this.Pattern.ToString() : string.Empty,
                 this.Pattern != null ? this.Pattern.ToString() : string.Empty)
                 && string.Equals(this.Template, other.Template)
+                && this.AllowedMethods.SequenceEqual(other.AllowedMethods)
                 && this.FinalFunctions.Select(o => o.Method).SequenceEqual(other.FinalFunctions.Select(o => o.Method));
         }
 

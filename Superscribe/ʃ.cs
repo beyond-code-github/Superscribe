@@ -111,8 +111,6 @@
         public static SuperscribeNode Route(Func<SuperscribeNode, SuperscribeNode> config)
         {
             var leaf = config(Base);
-            leaf.AddAllowedMethod("GET");
-
             return leaf;
         }
 
@@ -123,9 +121,7 @@
         /// <returns>The last state in the chain</returns>
         public static SuperscribeNode Route(Func<SuperscribeNode, RouteGlue, SuperscribeNode> config)
         {
-            var leaf = config(Base, new RouteGlue("GET"));
-            leaf.AddAllowedMethod("GET");
-
+            var leaf = config(Base, new RouteGlue());
             return leaf;
         }
 

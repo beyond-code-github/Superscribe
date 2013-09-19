@@ -4,6 +4,10 @@
 
     public class RouteGlue
     {
+        public RouteGlue()
+        {
+        }
+
         public RouteGlue(string method)
         {
             this.Method = method;
@@ -14,7 +18,10 @@
         public static SuperscribeNode operator /(RouteGlue state, string other)
         {
             var node = ʃ.Constant(other);
-            node.AddAllowedMethod(state.Method);
+            if (!string.IsNullOrEmpty(state.Method))
+            {
+                node.AddAllowedMethod(state.Method);    
+            }
 
             return node;
         }
@@ -22,7 +29,10 @@
         public static SuperscribeNode operator /(RouteGlue state, SuperscribeNode other)
         {
             var node = other.Base();
-            node.AddAllowedMethod(state.Method);
+            if (!string.IsNullOrEmpty(state.Method))
+            {
+                node.AddAllowedMethod(state.Method);
+            }
 
             return node;
         }

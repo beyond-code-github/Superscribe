@@ -55,7 +55,7 @@
 
         private Because of = () => subject.WalkRoute("/Hello/Pete", "POST", routeData);
 
-        private It should_set_the_incomplete_match_flag = () => subject.IncompleteMatch.ShouldBeTrue();
+        private It should_respond_correctly = () => routeData.Response.ShouldEqual("Hello Pete");
     }
 
     public class When_defining_a_route_with_options_and_issuing_a_get_to_the_first : HttpMethodTests
@@ -88,7 +88,7 @@
 
         private Because of = () => subject.WalkRoute("/Hello/Pete", "POST", routeData);
 
-        private It should_set_the_incomplete_match_flag = () => subject.IncompleteMatch.ShouldBeTrue();
+        private It should_respond_correctly = () => routeData.Response.ShouldEqual("Hello Pete");
     }
 
     public class When_defining_a_route_with_options_and_issuing_a_post_to_the_second : HttpMethodTests
@@ -99,7 +99,7 @@
 
         private Because of = () => subject.WalkRoute("/Confirm/18", "POST", routeData);
 
-        private It should_set_the_incomplete_match_flag = () => subject.IncompleteMatch.ShouldBeTrue();
+        private It should_respond_correctly = () => routeData.Response.ShouldEqual("Access granted");
     }
 
     public class When_defining_a_route_with_options_and_explicit_methods_and_issuing_a_get_to_the_first : HttpMethodTests
@@ -144,6 +144,53 @@
         private Because of = () => subject.WalkRoute("/Confirm/18", "GET", routeData);
 
         private It should_set_the_incomplete_match_flag = () => subject.IncompleteMatch.ShouldBeTrue();
+    }
+
+    public class When_defining_a_route_under_a_subnode_with_options_and_explicit_methods_and_issuing_a_get_to_the_first : HttpMethodTests
+    {
+        private Establish context = () => ʃ.Route((root, ʅ) => root / "Api" / (
+              ʅ["GET"] / "Hello" / (ʃString)"Name" * Hello
+            | ʅ["POST"] / "Confirm" / (ʃLong)"Age" * CheckAge));
+
+        private Because of = () => subject.WalkRoute("/Api/Hello/Pete", "GET", routeData);
+
+        private It should_respond_correctly = () => routeData.Response.ShouldEqual("Hello Pete");
+    }
+
+    public class When_defining_a_route_under_a_subnode_with_options_and_explicit_methods_and_issuing_a_post_to_the_second : HttpMethodTests
+    {
+        private Establish context = () => ʃ.Route((root, ʅ) => root / "Api" / (
+              ʅ["GET"] / "Hello" / (ʃString)"Name" * Hello
+            | ʅ["POST"] / "Confirm" / (ʃLong)"Age" * CheckAge));
+
+        private Because of = () => 
+            subject.WalkRoute("/Api/Confirm/18", "POST", routeData);
+
+        private It should_respond_correctly = () => routeData.Response.ShouldEqual("Access granted");
+    }
+
+    public class When_defining_a_route_under_a_subnode_where_both_explcit_method_definitons_contain_the_same_matcher_and_issuing_a_get : HttpMethodTests
+    {
+        private Establish context = () => ʃ.Route((root, ʅ) => root / "Api" / (
+              ʅ["GET"] / "Product" * GetProduct
+            | ʅ["POST"] / "Product" * UpdateProduct));
+
+        private Because of = () =>
+            subject.WalkRoute("/Api/Product", "GET", routeData);
+
+        private It should_respond_correctly = () => routeData.Response.ShouldEqual("Product Details");
+    }
+
+    public class When_defining_a_route_under_a_subnode_where_both_explcit_method_definitons_contain_the_same_matcher_and_issuing_a_post : HttpMethodTests
+    {
+        private Establish context = () => ʃ.Route((root, ʅ) => root / "Api" / (
+              ʅ["GET"] / "Product" * GetProduct
+            | ʅ["POST"] / "Product" * UpdateProduct));
+
+        private Because of = () =>
+            subject.WalkRoute("/Api/Product", "POST", routeData);
+
+        private It should_respond_correctly = () => routeData.Response.ShouldEqual("Update Product");
     }
 
     public class When_defining_a_route_with_explicit_method_final_function_options_and_issuing_a_get : HttpMethodTests
