@@ -53,8 +53,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionFunctionTests.cs" />
     <Compile Include="ActivationFunctionTests.cs" />
     <Compile Include="FinalFunctionTests.cs" />
+    <Compile Include="HttpMethodTests.cs" />
+    <Compile Include="MatchingTests.cs" />
+    <Compile Include="NonConsumingStateTests.cs" />
     <Compile Include="ParameterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
