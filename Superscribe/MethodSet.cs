@@ -28,11 +28,11 @@
             }
         }
 
-        public Func<dynamic, object> this[SuperscribeNode s]
+        public Func<T, object> this[SuperscribeNode s]
         {
             set
             {
-                ʃ.Get(o => o / s.Base() * value);
+                ʃ.Get(o => o / s.Base() * (f => value(f)));
             }
         }
     }

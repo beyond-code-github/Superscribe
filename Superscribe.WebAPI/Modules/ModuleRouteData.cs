@@ -52,5 +52,10 @@
                 this.Request.Content,
                 null).Result as T;
         }
+
+        public T Require<T>() where T : class
+        {
+            return this.ControllerContext.Configuration.DependencyResolver.GetService(typeof(T)) as T;
+        }
     }
 }
