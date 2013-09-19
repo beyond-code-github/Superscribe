@@ -6,14 +6,34 @@
 
     public class MethodSet
     {
-        public Action<RouteData> Get { get; set; }
+        private readonly Action<Func<SuperscribeNode, SuperscribeNode>> binding;
 
-        public Action<RouteData> Post { get; set; }
+        public MethodSet(Action<Func<SuperscribeNode, SuperscribeNode>> binding)
+        {
+            this.binding = binding;
+        }
 
-        public Action<RouteData> Put { get; set; }
+        public Action<RouteData> this[string s]
+        {
+            set
+            {
+                if (s == "/")
+                {
+                    this.binding(o => o * value);   
+                }
+                else
+                {
+                    this.binding(o => o / s * value);    
+                }
+            }
+        }
 
-        public Action<RouteData> Patch { get; set; }
-
-        public Action<RouteData> Delete { get; set; }
+        public Action<RouteData> this[SuperscribeNode s]
+        {
+            set
+            {
+                ʃ.Get(o => o / s.Base() * value);
+            }
+        }
     }
 }

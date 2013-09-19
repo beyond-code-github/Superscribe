@@ -37,10 +37,15 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Modules\ModuleController.cs" />
+    <Compile Include="Modules\SuperscribeModuleActionInvoker.cs" />
+    <Compile Include="Modules\SuperscribeModuleActionSelector.cs" />
+    <Compile Include="Modules\SuperscribeModuleControllerSelector.cs" />
     <Compile Include="Internals\ActionSelectorCacheItem.cs" />
     <Compile Include="Internals\HttpControllerTypeCache.cs" />
     <Compile Include="Internals\HttpParameterBindingExtensions.cs" />

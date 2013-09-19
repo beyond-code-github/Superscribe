@@ -1,34 +1,24 @@
 ﻿namespace Superscribe
 {
-    using System;
-
-    using Superscribe.Models;
-
     public class SuperscribeModule
     {
-        protected void Get(Func<SuperscribeNode, RouteGlue, SuperscribeNode> config)
+        public SuperscribeModule()
         {
-            ʃ.Route(config);
+            this.Get = new MethodSet(o => ʃ.Get(o));
+            this.Put = new MethodSet(o => ʃ.Put(o));
+            this.Post = new MethodSet(o => ʃ.Post(o));
+            this.Patch = new MethodSet(o => ʃ.Patch(o));
+            this.Delete = new MethodSet(o => ʃ.Delete(o));
         }
 
-        protected void Post(Func<SuperscribeNode, RouteGlue, SuperscribeNode> config)
-        {
-            ʃ.Route(config);
-        }
+        public MethodSet Get { get; private set; }
 
-        protected void Put(Func<SuperscribeNode, RouteGlue, SuperscribeNode> config)
-        {
-            ʃ.Route(config);
-        }
+        public MethodSet Put { get; private set; }
 
-        protected void Delete(Func<SuperscribeNode, RouteGlue, SuperscribeNode> config)
-        {
-            ʃ.Route(config);
-        }
+        public MethodSet Post { get; private set; }
 
-        protected void Patch(Func<SuperscribeNode, RouteGlue, SuperscribeNode> config)
-        {
-            ʃ.Route(config);
-        }
+        public MethodSet Patch { get; private set; }
+        
+        public MethodSet Delete { get; private set; }
     }
 }
