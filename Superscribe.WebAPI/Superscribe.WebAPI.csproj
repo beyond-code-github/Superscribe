@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Superscribe.WebApi</RootNamespace>
     <AssemblyName>Superscribe.WebApi</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -43,6 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Modules\ModuleController.cs" />
+    <Compile Include="Modules\ModuleRouteData.cs" />
+    <Compile Include="Modules\SuperscribeModule.cs" />
     <Compile Include="Modules\SuperscribeModuleActionInvoker.cs" />
     <Compile Include="Modules\SuperscribeModuleActionSelector.cs" />
     <Compile Include="Modules\SuperscribeModuleControllerSelector.cs" />

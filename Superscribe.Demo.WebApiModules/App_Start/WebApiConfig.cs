@@ -9,6 +9,7 @@
         public static void Register(HttpConfiguration config)
         {
             config.EnableSystemDiagnosticsTracing();
+            config.Formatters.Remove(config.Formatters.XmlFormatter);
 
             SuperscribeConfig.RegisterModules(config);
         }

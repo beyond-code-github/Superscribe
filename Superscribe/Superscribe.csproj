@@ -43,6 +43,7 @@
     <Compile Include="Models\CommandNode.cs" />
     <Compile Include="Models\FinalFunction.cs" />
     <Compile Include="Models\FinalFunctionList.cs" />
+    <Compile Include="Models\IRouteData.cs" />
     <Compile Include="Models\MethodShorthands.cs" />
     <Compile Include="Models\NodeFuture.cs" />
     <Compile Include="Models\ParamNode.cs" />
