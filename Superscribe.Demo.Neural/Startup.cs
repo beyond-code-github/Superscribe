@@ -10,15 +10,15 @@
     {
         public void Configuration(IAppBuilder app)
         {
-            ʃ.Route(root => root * this.ExplainPurpose);
-            ʃ.Route((root, ʅ) =>
-                root / "xor" / (ʃBool)"Param1" / (ʃBool)"Param2" / (
-                    ʅ["POST"] / "YouSaid" / (ʃBool)"Answer" / (
-                          ʅ / "AndThatWasCorrect" * this.LearnThatItWasCorrect
-                        | ʅ / "ButThatWasWrong" * this.LearnThatItWasWrong)
-                  | ʅ / this.ComputeResult / (
-                          ʅ / (o => o >= 0.5) * this.RespondTrue
-                        | ʅ / (o => o < 0.5) * this.RespondFalse)));
+            //ʃ.Route(ʅ => this.ExplainPurpose);
+            //ʃ.Route(ʅ =>
+            //    "xor" / (ʃBool)"Param1" / (ʃBool)"Param2" / (
+            //        ʅ["POST"] / "YouSaid" / (ʃBool)"Answer" / (
+            //              ʅ / "AndThatWasCorrect" * this.LearnThatItWasCorrect
+            //            | ʅ / "ButThatWasWrong" * this.LearnThatItWasWrong)
+            //      | ʅ / this.ComputeResult / (
+            //              ʅ / (o => o >= 0.5) * this.RespondTrue
+            //            | ʅ / (o => o < 0.5) * this.RespondFalse)));
 
             app.UseSuperscribe();
         }
