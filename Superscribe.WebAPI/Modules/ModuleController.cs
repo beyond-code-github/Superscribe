@@ -51,6 +51,12 @@
                 return responseMessage;
             }
 
+            var statusCode = webApiInfo.Response as HttpStatusCode?;
+            if (statusCode != null)
+            {
+                return this.Request.CreateResponse(statusCode.Value);
+            }
+
             return this.Request.CreateResponse(HttpStatusCode.OK, webApiInfo.Response);
         }
     }
