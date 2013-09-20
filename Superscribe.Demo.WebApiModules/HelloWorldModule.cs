@@ -14,13 +14,13 @@
         public HelloWorldModule()
         {
             this.Get["/"] = o => new { Message = "Hello World" };
-
+            
             this.Get["Hello" / (ʃString)"Name"] = o =>
                 {
                     var helloService = o.Require<IHelloService>();
                     return new { Message = helloService.SayHello(o.Parameters.Name) };
                 };
-            
+
             this.Post["Save"] = o =>
                 {
                     var wrapper = o.Bind<MessageWrapper>();
