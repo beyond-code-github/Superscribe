@@ -10,7 +10,7 @@
 
     public class SuperscribeNode : IEquatable<SuperscribeNode>
     {
-        private Predicate<string> activationFunction;
+        public Func<dynamic, string, bool> activationFunction;
 
         /// <summary>
         /// Base constructor for superscribe states
@@ -22,7 +22,7 @@
             this.AllowedMethods = new ConcurrentQueue<string>();
             this.FinalFunctions = new List<FinalFunction>();
 
-            this.ActivationFunction = (routedata, segment) =>
+            this.activationFunction = (routedata, segment) =>
             {
                 if (this.Pattern != null)
                 {
@@ -71,7 +71,20 @@
 
         public List<FinalFunction> FinalFunctions { get; set; }
 
-        public Func<dynamic, string, bool> ActivationFunction { get; set; }
+        public bool ActivationFunctionChanged { set; get; }
+
+        public Func<dynamic, string, bool> ActivationFunction
+        {
+            get
+            {
+                return activationFunction;
+            }
+            set
+            {
+                this.ActivationFunctionChanged = true;
+                this.activationFunction = value;
+            }
+        }
 
         public ConcurrentQueue<string> AllowedMethods { get; set; }
 
@@ -79,18 +92,29 @@
 
         #region Methods
 
-        public SuperscribeNode Slash(SuperscribeNode nextNode)
+        public SuperscribeNode Zip(SuperscribeNode nextNode)
         {
             nextNode.Parent = this;
-
             foreach (var existingNode in this.Edges)
             {
                 if (existingNode.Equals(nextNode))
                 {
+                    foreach (var nextEdge in nextNode.Edges)
+                    {
+                        existingNode.Zip(nextEdge);
+                    }
+
                     return existingNode;
                 }
             }
 
+            this.Edges.Enqueue(nextNode);
+            return nextNode;
+        }
+
+        public SuperscribeNode Slash(SuperscribeNode nextNode)
+        {
+            nextNode.Parent = this;
             this.Edges.Enqueue(nextNode);
             return nextNode;
         }
@@ -311,12 +335,19 @@
                 return false;
             }
 
-            return string.Equals(
+            if (this.ActivationFunctionChanged || other.ActivationFunctionChanged)
+            {
+                return false;
+            }
+            
+            var equal = string.Equals(
                 this.Pattern != null ? this.Pattern.ToString() : string.Empty,
                 this.Pattern != null ? this.Pattern.ToString() : string.Empty)
                 && string.Equals(this.Template, other.Template)
                 && this.AllowedMethods.SequenceEqual(other.AllowedMethods)
                 && this.FinalFunctions.Select(o => o.Method).SequenceEqual(other.FinalFunctions.Select(o => o.Method));
+
+            return equal;
         }
 
         public override bool Equals(object obj)

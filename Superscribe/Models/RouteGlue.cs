@@ -2,6 +2,8 @@
 {
     using System;
 
+    using Superscribe.Utils;
+
     public class RouteGlue
     {
         public RouteGlue()
@@ -35,6 +37,25 @@
             }
 
             return node;
+        }
+
+        public static SuperList operator /(RouteGlue state, SuperList others)
+        {
+            foreach (var other in others)
+            {
+                var node = other.Base();
+                if (!string.IsNullOrEmpty(state.Method))
+                {
+                    node.AddAllowedMethod(state.Method);
+                }
+            }
+            
+            return others;
+        }
+
+        public static NodeFuture operator /(RouteGlue state, Func<dynamic, string, bool> activation)
+        {
+            return new NodeFuture { ActivationFunction = activation };
         }
 
         public static FinalFunction operator *(RouteGlue state, Func<dynamic, object> other)

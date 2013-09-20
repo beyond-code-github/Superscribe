@@ -27,7 +27,7 @@
     
     public class When_specifying_an_activation_function_that_resolves_to_true : ActivationFunctionTests
     {
-        private Establish context = () => ʃ.Route((root, ʅ) => root / "Hello" / ((o, s) => true) * "World" * HelloWorld);
+        private Establish context = () => ʃ.Route(ʅ => ʅ / "Hello" / ((o, s) => true) * "World" * HelloWorld);
 
         private Because of = () => subject.WalkRoute("/Hello/World", "GET", routeData);
 
@@ -36,7 +36,7 @@
 
     public class When_specifying_an_activation_function_that_resolves_to_false : ActivationFunctionTests
     {
-        private Establish context = () => ʃ.Route((root, ʅ) => root / ((o, s) => false) * "Hello" / "World" * HelloWorld);
+        private Establish context = () => ʃ.Route(ʅ => ʅ / "Hello" / ((o, s) => false) * "World" * HelloWorld);
 
         private Because of = () => subject.WalkRoute("/Hello/World", "GET", routeData);
 

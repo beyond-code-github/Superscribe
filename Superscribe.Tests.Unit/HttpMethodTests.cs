@@ -60,7 +60,7 @@
 
     public class When_defining_a_route_with_options_and_issuing_a_get_to_the_first : HttpMethodTests
     {
-        private Establish context = () => ʃ.Route((root, ʅ) => root / (
+        private Establish context = () => ʃ.Route(ʅ => ʅ / (
               ʅ / "Hello" / (ʃString)"Name" * Hello
             | ʅ / "Confirm" / (ʃLong)"Age" * CheckAge));
 
@@ -71,7 +71,7 @@
 
     public class When_defining_a_route_with_options_and_issuing_a_get_to_the_second : HttpMethodTests
     {
-        private Establish context = () => ʃ.Route((root, ʅ) => root / (
+        private Establish context = () => ʃ.Route(ʅ => ʅ / (
               ʅ / "Hello" / (ʃString)"Name" * Hello
             | ʅ / "Confirm" / (ʃLong)"Age" * CheckAge));
 
@@ -82,7 +82,7 @@
 
     public class When_defining_a_route_with_options_and_issuing_a_post_to_the_first : HttpMethodTests
     {
-        private Establish context = () => ʃ.Route((root, ʅ) => root / (
+        private Establish context = () => ʃ.Route((ʅ) => ʅ / (
               ʅ / "Hello" / (ʃString)"Name" * Hello
             | ʅ / "Confirm" / (ʃLong)"Age" * CheckAge));
 
@@ -93,7 +93,7 @@
 
     public class When_defining_a_route_with_options_and_issuing_a_post_to_the_second : HttpMethodTests
     {
-        private Establish context = () => ʃ.Route((root, ʅ) => root / (
+        private Establish context = () => ʃ.Route((ʅ) => ʅ / (
               ʅ / "Hello" / (ʃString)"Name" * Hello
             | ʅ / "Confirm" / (ʃLong)"Age" * CheckAge));
 
@@ -104,7 +104,7 @@
 
     public class When_defining_a_route_with_options_and_explicit_methods_and_issuing_a_get_to_the_first : HttpMethodTests
     {
-        private Establish context = () => ʃ.Route((root, ʅ) => root / (
+        private Establish context = () => ʃ.Route((ʅ) => ʅ / (
               ʅ["GET"] / "Hello" / (ʃString)"Name" * Hello
             | ʅ["POST"] / "Confirm" / (ʃLong)"Age" * CheckAge));
 
@@ -115,7 +115,7 @@
 
     public class When_defining_a_route_with_options_and_explicit_methods_and_issuing_a_post_to_the_first : HttpMethodTests
     {
-        private Establish context = () => ʃ.Route((root, ʅ) => root / (
+        private Establish context = () => ʃ.Route((ʅ) => ʅ / (
               ʅ["GET"] / "Hello" / (ʃString)"Name" * Hello
             | ʅ["POST"] / "Confirm" / (ʃLong)"Age" * CheckAge));
 
@@ -126,7 +126,7 @@
 
     public class When_defining_a_route_with_options_and_explicit_methods_and_issuing_a_post_to_the_second : HttpMethodTests
     {
-        private Establish context = () => ʃ.Route((root, ʅ) => root / (
+        private Establish context = () => ʃ.Route((ʅ) => ʅ / (
               ʅ["GET"] / "Hello" / (ʃString)"Name" * Hello
             | ʅ["POST"] / "Confirm" / (ʃLong)"Age" * CheckAge));
 
@@ -137,7 +137,7 @@
 
     public class When_defining_a_route_with_options_and_explicit_methods_and_issuing_a_get_to_the_second : HttpMethodTests
     {
-        private Establish context = () => ʃ.Route((root, ʅ) => root / (
+        private Establish context = () => ʃ.Route((ʅ) => ʅ / (
               ʅ["GET"] / "Hello" / (ʃString)"Name" * Hello
             | ʅ["POST"] / "Confirm" / (ʃLong)"Age" * CheckAge));
 
@@ -148,7 +148,7 @@
 
     public class When_defining_a_route_under_a_subnode_with_options_and_explicit_methods_and_issuing_a_get_to_the_first : HttpMethodTests
     {
-        private Establish context = () => ʃ.Route((root, ʅ) => root / "Api" / (
+        private Establish context = () => ʃ.Route(ʅ => ʅ /"Api" / (
               ʅ["GET"] / "Hello" / (ʃString)"Name" * Hello
             | ʅ["POST"] / "Confirm" / (ʃLong)"Age" * CheckAge));
 
@@ -159,7 +159,7 @@
 
     public class When_defining_a_route_under_a_subnode_with_options_and_explicit_methods_and_issuing_a_post_to_the_second : HttpMethodTests
     {
-        private Establish context = () => ʃ.Route((root, ʅ) => root / "Api" / (
+        private Establish context = () => ʃ.Route((ʅ) => ʅ /"Api" / (
               ʅ["GET"] / "Hello" / (ʃString)"Name" * Hello
             | ʅ["POST"] / "Confirm" / (ʃLong)"Age" * CheckAge));
 
@@ -171,7 +171,7 @@
 
     public class When_defining_a_route_under_a_subnode_where_both_explcit_method_definitons_contain_the_same_matcher_and_issuing_a_get : HttpMethodTests
     {
-        private Establish context = () => ʃ.Route((root, ʅ) => root / "Api" / (
+        private Establish context = () => ʃ.Route((ʅ) => ʅ /"Api" / (
               ʅ["GET"] / "Product" * GetProduct
             | ʅ["POST"] / "Product" * UpdateProduct));
 
@@ -183,7 +183,7 @@
 
     public class When_defining_a_route_under_a_subnode_where_both_explcit_method_definitons_contain_the_same_matcher_and_issuing_a_post : HttpMethodTests
     {
-        private Establish context = () => ʃ.Route((root, ʅ) => root / "Api" / (
+        private Establish context = () => ʃ.Route((ʅ) => ʅ /"Api" / (
               ʅ["GET"] / "Product" * GetProduct
             | ʅ["POST"] / "Product" * UpdateProduct));
 
@@ -195,7 +195,7 @@
 
     public class When_defining_a_route_with_explicit_method_final_function_options_and_issuing_a_get : HttpMethodTests
     {
-        private Establish context = () => ʃ.Route((root, ʅ) => root / "Products" / (ʃLong)"Id" * (
+        private Establish context = () => ʃ.Route((ʅ) => ʅ /"Products" / (ʃLong)"Id" * (
               ʅ["GET"] * GetProduct
             | ʅ["POST"] * UpdateProduct));
 
@@ -206,7 +206,7 @@
 
     public class When_defining_a_route_with_explicit_method_final_function_options_and_issuing_a_post : HttpMethodTests
     {
-        private Establish context = () => ʃ.Route((root, ʅ) => root / "Products" / (ʃLong)"Id" * (
+        private Establish context = () => ʃ.Route((ʅ) => ʅ /"Products" / (ʃLong)"Id" * (
               ʅ["GET"] * GetProduct
             | ʅ["POST"] * UpdateProduct));
 
@@ -219,8 +219,8 @@
     {
         private Establish context = () =>
             {
-                ʃ.Get((root, ʅ) => root / "Products" / (ʃLong)"Id" * GetProduct);
-                ʃ.Post((root, ʅ) => root / "Products" / (ʃLong)"Id" * UpdateProduct);
+                ʃ.Get((ʅ) => "Products" / (ʃLong)"Id" * GetProduct);
+                ʃ.Post((ʅ) => "Products" / (ʃLong)"Id" * UpdateProduct);
         };
 
         private Because of = () => subject.WalkRoute("/Products/1", "GET", routeData);
@@ -232,8 +232,8 @@
     {
         private Establish context = () =>
         {
-            ʃ.Get((root, ʅ) => root / "Products" / (ʃLong)"Id" * GetProduct);
-            ʃ.Post((root, ʅ) => root / "Products" / (ʃLong)"Id" * UpdateProduct);
+            ʃ.Get(ʅ => "Products" / (ʃLong)"Id" * GetProduct);
+            ʃ.Post(ʅ => "Products" / (ʃLong)"Id" * UpdateProduct);
         };
 
         private Because of = () => subject.WalkRoute("/Products/1", "POST", routeData);

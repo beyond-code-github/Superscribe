@@ -6,11 +6,14 @@
 
     public class MethodSet<T>
     {
-        private readonly Action<Func<SuperscribeNode, SuperscribeNode>> binding;
+        private readonly Action<Func<SuperscribeNode>> binding;
 
-        public MethodSet(Action<Func<SuperscribeNode, SuperscribeNode>> binding)
+        private readonly string method;
+
+        public MethodSet(Action<Func<SuperscribeNode>> binding, string method)
         {
             this.binding = binding;
+            this.method = method;
         }
 
         public Func<T, object> this[string s]
@@ -19,11 +22,12 @@
             {
                 if (s == "/")
                 {
-                    this.binding(o => o * (f => value(f)));   
+                    ʃ.Base.FinalFunctions.Add(new FinalFunction { Function = f => value(f), Method = this.method });
                 }
                 else
                 {
-                    this.binding(o => o / s * (f => value(f)));    
+                    var node = ʃ.Constant(s);
+                    this.binding(() => node * (f => value(f)));    
                 }
             }
         }
@@ -32,7 +36,8 @@
         {
             set
             {
-                ʃ.Get(o => o / s.Base() * (f => value(f)));
+                s = s * (f => value(f));
+                this.binding(() => s.Base());
             }
         }
     }

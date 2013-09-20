@@ -12,12 +12,12 @@
             SuperscribeConfig.Register(config);
             ʃ.Reset();
 
-            ʃ.Route((root, ʅ) => root / "api" / (ʃLong)"parentId" /
+            ʃ.Route(ʅ => ʅ / "api" / (ʃLong)"parentId" /
                         "Forms".Controller() / (
                             ʅ / "VisibleFor".Action() / (ʃString)"appDataId"
                           | ʅ / -(ʃLong)"id"));
 
-            ʃ.Route((root, ʅ) => root / "sites" / (ʃInt)"siteId" / (
+            ʃ.Route(ʅ => ʅ / "sites" / (ʃInt)"siteId" / (
                 ʅ / "blog" / (
                       ʅ / "tags".Controller("blogtags")
                     | ʅ / "posts".Controller("blogposts") / (

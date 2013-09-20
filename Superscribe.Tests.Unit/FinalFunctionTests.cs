@@ -27,7 +27,7 @@
 
     public class When_specifying_a_final_function_against_a_root_node : FinalFunctionTests
     {
-        private Establish context = () => ʃ.Route(root => root * HelloWorld);
+        private Establish context = () => ʃ.Route(ʅ => HelloWorld);
         
         private Because of = () => subject.WalkRoute("/", "GET", routeData);
 
@@ -36,7 +36,7 @@
 
     public class When_specifying_a_final_function_against_a_leaf_node : FinalFunctionTests
     {
-        private Establish context = () => ʃ.Route(root => root / "Hello" / "World" * HelloWorld);
+        private Establish context = () => ʃ.Route(ʅ => ʅ / "Hello" / "World" * HelloWorld);
 
         private Because of = () => subject.WalkRoute("/Hello/World", "GET", routeData);
 
@@ -45,7 +45,7 @@
 
     public class When_specifying_a_final_function_against_a_node : FinalFunctionTests
     {
-        private Establish context = () => ʃ.Route(root => root / "Hello" * HelloWorld / "World");
+        private Establish context = () => ʃ.Route(ʅ => ʅ / "Hello" * HelloWorld / "World");
 
         private Because of = () => subject.WalkRoute("/Hello/World", "GET", routeData);
 

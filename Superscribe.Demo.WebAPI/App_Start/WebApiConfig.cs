@@ -9,7 +9,7 @@
         {
             SuperscribeConfig.Register(config);
 
-            ʃ.Route(o => o / "api" / "values".Controller() / (
+            ʃ.Route(() => "api" / "values".Controller() / (
                   -"id".Int()
                 | ~"(first|last)".Action()
                 | +("foruser" / "userId".Int())));

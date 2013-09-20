@@ -15,5 +15,12 @@
 
             return future.Parent.Slash(node);
         }
+
+        public static SuperscribeNode operator *(NodeFuture future, SuperscribeNode node)
+        {
+            node.ActivationFunction = future.ActivationFunction;
+
+            return future.Parent.Slash(node);
+        }
     }
 }
