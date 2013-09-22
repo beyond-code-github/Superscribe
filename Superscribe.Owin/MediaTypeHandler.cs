@@ -5,7 +5,7 @@
 
     using global::Owin.Types;
 
-    public class ContentHandler
+    public class MediaTypeHandler
     {
         public Func<OwinResponse, object, Task> Write { get; set; }
 

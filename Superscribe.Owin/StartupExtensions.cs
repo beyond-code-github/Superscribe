@@ -70,10 +70,10 @@
                     if (req.Headers.TryGetValue("accept", out outgoingMediaTypes))
                     {
                         var mediaTypes = ConnegHelpers.GetWeightedValues(outgoingMediaTypes);
-                        var mediaType = mediaTypes.FirstOrDefault(o => config.ContentHandlers.Keys.Contains(o) && config.ContentHandlers[o].Write != null);
+                        var mediaType = mediaTypes.FirstOrDefault(o => config.MediaTypeHandlers.Keys.Contains(o) && config.MediaTypeHandlers[o].Write != null);
                         if (!string.IsNullOrEmpty(mediaType))
                         {
-                            var formatter = config.ContentHandlers[mediaType];
+                            var formatter = config.MediaTypeHandlers[mediaType];
                             res.SetHeader("content-type", mediaType);
                             return formatter.Write(res, routeData.Response);
                         }

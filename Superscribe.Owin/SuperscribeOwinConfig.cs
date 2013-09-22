@@ -6,9 +6,9 @@
     {
         public SuperscribeOwinConfig()
         {
-            this.ContentHandlers = new Dictionary<string, ContentHandler>();
+            this.MediaTypeHandlers = new Dictionary<string, MediaTypeHandler>();
         }
 
-        public Dictionary<string, ContentHandler> ContentHandlers { get; set; }
+        public Dictionary<string, MediaTypeHandler> MediaTypeHandlers { get; set; }
     }
 }

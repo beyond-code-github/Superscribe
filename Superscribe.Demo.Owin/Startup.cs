@@ -13,9 +13,9 @@
         public void Configuration(IAppBuilder app)
         {
             var config = new SuperscribeOwinConfig();
-            config.ContentHandlers.Add(
+            config.MediaTypeHandlers.Add(
                 "application/json",
-                new ContentHandler
+                new MediaTypeHandler
                     {
                         Write = (res, o) => res.WriteAsync(JsonConvert.SerializeObject(o)),
                         Read = (req, type) =>
@@ -30,9 +30,9 @@
                             }
                     });
 
-            config.ContentHandlers.Add(
+            config.MediaTypeHandlers.Add(
                 "text/html",
-                new ContentHandler
+                new MediaTypeHandler
                     {
                         Write = (res, o) => res.WriteAsync(o.ToString())
                     });

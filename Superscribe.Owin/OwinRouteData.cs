@@ -27,10 +27,10 @@
             if (this.OwinRequest.Headers.TryGetValue("content-type", out incomingMediaTypes))
             {
                 var mediaTypes = ConnegHelpers.GetWeightedValues(incomingMediaTypes);
-                var mediaType = mediaTypes.FirstOrDefault(o => this.Config.ContentHandlers.Keys.Contains(o) && this.Config.ContentHandlers[o].Read != null);
+                var mediaType = mediaTypes.FirstOrDefault(o => this.Config.MediaTypeHandlers.Keys.Contains(o) && this.Config.MediaTypeHandlers[o].Read != null);
                 if (!string.IsNullOrEmpty(mediaType))
                 {
-                    var formatter = this.Config.ContentHandlers[mediaType];
+                    var formatter = this.Config.MediaTypeHandlers[mediaType];
                     return formatter.Read(this.OwinRequest, typeof(T)) as T;
                 }
                         
