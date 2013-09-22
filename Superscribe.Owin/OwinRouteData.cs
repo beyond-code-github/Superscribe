@@ -1,13 +1,17 @@
 ﻿namespace Superscribe.Owin
 {
-    using Superscribe.Models;
-
     using global::Owin.Types;
 
-    public class OwinRouteData : RouteData
-    {
-        public OwinRequest Request { get; set; }
+    using Superscribe.Models;
 
-        public OwinResponse Response { get; set; }
+    public class OwinRouteData : IRouteData
+    {
+        public dynamic Parameters { get; set; }
+        
+        public object Response { get; set; }
+
+        public OwinRequest OwinRequest { get; set; }
+        
+        public OwinResponse OwinRespose { get; set; }
     }
 }

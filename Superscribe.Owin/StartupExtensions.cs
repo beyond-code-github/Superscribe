@@ -1,21 +1,47 @@
 ﻿namespace Superscribe.Owin
 {
+    using System;
+    using System.Linq;
+    using System.Runtime.CompilerServices;
+    using System.Runtime.Serialization;
+    using System.Threading.Tasks;
+
     using global::Owin;
 
-    using Superscribe.Models;
     using Superscribe.Utils;
 
     public static class StartupExtensions
     {
         public static IAppBuilder UseSuperscribe(
-            this IAppBuilder builder)
+            this IAppBuilder builder, SuperscribeOwinConfig config)
+        {
+            return SuperscribeHandler(builder, config);
+        }
+
+        public static IAppBuilder UseSuperscribeModules(
+            this IAppBuilder builder, SuperscribeOwinConfig config)
+        {
+            var modules = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
+                           from type in assembly.GetTypes()
+                           where typeof(SuperscribeOwinModule).IsAssignableFrom(type) && type != typeof(SuperscribeOwinModule)
+                           select new { Type = type }).ToList();
+
+            foreach (var module in modules)
+            {
+                Activator.CreateInstance(module.Type);
+            }
+
+            return SuperscribeHandler(builder, config);
+        }
+
+        private static IAppBuilder SuperscribeHandler(IAppBuilder builder, SuperscribeOwinConfig config)
         {
             return builder.UseHandlerAsync((req, res) =>
                 {
                     var path = req.Path;
-                    var routeData = new RouteData();
+                    var routeData = new OwinRouteData { OwinRequest = req, OwinRespose = res, Response = res };
 
-                    var walker = new RouteWalker<RouteData>(ʃ.Base);
+                    var walker = new RouteWalker<OwinRouteData>(ʃ.Base);
                     walker.WalkRoute(path, req.Method, routeData);
 
                     if (walker.IncompleteMatch)
@@ -30,9 +56,28 @@
                         return res.WriteAsync("404 - Route match failed");
                     }
 
-                    res.ContentType = "text/html";
+                    var responseTask = routeData.Response as Task;
+                    if (responseTask != null)
+                    {
+                        return responseTask;
+                    }
 
-                    return res.WriteAsync(routeData.Response.ToString());
+                    string[] outgoingMediaTypes;
+                    if (req.Headers.TryGetValue("accept", out outgoingMediaTypes))
+                    {
+                        var mediaTypes = ConnegHelpers.GetWeightedValues(outgoingMediaTypes);
+                        var mediaType = mediaTypes.FirstOrDefault(o => config.ContentHandlers.Keys.Contains(o));
+                        if (!string.IsNullOrEmpty(mediaType))
+                        {
+                            var formatter = config.ContentHandlers[mediaType];
+                            res.SetHeader("content-type", mediaType);
+                            return formatter(res, routeData.Response);
+                        }
+                        
+                        throw new NotSupportedException("Media type is not supported");
+                    }
+                    
+                    throw new NotSupportedException("Response type is not supported");
                 });
         }
     }
