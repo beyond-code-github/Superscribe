@@ -2,8 +2,6 @@
 {
     using System;
     using System.Linq;
-    using System.Runtime.CompilerServices;
-    using System.Runtime.Serialization;
     using System.Threading.Tasks;
 
     using global::Owin;
@@ -39,7 +37,7 @@
             return builder.UseHandlerAsync((req, res) =>
                 {
                     var path = req.Path;
-                    var routeData = new OwinRouteData { OwinRequest = req, OwinRespose = res, Response = res };
+                    var routeData = new OwinRouteData { OwinRequest = req, Response = res, Config = config };
 
                     var walker = new RouteWalker<OwinRouteData>(ʃ.Base);
                     walker.WalkRoute(path, req.Method, routeData);
@@ -62,16 +60,22 @@
                         return responseTask;
                     }
 
+                    // Set status code
+                    if (routeData.StatusCode > 0)
+                    {
+                        res.StatusCode = routeData.StatusCode;
+                    }
+
                     string[] outgoingMediaTypes;
                     if (req.Headers.TryGetValue("accept", out outgoingMediaTypes))
                     {
                         var mediaTypes = ConnegHelpers.GetWeightedValues(outgoingMediaTypes);
-                        var mediaType = mediaTypes.FirstOrDefault(o => config.ContentHandlers.Keys.Contains(o));
+                        var mediaType = mediaTypes.FirstOrDefault(o => config.ContentHandlers.Keys.Contains(o) && config.ContentHandlers[o].Write != null);
                         if (!string.IsNullOrEmpty(mediaType))
                         {
                             var formatter = config.ContentHandlers[mediaType];
                             res.SetHeader("content-type", mediaType);
-                            return formatter(res, routeData.Response);
+                            return formatter.Write(res, routeData.Response);
                         }
                         
                         throw new NotSupportedException("Media type is not supported");
