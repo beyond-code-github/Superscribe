@@ -1,26 +1,22 @@
 ﻿namespace Superscribe.Demo.Neural
 {
+    using Newtonsoft.Json;
+
     using global::Owin;
 
     using Superscribe.Demo.Neural.NeuralNetwork;
-    using Superscribe.Models;
     using Superscribe.Owin;
 
     public class Startup
     {
         public void Configuration(IAppBuilder app)
         {
-            //ʃ.Route(ʅ => this.ExplainPurpose);
-            //ʃ.Route(ʅ =>
-            //    "xor" / (ʃBool)"Param1" / (ʃBool)"Param2" / (
-            //        ʅ["POST"] / "YouSaid" / (ʃBool)"Answer" / (
-            //              ʅ / "AndThatWasCorrect" * this.LearnThatItWasCorrect
-            //            | ʅ / "ButThatWasWrong" * this.LearnThatItWasWrong)
-            //      | ʅ / this.ComputeResult / (
-            //              ʅ / (o => o >= 0.5) * this.RespondTrue
-            //            | ʅ / (o => o < 0.5) * this.RespondFalse)));
-
-            app.UseSuperscribe();
+            var config = new SuperscribeOwinConfig();
+            config.MediaTypeHandlers.Add(
+                "application/json",
+                new MediaTypeHandler { Write = (res, o) => res.WriteAsync(JsonConvert.SerializeObject(o)) });
+            
+            app.UseSuperscribe(config);
         }
 
         private double ComputeResult(dynamic o, string segment)
