@@ -42,12 +42,12 @@ title:  Home
 
 public static class WebApiConfig
 {
-public static void Register(HttpConfiguration config)
-{
-    config.Formatters.Remove(config.Formatters.XmlFormatter);
+    public static void Register(HttpConfiguration config)
+    {
+        config.Formatters.Remove(config.Formatters.XmlFormatter);
 
-    SuperscribeConfig.RegisterModules(config);
-}
+        SuperscribeConfig.RegisterModules(config);
+    }
 }
         </pre>
         <h3 class="title visible-phone">Configure OWIN</h3>
@@ -55,15 +55,15 @@ public static void Register(HttpConfiguration config)
 
 public class Startup
 {
-public void Configuration(IAppBuilder app)
-{
-    var config = new SuperscribeOwinConfig();
-    config.MediaTypeHandlers.Add(
-        "text/html", 
-        new MediaTypeHandler { Write = (res, o) => res.WriteAsync(o.ToString()) });
+    public void Configuration(IAppBuilder app)
+    {
+        var config = new SuperscribeOwinConfig();
+        config.MediaTypeHandlers.Add(
+            "text/html", 
+            new MediaTypeHandler { Write = (res, o) => res.WriteAsync(o.ToString()) });
 
-    app.UseSuperscribeModules(config);
-}
+        app.UseSuperscribeModules(config);
+    }
 }
         </pre>
         <h3 class="title visible-phone">Add a Module</h3>
@@ -71,13 +71,13 @@ public void Configuration(IAppBuilder app)
 
 public class HelloWorldModule : Superscribe.WebApi.Modules.SuperscribeModule
 {
-public HelloWorldModule()
-{
-    this.Get["/"] = ʅ => "Hello World!";
+    public HelloWorldModule()
+    {
+        this.Get["/"] = ʅ => "Hello World!";
 
-    this.Get["Hello" / (ʃString)"Name"] = 
-      ʅ => string.Format("Hello {0}", ʅ.Parameters.Name);
-}
+        this.Get["Hello" / (ʃString)"Name"] = 
+          ʅ => string.Format("Hello {0}", ʅ.Parameters.Name);
+    }
 }
         </pre>
       </div>
@@ -87,14 +87,14 @@ public HelloWorldModule()
 
 public static class WebApiConfig
 {
-public static void Register(HttpConfiguration config)
-{
-    config.Routes.MapHttpRoute(
-        name: "DefaultApi",
-        routeTemplate: "api/{controller}/{id}",
-        defaults: new { id = RouteParameter.Optional }
-    );
-}
+    public static void Register(HttpConfiguration config)
+    {
+        config.Routes.MapHttpRoute(
+            name: "DefaultApi",
+            routeTemplate: "api/{controller}/{id}",
+            defaults: new { id = RouteParameter.Optional }
+        );
+    }
 }
         </pre>
         <h3 class="title visible-phone">Superscribe Web API Config</h3>
@@ -102,12 +102,12 @@ public static void Register(HttpConfiguration config)
 
 public static class WebApiConfig
 {
-public static void Register(HttpConfiguration config)
-{
-    SuperscribeConfig.Register(config);
+    public static void Register(HttpConfiguration config)
+    {
+        SuperscribeConfig.Register(config);
 
-    ʃ.Route(() => "api" / ʃ.Controller / -(ʃInt)"id");
-}
+        ʃ.Route(() => "api" / ʃ.Controller / -(ʃInt)"id");
+    }
 }
         </pre>
       </div>
@@ -173,10 +173,10 @@ public static void Register(HttpConfiguration config)
         <pre class="prettyprint lang-cs">
 
 ʃ.Route(ʅ => ʅ / "api" / (
-  ʅ / "Fields".Controller() / (
-      ʅ / "VisibleFor" / (ʃString)"userId"
-    | ʅ / -(ʃLong)"fieldId"))
-| ʅ / "Forms".Controller() / -(ʃLong)"formId");  
+      ʅ / "Fields".Controller() / (
+          ʅ / "VisibleFor" / (ʃString)"userId"
+        | ʅ / -(ʃLong)"fieldId"))
+    | ʅ / "Forms".Controller() / -(ʃLong)"formId");  
         </pre>
         <h3 class="title visible-phone">Module style</h3>
         <p>Superscribe will automatically combine identical segments to build a hierarchy from individual routes:</p>
@@ -212,9 +212,9 @@ var objectNames = new [] {"Books", "Films", "Games"};
 
 foreach (var name in objectNames)
 {
-ʃ.Route(ʅ => baseRoute / name.Controller() / (
-    ʅ / -"BestSellers".Action()
-  | ʅ / -(ʃLong)"id"));
+    ʃ.Route(ʅ => baseRoute / name.Controller() / (
+        ʅ / -"BestSellers".Action()
+      | ʅ / -(ʃLong)"id"));
 }
         </pre>
         <h3 class="title visible-phone">Module style</h3>
@@ -223,17 +223,17 @@ foreach (var name in objectNames)
 var baseRoute = ʅ / "api" / "products";
 var repos = new Dictionary<string, IRepository> 
 {
-{ "Books", booksRepo }, { "Films", filmsRepo }, { "Games", gamesRepo }
+    { "Books", booksRepo }, { "Films", filmsRepo }, { "Games", gamesRepo }
 }
 
 foreach (var object in repos)
 {
-var name = object.Key;
-var repo = object.Value;
+    var name = object.Key;
+    var repo = object.Value;
 
-this.Get[baseRoute / name] = o => repo.All();
-this.Get[baseRoute / name / (ʃLong)"id"] = o => repo.Get(o.Params.Id);
-this.Get[baseRoute / name / "BestSellers"] = o => repo.BestSellers();
+    this.Get[baseRoute / name] = o => repo.All();
+    this.Get[baseRoute / name / (ʃLong)"id"] = o => repo.Get(o.Params.Id);
+    this.Get[baseRoute / name / "BestSellers"] = o => repo.BestSellers();
 }
         </pre>
       </div>       
