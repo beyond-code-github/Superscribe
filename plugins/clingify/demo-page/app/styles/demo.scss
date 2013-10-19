@@ -1,0 +1,27 @@
+@import "compass/reset";
+@import "compass/css3";
+@import "compass/typography/text/force-wrap";
+
+$lighter : #f8f8f8;
+$mobileish : "only screen and (max-width : 768px)";
+
+.mobileonly {
+	display: none;
+}
+
+@media #{$mobileish} { 
+	.mobileonly {
+		display: inline-block;
+	}
+}
+
+%box {
+    background: white;
+    border-radius: 5px;
+}
+
+@import "partials/rainbows";
+@import "partials/table";
+
+@import "partials/base";
+@import "partials/clingify";

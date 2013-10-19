@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	
+	<!-- META -->
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	
+	<!-- Force latest IE rendering engine (even in intranet) & Chrome Frame -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	<!-- tell mobile browsers to scale -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>jRespond Test Page</title>
+	
+	<!-- css -->
+	<style>
+		body {
+			background-color: #fff;
+			margin: 0;
+		}
+		#output {
+			font-size: 24px;
+			margin: 100px 0;
+			text-align: center;
+		}
+	</style>
+	
+</head>
+<body>
+	
+	<div class="wrapper">
+		
+		<p id="output"></p>
+		
+	</div>
+
+	<!-- Javascript -->
+	<script src="js/util.js"></script>
+	<script src="js/jRespond.js"></script>
+	<script>
+		
+		// call jRespond and add breakpoints
+		var jRes = jRespond([
+			{
+				label: 'handheld',
+				enter: 0,
+				exit: 767
+			},{
+				label: 'tablet',
+				enter: 768,
+				exit: 979
+			},{
+				label: 'laptop',
+				enter: 980,
+				exit: 1199
+			},{
+				label: 'desktop',
+				enter: 1200,
+				exit: 10000
+			}
+		]);
+		
+		// usage
+		var outputStr = document.getElementById('output');
+		
+		jRes.addFunc({
+			breakpoint: 'desktop',
+			enter: function() {
+				console.log('>>> run this for the DESKTOP breakpoint <<<');
+				outputStr.innerHTML = 'Current breakpoint: desktop';
+			},
+			exit: function() {
+				console.log('<<< destroy this when exiting the DESKTOP breakpoint >>>');
+			}
+		});
+		
+		jRes.addFunc({
+			breakpoint: ['laptop','tablet'],
+			enter: function() {
+				console.log('>>> run this for the LAPTOP/TABLET breakpoint <<<');
+			},
+			exit: function() {
+				console.log('<<< destroy this when exiting the LAPTOP/TABLET breakpoint >>>');
+			}
+		});
+		
+		jRes.addFunc({
+			breakpoint: 'laptop',
+			enter: function() {
+				outputStr.innerHTML = 'Current breakpoint: laptop';
+			}
+		});
+		
+		jRes.addFunc({
+			breakpoint: 'tablet',
+			enter: function() {
+				outputStr.innerHTML = 'Current breakpoint: tablet';
+			}
+		});
+		
+		jRes.addFunc({
+			breakpoint: 'handheld',
+			enter: function() {
+				console.log('>>> run this for the HANDHELD breakpoint <<<');
+				outputStr.innerHTML = 'Current breakpoint: handheld';
+			},
+			exit: function() {
+				console.log('<<< destroy this when exiting the HANDHELD breakpoint >>>');
+			}
+		});
+		
+		jRes.addFunc({
+			breakpoint: '*',
+			enter: function() {
+				console.log('>>> run this when entering EVERY breakpoint <<<');
+			},
+			exit: function() {
+				console.log('<<< run this when exiting EVERY breakpoint >>>');
+			}
+		});
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,515 @@
+/* line 4, ../../app/styles/clingify.scss */
+.js-clingify-ztransform, .js-clingify-wrapper {
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* Baseline selectors */
+/* line 11, ../../app/styles/clingify.scss */
+.js-clingify-wrapper {
+  width: 100%;
+}
+
+/* line 15, ../../app/styles/clingify.scss */
+.js-clingify-locked {
+  left: 0;
+  position: fixed;
+  top: 0;
+  z-index: 99999;
+}
+
+/* Advanced selectors */
+
+/* line 17, ../../../../../.rvm/rubies/ruby-1.9.3-p194/lib/ruby/gems/1.9.1/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+/* line 22, ../../../../../.rvm/rubies/ruby-1.9.3-p194/lib/ruby/gems/1.9.1/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html {
+  line-height: 1;
+}
+
+/* line 24, ../../../../../.rvm/rubies/ruby-1.9.3-p194/lib/ruby/gems/1.9.1/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+ol, ul {
+  list-style: none;
+}
+
+/* line 26, ../../../../../.rvm/rubies/ruby-1.9.3-p194/lib/ruby/gems/1.9.1/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 28, ../../../../../.rvm/rubies/ruby-1.9.3-p194/lib/ruby/gems/1.9.1/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+/* line 30, ../../../../../.rvm/rubies/ruby-1.9.3-p194/lib/ruby/gems/1.9.1/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q, blockquote {
+  quotes: none;
+}
+/* line 103, ../../../../../.rvm/rubies/ruby-1.9.3-p194/lib/ruby/gems/1.9.1/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+/* line 32, ../../../../../.rvm/rubies/ruby-1.9.3-p194/lib/ruby/gems/1.9.1/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+a img {
+  border: none;
+}
+
+/* line 116, ../../../../../.rvm/rubies/ruby-1.9.3-p194/lib/ruby/gems/1.9.1/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+  display: block;
+}
+
+/* line 8, ../../app/styles/demo.scss */
+.mobileonly {
+  display: none;
+}
+
+@media only screen and (max-width: 768px) {
+  /* line 13, ../../app/styles/demo.scss */
+  .mobileonly {
+    display: inline-block;
+  }
+}
+/* line 18, ../../app/styles/demo.scss */
+.initialization, .nav-persistent ul, .second-clingy {
+  background: white;
+  border-radius: 5px;
+}
+
+/*
+ * CSS animated rainbow dividers of awesome 
+ * by Chris Heilmann @codepo8 and Lea Verou @leaverou and unicorn @ollie
+ **/
+@-webkit-keyframes charlieeee {
+  /* line 6, ../../app/styles/partials/_rainbows.scss */
+  from {
+    background-position: top left;
+  }
+
+  /* line 7, ../../app/styles/partials/_rainbows.scss */
+  to {
+    background-position: top right;
+  }
+}
+
+/* line 10, ../../app/styles/partials/_rainbows.scss */
+.catchadream {
+  background-image: -webkit-linear-gradient(left, red, orange, yellow, green, blue, indigo, violet, indigo, blue, green, yellow, orange, red);
+  -webkit-animation: charlieeee 1.5s forwards linear infinite;
+  background-size: 50% auto;
+}
+
+/* line 17, ../../app/styles/partials/_table.scss */
+table {
+  max-width: 100%;
+  background-color: white;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 27, ../../app/styles/partials/_table.scss */
+.table {
+  width: 100%;
+  margin-bottom: 1em;
+}
+/* line 32, ../../app/styles/partials/_table.scss */
+.table th,
+.table td {
+  padding: 8px;
+  line-height: 1em;
+  text-align: left;
+  vertical-align: top;
+  border-top: 1px solid #cccccc;
+}
+/* line 39, ../../app/styles/partials/_table.scss */
+.table th {
+  font-weight: bold;
+}
+/* line 43, ../../app/styles/partials/_table.scss */
+.table thead th {
+  vertical-align: bottom;
+}
+/* line 52, ../../app/styles/partials/_table.scss */
+.table caption + thead tr:first-child th,
+.table caption + thead tr:first-child td,
+.table colgroup + thead tr:first-child th,
+.table colgroup + thead tr:first-child td,
+.table thead:first-child tr:first-child th,
+.table thead:first-child tr:first-child td {
+  border-top: 0;
+}
+/* line 56, ../../app/styles/partials/_table.scss */
+.table tbody + tbody {
+  border-top: 2px solid #cccccc;
+}
+/* line 61, ../../app/styles/partials/_table.scss */
+.table .table {
+  background-color: white;
+}
+
+/* line 73, ../../app/styles/partials/_table.scss */
+.table-condensed th,
+.table-condensed td {
+  padding: 4px 5px;
+}
+
+/* line 82, ../../app/styles/partials/_table.scss */
+.table-bordered {
+  border: 1px solid #cccccc;
+  border-collapse: separate;
+  *border-collapse: collapse;
+  border-left: 0;
+  -webkit-border-radius: 5;
+  -moz-border-radius: 5;
+  -ms-border-radius: 5;
+  -o-border-radius: 5;
+  border-radius: 5;
+}
+/* line 89, ../../app/styles/partials/_table.scss */
+.table-bordered th,
+.table-bordered td {
+  border-left: 1px solid #cccccc;
+}
+/* line 101, ../../app/styles/partials/_table.scss */
+.table-bordered caption + thead tr:first-child th,
+.table-bordered caption + tbody tr:first-child th,
+.table-bordered caption + tbody tr:first-child td,
+.table-bordered colgroup + thead tr:first-child th,
+.table-bordered colgroup + tbody tr:first-child th,
+.table-bordered colgroup + tbody tr:first-child td,
+.table-bordered thead:first-child tr:first-child th,
+.table-bordered tbody:first-child tr:first-child th,
+.table-bordered tbody:first-child tr:first-child td {
+  border-top: 0;
+}
+/* line 107, ../../app/styles/partials/_table.scss */
+.table-bordered thead:first-child tr:first-child > th:first-child,
+.table-bordered tbody:first-child tr:first-child > td:first-child,
+.table-bordered tbody:first-child tr:first-child > th:first-child {
+  -moz-border-radius-topleft: 5;
+  -webkit-border-top-left-radius: 5;
+  border-top-left-radius: 5;
+}
+/* line 113, ../../app/styles/partials/_table.scss */
+.table-bordered thead:first-child tr:first-child > th:last-child,
+.table-bordered tbody:first-child tr:first-child > td:last-child,
+.table-bordered tbody:first-child tr:first-child > th:last-child {
+  -moz-border-radius-topright: 5;
+  -webkit-border-top-right-radius: 5;
+  border-top-right-radius: 5;
+}
+/* line 121, ../../app/styles/partials/_table.scss */
+.table-bordered thead:last-child tr:last-child > th:first-child,
+.table-bordered tbody:last-child tr:last-child > td:first-child,
+.table-bordered tbody:last-child tr:last-child > th:first-child,
+.table-bordered tfoot:last-child tr:last-child > td:first-child,
+.table-bordered tfoot:last-child tr:last-child > th:first-child {
+  -moz-border-radius-bottomleft: 5;
+  -webkit-border-bottom-left-radius: 5;
+  border-bottom-left-radius: 5;
+}
+/* line 129, ../../app/styles/partials/_table.scss */
+.table-bordered thead:last-child tr:last-child > th:last-child,
+.table-bordered tbody:last-child tr:last-child > td:last-child,
+.table-bordered tbody:last-child tr:last-child > th:last-child,
+.table-bordered tfoot:last-child tr:last-child > td:last-child,
+.table-bordered tfoot:last-child tr:last-child > th:last-child {
+  -moz-border-radius-bottomright: 5;
+  -webkit-border-bottom-right-radius: 5;
+  border-bottom-right-radius: 5;
+}
+/* line 134, ../../app/styles/partials/_table.scss */
+.table-bordered tfoot + tbody:last-child tr:last-child td:first-child {
+  -moz-border-radius-bottomleft: 0;
+  -webkit-border-bottom-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+/* line 137, ../../app/styles/partials/_table.scss */
+.table-bordered tfoot + tbody:last-child tr:last-child td:last-child {
+  -moz-border-radius-bottomright: 0;
+  -webkit-border-bottom-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+/* line 145, ../../app/styles/partials/_table.scss */
+.table-bordered caption + thead tr:first-child th:first-child,
+.table-bordered caption + tbody tr:first-child td:first-child,
+.table-bordered colgroup + thead tr:first-child th:first-child,
+.table-bordered colgroup + tbody tr:first-child td:first-child {
+  -moz-border-radius-topleft: 5;
+  -webkit-border-top-left-radius: 5;
+  border-top-left-radius: 5;
+}
+/* line 151, ../../app/styles/partials/_table.scss */
+.table-bordered caption + thead tr:first-child th:last-child,
+.table-bordered caption + tbody tr:first-child td:last-child,
+.table-bordered colgroup + thead tr:first-child th:last-child,
+.table-bordered colgroup + tbody tr:first-child td:last-child {
+  -moz-border-radius-topright: 5;
+  -webkit-border-top-right-radius: 5;
+  border-top-right-radius: 5;
+}
+
+/* line 167, ../../app/styles/partials/_table.scss */
+.table-striped tbody > tr:nth-child(odd) > td,
+.table-striped tbody > tr:nth-child(odd) > th {
+  background-color: #f8f8f8;
+}
+
+/* line 180, ../../app/styles/partials/_table.scss */
+table td[class*="span"],
+table th[class*="span"],
+.row-fluid table td[class*="span"],
+.row-fluid table th[class*="span"] {
+  display: table-cell;
+  float: none;
+  margin-left: 0;
+}
+
+/* line 1, ../../app/styles/partials/_base.scss */
+html {
+  background: #eee;
+}
+
+/* line 4, ../../app/styles/partials/_base.scss */
+body {
+  font-size: 1em;
+}
+
+/* line 8, ../../app/styles/partials/_base.scss */
+.wrapper {
+  background: #eee;
+  color: #333;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  height: 100%;
+  width: 100%;
+}
+
+/* line 15, ../../app/styles/partials/_base.scss */
+.content {
+  margin: 0 auto;
+  padding: 1em 0;
+  width: 55%;
+}
+@media only screen and (max-width: 768px) {
+  /* line 15, ../../app/styles/partials/_base.scss */
+  .content {
+    width: 90%;
+  }
+}
+/* line 23, ../../app/styles/partials/_base.scss */
+.content section {
+  padding: 3.5em 0 0;
+}
+/* line 26, ../../app/styles/partials/_base.scss */
+.content p {
+  margin: 1em 0;
+}
+/* line 28, ../../app/styles/partials/_base.scss */
+.content p:last-child {
+  margin: 0;
+}
+/* line 32, ../../app/styles/partials/_base.scss */
+.content h1 {
+  font-size: 2em;
+}
+/* line 35, ../../app/styles/partials/_base.scss */
+.content h2 {
+  font-size: 1.3em;
+  margin: 0 0 1em;
+}
+/* line 39, ../../app/styles/partials/_base.scss */
+.content h3 {
+  font-size: 1.2em;
+  margin: 0;
+}
+/* line 43, ../../app/styles/partials/_base.scss */
+.content p {
+  font-size: 1.2em;
+  line-height: 1.2em;
+}
+/* line 47, ../../app/styles/partials/_base.scss */
+.content h1, .content h2, .content h3 {
+  font-weight: bold;
+}
+
+/* line 51, ../../app/styles/partials/_base.scss */
+.github-link {
+  display: block;
+  margin: 0 0 1em;
+}
+
+/* line 55, ../../app/styles/partials/_base.scss */
+.title {
+  display: inline-block;
+  margin: 1em 0 0.5em;
+}
+
+/* line 59, ../../app/styles/partials/_base.scss */
+.advantages {
+  list-style-position: outside;
+  list-style-type: disc;
+  padding: 0 0 0 1.5em;
+}
+/* line 64, ../../app/styles/partials/_base.scss */
+.advantages li {
+  font-size: 1em;
+  line-height: 1.2em;
+  margin: 1em 0;
+}
+
+/* line 70, ../../app/styles/partials/_base.scss */
+.initialization {
+  display: block;
+  font-family: monospace;
+  margin: 0 auto 1em;
+  padding: 2em;
+  white-space: pre;
+  white-space: pre-wrap;
+  white-space: pre-line;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -hp-pre-wrap;
+  word-wrap: break-word;
+}
+
+/* line 78, ../../app/styles/partials/_base.scss */
+.options {
+  border: 1px solid #cccccc;
+  font-size: 1em;
+  display: block;
+  overflow-x: auto;
+}
+
+/* line 1, ../../app/styles/partials/_clingify.scss */
+.js-clingify-wrapper.js-clingify-locked {
+  border-bottom: 1px solid #ccc;
+  -webkit-transition: background-color 1s;
+  -moz-transition: background-color 1s;
+  -o-transition: background-color 1s;
+  transition: background-color 1s;
+  background: #f8f8f8;
+  visibility: visible;
+}
+
+/* line 8, ../../app/styles/partials/_clingify.scss */
+.js-clingify-wrapper > * {
+  -webkit-transition: background-color 1s;
+  -moz-transition: background-color 1s;
+  -o-transition: background-color 1s;
+  transition: background-color 1s;
+}
+
+/* line 11, ../../app/styles/partials/_clingify.scss */
+.nav-persistent {
+  margin: 0 auto;
+}
+/* line 13, ../../app/styles/partials/_clingify.scss */
+.nav-persistent ul {
+  margin: 0 0 1em;
+  padding: 1em;
+  -webkit-transition: padding 0.1s;
+  -moz-transition: padding 0.1s;
+  -o-transition: padding 0.1s;
+  transition: padding 0.1s;
+}
+/* line 20, ../../app/styles/partials/_clingify.scss */
+.nav-persistent li {
+  display: inline;
+  padding: 0 0.5em 0 0;
+}
+/* line 23, ../../app/styles/partials/_clingify.scss */
+.nav-persistent li:last-child {
+  display: none;
+  padding: 0;
+  text-align: right;
+}
+
+/* line 32, ../../app/styles/partials/_clingify.scss */
+.js-clingify-wrapper.js-clingify-locked.primaryClingifyElement .nav-persistent ul {
+  background: #f8f8f8;
+  margin: 0;
+  padding-top: 0.75em;
+}
+/* line 37, ../../app/styles/partials/_clingify.scss */
+.js-clingify-wrapper.js-clingify-locked.primaryClingifyElement .nav-persistent li:last-child {
+  display: inline;
+}
+
+/* line 42, ../../app/styles/partials/_clingify.scss */
+.second-clingy {
+  margin: 0 auto;
+  position: relative;
+  text-align: center;
+}
+/* line 48, ../../app/styles/partials/_clingify.scss */
+.second-clingy .message {
+  display: inline-block;
+  font-size: 1em;
+  line-height: 1em;
+  margin: 0;
+  padding: 1em;
+}
+/* line 56, ../../app/styles/partials/_clingify.scss */
+.second-clingy .first-message {
+  -webkit-transition: opacity 1s;
+  -moz-transition: opacity 1s;
+  -o-transition: opacity 1s;
+  transition: opacity 1s;
+}
+/* line 58, ../../app/styles/partials/_clingify.scss */
+.second-clingy .first-message .star {
+  color: hotpink;
+}
+/* line 60, ../../app/styles/partials/_clingify.scss */
+.second-clingy .second-message {
+  display: none;
+  padding-top: 0.75em;
+}
+/* line 64, ../../app/styles/partials/_clingify.scss */
+.second-clingy .catchadream {
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+}
+
+/* line 70, ../../app/styles/partials/_clingify.scss */
+.js-clingify-wrapper.js-clingify-locked.secondaryClingifyElement .second-clingy {
+  background: #f8f8f8;
+}
+/* line 75, ../../app/styles/partials/_clingify.scss */
+.js-clingify-wrapper.js-clingify-locked.secondaryClingifyElement .second-clingy .first-message {
+  display: none;
+}
+/* line 78, ../../app/styles/partials/_clingify.scss */
+.js-clingify-wrapper.js-clingify-locked.secondaryClingifyElement .second-clingy .second-message {
+  display: inline-block;
+}

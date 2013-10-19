@@ -1,0 +1,87 @@
+html {
+   background: #eee;
+}
+body {
+    font-size: 1em;
+
+}
+.wrapper {
+    background: #eee;
+    color: #333;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    height: 100%;
+    width: 100%;
+}
+.content {
+    margin: 0 auto;
+    padding: 1em 0;
+
+    width: 55%;
+    @media #{$mobileish} {
+        width: 90%;
+    }
+    section {
+        padding: 3.5em 0 0;
+    }
+    p {
+        margin: 1em 0;
+        &:last-child {
+            margin: 0;
+        }
+    }
+    h1 {
+    font-size: 2em;
+    }
+    h2 {
+        font-size: 1.3em;
+        margin: 0 0 1em;
+    }
+    h3 {
+        font-size: 1.2em;
+        margin: 0;
+    }
+    p {
+        font-size: 1.2em;
+        line-height: 1.2em;
+    }
+    h1, h2, h3 {
+        font-weight: bold;
+    }
+}
+.github-link {
+    display: block;
+    margin: 0 0 1em;
+}
+.title {
+    display: inline-block;
+    margin: 1em 0 0.5em;
+}
+.advantages {
+    list-style-position: outside;
+    list-style-type: disc;
+    padding: 0 0 0 1.5em;
+
+    li {
+        font-size: 1em;
+        line-height: 1.2em;
+        margin: 1em 0;
+    }
+}
+.initialization {
+    @extend %box;
+    display: block;
+    font-family: monospace;
+    margin: 0 auto 1em;
+    padding: 2em;
+    @include force-wrap
+}
+.options {
+    // @include box-sizing(border-box);
+    border: 1px solid $tableBorder;
+    font-size: 1em;
+    display: block; // iOS displays as table by default. Interferes with overflow on small screens.
+    overflow-x: auto;
+
+    tbody {
+    }
+}

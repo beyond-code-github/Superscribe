@@ -1,0 +1,82 @@
+.js-clingify-wrapper.js-clingify-locked {
+    border-bottom: 1px solid #ccc;
+    @include transition(background-color 1s);
+    background: $lighter; 
+
+    visibility: visible;
+}
+.js-clingify-wrapper > * {
+    @include transition(background-color 1s);
+}
+.nav-persistent {
+    margin: 0 auto;
+    ul {
+        @extend %box;
+        margin: 0 0 1em;
+        padding: 1em;
+        @include transition(padding 0.1s);
+    }
+    
+    li {
+        display: inline;
+        padding: 0 0.5em 0 0;
+        &:last-child {
+            display: none;
+            padding: 0;
+            text-align: right;
+        }
+    }
+}
+.js-clingify-wrapper.js-clingify-locked.primaryClingifyElement {
+    .nav-persistent {
+        ul {
+            background: $lighter;
+            margin: 0;
+            padding-top: 0.75em;
+        }
+        li:last-child {
+            display: inline;
+        }
+    }
+}
+.second-clingy {
+    @extend %box;
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
+
+    .message {
+        display: inline-block;
+        font-size: 1em;
+        line-height: 1em;
+        margin: 0;
+        padding: 1em;
+
+    }
+    .first-message {
+        @include transition(opacity 1s);
+        .star {color : hotpink;}
+    }
+    .second-message {
+        display: none;
+        padding-top: 0.75em;
+    }
+    .catchadream {
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+    }
+}
+.js-clingify-wrapper.js-clingify-locked.secondaryClingifyElement {    
+    .second-clingy {
+        background: $lighter;
+
+        .message {
+        }
+        .first-message {
+            display: none;
+        }
+        .second-message {
+            display: inline-block;
+        }
+    }
+}
