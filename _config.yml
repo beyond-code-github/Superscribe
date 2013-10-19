@@ -1,11 +1,11 @@
 ---
 author: "Roysvork"
-email: "blog@zanshine.com"
-title: "Linq to Querystring"
-subtitle: "Flexible standardised query syntax for URIs and much more"
-url: "https://github.com/roysvork/linqtoquerystring"
+email: "roysvork@gmail.com"
+title: "Superscribe"
+subtitle: "Make Routing a First Class Citizen in your Web Application"
+url: "https://github.com/roysvork/superscribe"
 description: ""
-short_description: "A lightweight subset of OData querystring conventions that works with any IQueryable"
+short_description: "Super flexible, ultra expressive graph based routing for Asp.Net"
 
 theme:          plain
 permalink:      /:title
