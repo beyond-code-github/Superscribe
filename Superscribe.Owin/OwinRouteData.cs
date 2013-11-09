@@ -2,8 +2,8 @@
 {
     using System;
     using System.Linq;
-
-    using global::Owin.Types;
+    
+    using Microsoft.Owin;
 
     using Superscribe.Models;
 
@@ -15,7 +15,7 @@
 
         public int StatusCode { get; set; }
 
-        public OwinRequest OwinRequest { get; set; }
+        public IOwinRequest OwinRequest { get; set; }
 
         public OwinResponse OwinResponse { get; set; }
 

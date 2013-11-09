@@ -2,13 +2,13 @@
 {
     using System;
     using System.Threading.Tasks;
-
-    using global::Owin.Types;
+    
+    using Microsoft.Owin;
 
     public class MediaTypeHandler
     {
-        public Func<OwinResponse, object, Task> Write { get; set; }
+        public Func<IOwinResponse, object, Task> Write { get; set; }
 
-        public Func<OwinRequest, Type, object> Read { get; set; }
+        public Func<IOwinRequest, Type, object> Read { get; set; }
     }
 }

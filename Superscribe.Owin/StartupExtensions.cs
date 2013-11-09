@@ -10,13 +10,13 @@
 
     public static class StartupExtensions
     {
-        public static IAppBuilder UseSuperscribe(
+        public static void UseSuperscribe(
             this IAppBuilder builder, SuperscribeOwinConfig config)
         {
-            return SuperscribeHandler(builder, config);
+            SuperscribeHandler(builder, config);
         }
 
-        public static IAppBuilder UseSuperscribeModules(
+        public static void UseSuperscribeModules(
             this IAppBuilder builder, SuperscribeOwinConfig config)
         {
             var modules = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
@@ -29,18 +29,21 @@
                 Activator.CreateInstance(module.Type);
             }
 
-            return SuperscribeHandler(builder, config);
+            SuperscribeHandler(builder, config);
         }
 
-        private static IAppBuilder SuperscribeHandler(IAppBuilder builder, SuperscribeOwinConfig config)
+        private static void SuperscribeHandler(IAppBuilder builder, SuperscribeOwinConfig config)
         {
-            return builder.UseHandlerAsync((req, res) =>
+            builder.Run(ctx =>
                 {
+                    var req = ctx.Request;
+                    var res = ctx.Response;
+
                     var path = req.Path;
                     var routeData = new OwinRouteData { OwinRequest = req, Response = res, Config = config };
 
                     var walker = new RouteWalker<OwinRouteData>(ʃ.Base);
-                    walker.WalkRoute(path, req.Method, routeData);
+                    walker.WalkRoute(path.ToString(), req.Method, routeData);
 
                     if (walker.IncompleteMatch)
                     {
@@ -74,7 +77,7 @@
                         if (!string.IsNullOrEmpty(mediaType))
                         {
                             var formatter = config.MediaTypeHandlers[mediaType];
-                            res.SetHeader("content-type", mediaType);
+                            res.ContentType = mediaType;
                             return formatter.Write(res, routeData.Response);
                         }
                         
