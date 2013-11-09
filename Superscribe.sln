@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe", "Superscribe\Superscribe.csproj", "{0882D762-CA4D-48A5-956E-2121DECE000E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.Demo.WebApi", "Superscribe.Demo.WebApi\Superscribe.Demo.WebApi.csproj", "{5E0E68C0-8CF9-493F-9783-9D685DBE1E2D}"
@@ -57,6 +59,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.Tests.Unit", "Superscribe.Tests.Unit\Superscribe.Tests.Unit.csproj", "{64CF0BA2-55F6-48BB-82E0-B17A6FBC5D94}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.Demo.WebApiModules", "Superscribe.Demo.WebApiModules\Superscribe.Demo.WebApiModules.csproj", "{68A4BE78-D3EA-4B7F-9B6A-DA0024E07A2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.Samples.FluentApi", "Samples\Superscribe.Samples.FluentApi\Superscribe.Samples.FluentApi.csproj", "{BF7DE7D7-F4DB-45EA-BE27-D8FE576BBE08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -152,6 +156,10 @@ Global
 		{68A4BE78-D3EA-4B7F-9B6A-DA0024E07A2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68A4BE78-D3EA-4B7F-9B6A-DA0024E07A2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68A4BE78-D3EA-4B7F-9B6A-DA0024E07A2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF7DE7D7-F4DB-45EA-BE27-D8FE576BBE08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF7DE7D7-F4DB-45EA-BE27-D8FE576BBE08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF7DE7D7-F4DB-45EA-BE27-D8FE576BBE08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF7DE7D7-F4DB-45EA-BE27-D8FE576BBE08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -176,5 +184,6 @@ Global
 		{600C3EFF-51CF-4DE2-8507-93C0F7442D84} = {67430440-F6AD-41EC-A829-F2457B09B672}
 		{C2D58D95-3885-4FA5-9C57-6EF29224D7B5} = {67430440-F6AD-41EC-A829-F2457B09B672}
 		{0B0D9BE5-C83F-4CA9-B857-29C8FDB9AE7E} = {67430440-F6AD-41EC-A829-F2457B09B672}
+		{BF7DE7D7-F4DB-45EA-BE27-D8FE576BBE08} = {67430440-F6AD-41EC-A829-F2457B09B672}
 	EndGlobalSection
 EndGlobal
