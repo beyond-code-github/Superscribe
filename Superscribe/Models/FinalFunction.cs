@@ -5,6 +5,16 @@ namespace Superscribe.Models
 
     public class FinalFunction
     {
+        public FinalFunction()
+        {
+        }
+
+        public FinalFunction(string method, Func<dynamic, object> func)
+        {
+            this.Method = method;
+            this.Function = func;
+        }
+        
         public string Method { get; set; }
 
         public Func<dynamic, object> Function { get; set; }

@@ -22,7 +22,7 @@
             {
                 if (s == "/")
                 {
-                    ʃ.Base.FinalFunctions.Add(new FinalFunction { Function = f => value(f), Method = this.method });
+                    ʃ.Base.FinalFunctions.Add(new FinalFunction(this.method, f => value(f)));
                 }
                 else
                 {
