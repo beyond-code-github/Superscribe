@@ -2004,6 +2004,7 @@ ul.nav-tabs li.active a:hover {
 .vertical-tabs ul.nav-stacked li a small {
   display: block;
   font-weight: normal;
+  margin-right:12px;
 }
 .vertical-tabs ul.nav-stacked li a:hover i {
   color: #2980b9;

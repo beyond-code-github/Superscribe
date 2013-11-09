@@ -2,34 +2,140 @@
 layout: default
 title:  Features
 ---
-## Current features
 
-* Seamless integration with Asp.Net Web API using LinqToQueryable Attribute 
-* Use Linq to Querystring with Nancy FX modules
-* Linq to Objects, Entity framework & MongoDB
-* Support for loosely typed datastructures
-* string, int32, bool, datetime, byte, decimal, double, single, guid, long data types
-* nullable types & the null keyword
-* $top
-* $skip (must be used in conjunction with orderby in Linq to Entities)
-* $orderby:
-    * simple types, 
-    * subproperties
-    * complex types ( Linq to Objects only, via IComparable, )
-* $filter - simple properties & subproperties
-* $select - simple properties
-* $expand - when directly exposing entity framework queries
-* $inlinecount
-* Functions - startswith, endswith, substringof, tolower
-* Collection Aggregates:
-    * Any / All with predicates
-    * Count, Sum, Average, Min, Max
-* Unicode values
-* UIToQuerystring (alpha) - JQuery plugin for building oData/Linq to Querystring expressions
+<div class="block">
+<h2 class="title-divider"><span>Key <span class="de-em">features</span></span>
+<small>Superscribe comes with a host of features to help you get the most out of your routing</small>
+</h2><!-- 
+<div class="row">
+	<div class="col-md-6 col-sm-6">
+		<div class="block features">
+			<div class="row">
+			    <div class="feature col-lg-5 col-lg-offset-1 col-md-6 col-sm-6 col-xs-6"><a href="features.html"><img src="img/icons/Map.png" alt="Feature 1" class="img-responsive"></a>
+			    </div>
+			    <div class="feature col-lg-5 col-md-6 col-sm-6 col-xs-6">
+			      <a href="features.html"><img src="img/icons/Pensils.png" alt="Feature 2" class="img-responsive"></a>
+			    </div>
+			</div>
+			<div class="row">
+			    <div class="feature col-lg-5 col-lg-offset-1 col-md-6 col-sm-6 col-xs-6">
+			      <a href="features.html"><img src="img/icons/Clipboard.png" alt="Feature 3" class="img-responsive"></a>
+			    </div>
+			    <div class="feature col-lg-5 col-md-6 col-sm-6 col-xs-6">
+			      <a href="features.html"><img src="img/icons/Infinity-Loop.png" alt="Feature 4" class="img-responsive"></a>
+			    </div>
+		  	</div>
+		</div>
+	</div>
+	<div class="col-md-6 col-sm-6 caption">	      
+	
+	This section is intended as a brief overview, for technical documentation please see the Documentation section. If you prefer to learn by example, check out our Samples.</h4>
+	</div>
+</div>
+ -->
+  <div class="tabbable tabs-left vertical-tabs bold-tabs row">
+    <ul class="nav nav-tabs nav-stacked col-sm-4 col-md-4">
+      <li class="active"> <a href="#tab1" data-toggle="tab">Fluent API & DSL<small>Two simple ways to define hierarchical & strongly typed route definitions</small><i class="icon-angle-right"></i></a> </li>
+       <li> <a href="#tab2" data-toggle="tab">Easy unit testing<small>Invoke the superscribe routing engine in isolation from the rest of your app</small><i class="icon-angle-right"></i></a> </li>
+      <li> <a href="#tab3" data-toggle="tab">Asp.Net Web API routing<small>Replace existing routes with syntax thats much more concise and easy to manage</small><i class="icon-angle-right"></i></a> </li>
+      <li> <a href="#tab4" data-toggle="tab">Bring Nancy style modules to Web API<small>All the benefits of the code-centric approach combined with graph based routing</small><i class="icon-angle-right"></i></a> </li>   
+      <li> <a href="#tab5" data-toggle="tab">Serve your data direct from OWIN<small>Create ultra-lightweight services for maximum performance</small><i class="icon-angle-right"></i></a> </li>
+    </ul>    
+	<div class="tab-content col-sm-8 col-md-8">
+      <div class="feature tab-pane active col-sm-12 col-md-12" id="tab1">
+      	<h3 class="title visible-phone">Defining routes using superscribe's fluent interface</h3>
+      	<p>This section starts with a disclaimer. In practice you won't want to write routes using the Fluent API, as they won't look very nice and will be quite verbose; instead you'll be using the DSL wherever possible. However, to work with Superscribe effectively and to lessen any learning curves, it is useful to understand what the DSL is doing behind the scenes. As a result, this section should be considered required reading before continuing to the later topics</p>
+        <h3 class="title visible-phone">The ʃ Class & SuperscribeNode</h3>
+        <p>Superscribe's features are all accessed via the ʃ class, a member of the core library. Graph based routing definitions are constructed using strongly typed nodes and then stored as a graph. The <code class="prettyprint lang-cs">ʃ.Base</code> property is the root node of the graph... it matches the root '/' url, and is the parent for any susequent definitions.</p>
+        <p>ʃ.Base is of type SuperscribeNode... this is the base class for all route segment definitions and contains Superscribe's bread and butter functionality. If we want to respond to a request to '/', we need to provide ʃ.Base with a Final Function:</p>
+        <pre class="prettyprint lang-cs">
 
-## Future roadmap:
+    ʃ.Base.FinalFunctions.Add(new FinalFunction("GET", _ => @"
+        Welcome to Superscribe 
+        &lta href='/Hello/World'&gtSay hello...&lt/a&gt
+    "));
 
-* Website & improved documentation, samples
-* $select - sub properties & complex types (this should already work, but not tested)
-* More functions/Arithmetic operations (e.g abs, mod)
-* $expand for Lazy<T> and DTOs
+    // "/" -> "Welcome to Superscribe..."
+		</pre>
+		<p>Now when we hit '/' in our app, we'll get a message and a link. To make the link work, we need to extend our definition to respond to /Hello/World:</p>
+		<pre class="prettyprint lang-cs">
+
+    var helloRoute = new ConstantNode("Hello").Slash(new ConstantNode("World"));
+    helloRoute.FinalFunctions.Add(new FinalFunction("GET", _ => "Hello World"));
+
+    ʃ.Base.Zip(helloRoute.Base());
+
+    // "/Hello/World" -> "Hello World"
+		</pre>
+		<p>In this case, we are creating a subgraph and then attaching it as an edge to ʃ.Base.<p>
+		<p>Now we've introduced three more SuperscribeNode functions... Slash, Zip and Base, as well as a new subclass of SuperscribeNode, the ConstantNode. These work as follows:
+			<ul>
+				<li>The <strong>ConstantNode</strong> as it's name suggests, will only match a route segment that is identical to the value passed to it in the constructor</li>
+				<li>The <strong>Slash</strong> function creates an edge between two nodes and then returns the child node.</li>
+				<li>The <strong>Base</strong> function returns the topmost parent of a node. (remember, .Slash returns the child "World" node but we want to create an edge in ʃ.Base that points to the "Hello" node.</li>
+				<li>Finally, the <strong>Zip</strong> function performs a similar function to .Slash but with one important difference... it will combine any identical notes (See the next code block for an example).</li>
+			</ul>
+		</p>
+		<h3 class="title visible-phone">Optional Nodes</h3>
+		<p>So now we have an app that will respond to '/' and '/Hello/World', but lets see what happens if we access just '/Hello':</p>
+		<pre class="prettyprint lang-cs">
+
+    // "/Hello" -> 404 - Route was incomplete
+		</pre>
+		<p>This is because the "Hello" node only has one edge, and it is not optional. We can change this by calling the fluent method Optional() on the "World" node:
+		<pre class="prettyprint lang-cs">
+
+    var helloRoute = new ConstantNode("Hello").Slash(new ConstantNode("World")).Optional();
+    helloRoute.FinalFunctions.Add(new FinalFunction("GET", _ => "Hello World"));
+
+    ʃ.Base.Zip(helloRoute.Base());
+
+    // "/Hello" -> "Welcome to Superscribe..."
+		</pre>
+		<p>This is still not entirely the behavior we'd expect but if we look at the Graph Based Routing algorithm psuedo code, it becomes clear: </p>
+		<div class="well well-mini pull-center">
+          <em>"Once route parsing is complete, the Final function of the last node is executed. If the last node does not provide one, the engine must execute the final function of the last travelled node that did."</em>
+        </div>
+        <p>If we assign a final function to the "Hello" node, then we get the behavior we expect and by doing so we make any further nodes effectively optional as per another section of the pseudo code:</p>
+        <div class="well well-mini pull-center">
+          <em>"If the next match is null, the incomplete match flag will be set unless a) there are no edges on the current node or b) all edges on the current node are optional, or c) The current node has a final function defined for the current method"</em>
+        </div>
+        <p>So with that in mind, here's our final solution that will serve both uris. Note also the behavior of the Zip function from earlier to combine the two "Hello" nodes together as one.
+        <pre class="prettyprint lang-cs">
+
+    var helloRoute = new ConstantNode("Hello").Slash(new ConstantNode("World"));
+    helloRoute.FinalFunctions.Add(new FinalFunction("GET", _ => "Hello World"));
+
+	var justHelloRoute = new ConstantNode("Hello");
+	justHelloRoute.FinalFunctions.Add(new FinalFunction("GET", _ => "Hello... maybe"));
+
+    ʃ.Base.Zip(helloRoute.Base());
+    ʃ.Base.Zip(justHelloRoute.Base());
+
+    // "/Hello" -> "Hello... maybe"
+    // "/Hello/World" -> "Hello World"
+		</pre>
+	  </div>
+	  <div class="feature tab-pane col-sm-12 col-md-12" id="tab2">
+        <h3 class="title visible-phone"></h3>
+        <pre class="prettyprint lang-cs">
+		</pre>
+	  </div>
+	  <div class="feature tab-pane col-sm-12 col-md-12" id="tab3">
+        <h3 class="title visible-phone"></h3>
+        <pre class="prettyprint lang-cs">
+		</pre>
+	  </div>
+	  <div class="feature tab-pane col-sm-12 col-md-12" id="tab4">
+        <h3 class="title visible-phone"></h3>
+        <pre class="prettyprint lang-cs">
+		</pre>
+	  </div>	
+      <div class="feature tab-pane col-sm-12 col-md-12" id="tab5">
+        <h3 class="title visible-phone"></h3>
+        <pre class="prettyprint lang-cs">
+		</pre>
+	  </div>
+	</div>
+  </div>
+</div>
