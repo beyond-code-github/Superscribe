@@ -67,7 +67,11 @@
  * Other stuff
  *--------------------------------------------------
  */
-
+@font-face
+{
+font-family: Bulgari;
+src: url('../fonts/bulgari.ttf');
+}
 .logod1
 {
   background-image: url('../img/superscribe-blue-white.svg');
