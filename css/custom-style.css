@@ -67,6 +67,28 @@
  * Other stuff
  *--------------------------------------------------
  */
+
+.logod1
+{
+  background-image: url('../img/superscribe-blue-white.svg');
+  background-size: 100% 100%;
+  background-repeat:no-repeat;
+  padding: 33px 125px;
+}
+
+.logoblack
+{
+  background-image: url('../img/superscribe-black.svg');
+  background-size: 297px 80px;
+  background-repeat:no-repeat;
+  display: block;
+  padding: 40px;
+}
+
+.bluetint
+{
+  background: rgba(41, 128, 185, 0.15);
+};
  
 #content p {
   margin: 0 0 25px;

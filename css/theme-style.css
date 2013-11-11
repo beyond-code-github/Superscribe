@@ -994,7 +994,6 @@ ul#main-menu .dropdown-menu.mega-menu ul a.menu-item:hover {
     text-align: center;
     color: #2980b9;
     font-size: 20px;
-    padding: 33px 110px;
   }
   ul#main-menu li.home-link a:hover,
   ul#main-menu li.home-link a:link:hover,
@@ -2703,12 +2702,3 @@ ul.nav-tabs li.active a:hover {
 .page-elements h3.title-divider {
   margin-top: 2em;
 }
-.logod1
-{
-  background-image: url('../img/logod1.png');
-  background-size: 219px 67px;
-}
-.bluetint
-{
-  background: rgba(41, 128, 185, 0.15);
-};
