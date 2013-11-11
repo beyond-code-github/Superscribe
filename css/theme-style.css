@@ -172,8 +172,7 @@ blockquote small img {
 }
 .block .title {
   font-size: 18px;
-  text-transform: uppercase;
-  margin: 0 0 0.5em 0;
+  margin: 0 0 1.2em 0;
   line-height: 1;
 }
 .mdrs .btn-block,
@@ -2380,7 +2379,6 @@ ul.nav-tabs li.active a:hover {
 }
 .pricing-stack .well.active .title {
   font-size: 28px;
-  text-transform: uppercase;
 }
 .pricing-stack .well.active .price {
   background: #55a79a;

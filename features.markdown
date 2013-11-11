@@ -6,33 +6,7 @@ title:  Features
 <div class="block">
 <h2 class="title-divider"><span>Key <span class="de-em">features</span></span>
 <small>Superscribe comes with a host of features to help you get the most out of your routing</small>
-</h2><!-- 
-<div class="row">
-	<div class="col-md-6 col-sm-6">
-		<div class="block features">
-			<div class="row">
-			    <div class="feature col-lg-5 col-lg-offset-1 col-md-6 col-sm-6 col-xs-6"><a href="features.html"><img src="img/icons/Map.png" alt="Feature 1" class="img-responsive"></a>
-			    </div>
-			    <div class="feature col-lg-5 col-md-6 col-sm-6 col-xs-6">
-			      <a href="features.html"><img src="img/icons/Pensils.png" alt="Feature 2" class="img-responsive"></a>
-			    </div>
-			</div>
-			<div class="row">
-			    <div class="feature col-lg-5 col-lg-offset-1 col-md-6 col-sm-6 col-xs-6">
-			      <a href="features.html"><img src="img/icons/Clipboard.png" alt="Feature 3" class="img-responsive"></a>
-			    </div>
-			    <div class="feature col-lg-5 col-md-6 col-sm-6 col-xs-6">
-			      <a href="features.html"><img src="img/icons/Infinity-Loop.png" alt="Feature 4" class="img-responsive"></a>
-			    </div>
-		  	</div>
-		</div>
-	</div>
-	<div class="col-md-6 col-sm-6 caption">	      
-	
-	This section is intended as a brief overview, for technical documentation please see the Documentation section. If you prefer to learn by example, check out our Samples.</h4>
-	</div>
-</div>
- -->
+</h2>
   <div class="tabbable tabs-left vertical-tabs bold-tabs row">
     <ul class="nav nav-tabs nav-stacked col-sm-4 col-md-4">
       <li class="active"> <a href="#tab1" data-toggle="tab">Fluent API & DSL<small>Two simple ways to define hierarchical & strongly typed route definitions</small><i class="icon-angle-right"></i></a> </li>
@@ -42,8 +16,8 @@ title:  Features
       <li> <a href="#tab5" data-toggle="tab">Serve your data direct from OWIN<small>Create ultra-lightweight services for maximum performance</small><i class="icon-angle-right"></i></a> </li>
     </ul>    
 	<div class="tab-content col-sm-8 col-md-8">
-      <div class="feature tab-pane active col-sm-12 col-md-12" id="tab1">
-      	<h3 class="title visible-phone">Defining routes using superscribe's fluent interface</h3>
+      <div class="tab-pane active col-sm-12 col-md-12" id="tab1">
+      	<h3 class="visible-phone">Defining routes using superscribe's fluent interface</h3>
       	<p>This section starts with a disclaimer. In practice you won't want to write routes using the Fluent API, as they won't look very nice and will be quite verbose; instead you'll be using the DSL wherever possible. However, to work with Superscribe effectively and to lessen any learning curves, it is useful to understand what the DSL is doing behind the scenes. As a result, this section should be considered required reading before continuing to the later topics</p>
         <h3 class="title visible-phone">The ʃ Class & SuperscribeNode</h3>
         <p>Superscribe's features are all accessed via the ʃ class, a member of the core library. Graph based routing definitions are constructed using strongly typed nodes and then stored as a graph. The <code class="prettyprint lang-cs">ʃ.Base</code> property is the root node of the graph... it matches the root '/' url, and is the parent for any susequent definitions.</p>
@@ -57,7 +31,7 @@ title:  Features
 
     // "/" -> "Welcome to Superscribe..."
 		</pre>
-		<p>Now when we hit '/' in our app, we'll get a message and a link. To make the link work, we need to extend our definition to respond to /Hello/World:</p>
+		<p>This will respond the the '/' uri with a message and a link. To respond to the link uri, we simply extend our definition:</p>
 		<pre class="prettyprint lang-cs">
 
     var helloRoute = new ConstantNode("Hello").Slash(new ConstantNode("World"));
@@ -67,8 +41,7 @@ title:  Features
 
     // "/Hello/World" -> "Hello World"
 		</pre>
-		<p>In this case, we are creating a subgraph and then attaching it as an edge to ʃ.Base.<p>
-		<p>Now we've introduced three more SuperscribeNode functions... Slash, Zip and Base, as well as a new subclass of SuperscribeNode, the ConstantNode. These work as follows:
+		<p>The above sample exposes three SuperscribeNode functions... Slash, Zip and Base, as well as a new subclass of SuperscribeNode, the ConstantNode. These work as follows:
 			<ul>
 				<li>The <strong>ConstantNode</strong> as it's name suggests, will only match a route segment that is identical to the value passed to it in the constructor</li>
 				<li>The <strong>Slash</strong> function creates an edge between two nodes and then returns the child node.</li>
@@ -77,12 +50,12 @@ title:  Features
 			</ul>
 		</p>
 		<h3 class="title visible-phone">Optional Nodes</h3>
-		<p>So now we have an app that will respond to '/' and '/Hello/World', but lets see what happens if we access just '/Hello':</p>
+		<p>Combined, the samples above create an app that will respond to '/' and '/Hello/World', but not 'Hello':</p>
 		<pre class="prettyprint lang-cs">
 
     // "/Hello" -> 404 - Route was incomplete
 		</pre>
-		<p>This is because the "Hello" node only has one edge, and it is not optional. We can change this by calling the fluent method Optional() on the "World" node:
+		<p>This is because the "Hello" node only has one edge, and it is not optional. To change this, we call the fluent method Optional() on the "World" node:
 		<pre class="prettyprint lang-cs">
 
     var helloRoute = new ConstantNode("Hello").Slash(new ConstantNode("World")).Optional();
@@ -92,15 +65,11 @@ title:  Features
 
     // "/Hello" -> "Welcome to Superscribe..."
 		</pre>
-		<p>This is still not entirely the behavior we'd expect but if we look at the Graph Based Routing algorithm psuedo code, it becomes clear: </p>
+		<p>This might not be the behavior you'd expect, but if we look at the Graph Based Routing spec all becomes clear: </p>
 		<div class="well well-mini pull-center">
           <em>"Once route parsing is complete, the Final function of the last node is executed. If the last node does not provide one, the engine must execute the final function of the last travelled node that did."</em>
         </div>
-        <p>If we assign a final function to the "Hello" node, then we get the behavior we expect and by doing so we make any further nodes effectively optional as per another section of the pseudo code:</p>
-        <div class="well well-mini pull-center">
-          <em>"If the next match is null, the incomplete match flag will be set unless a) there are no edges on the current node or b) all edges on the current node are optional, or c) The current node has a final function defined for the current method"</em>
-        </div>
-        <p>So with that in mind, here's our final solution that will serve both uris. Note also the behavior of the Zip function from earlier to combine the two "Hello" nodes together as one.
+		<p>This behavior isn't entirely useless... we can use an Action Function to set some values which then become available to our final function and influence it's behavior. Another way of making the Superscribe engine treat 'Hello' as optional is to assign it a Final Function of it's own:</p>
         <pre class="prettyprint lang-cs">
 
     var helloRoute = new ConstantNode("Hello").Slash(new ConstantNode("World"));
@@ -115,23 +84,28 @@ title:  Features
     // "/Hello" -> "Hello... maybe"
     // "/Hello/World" -> "Hello World"
 		</pre>
+        <p>Note the usage of Zip() in this sample to combine the two 'Hello' nodes into one. Another except from the Graph Based Routing spec reveals how this change creates the optional behavior.</p>
+        <div class="well well-mini pull-center">
+          <em>"If the next match is null, the incomplete match flag will be set unless a) there are no edges on the current node or b) all edges on the current node are optional, or c) The current node has a final function defined for the current method"</em>
+        </div>
+        
 	  </div>
-	  <div class="feature tab-pane col-sm-12 col-md-12" id="tab2">
+	  <div class="tab-pane col-sm-12 col-md-12" id="tab2">
         <h3 class="title visible-phone"></h3>
         <pre class="prettyprint lang-cs">
 		</pre>
 	  </div>
-	  <div class="feature tab-pane col-sm-12 col-md-12" id="tab3">
+	  <div class="tab-pane col-sm-12 col-md-12" id="tab3">
         <h3 class="title visible-phone"></h3>
         <pre class="prettyprint lang-cs">
 		</pre>
 	  </div>
-	  <div class="feature tab-pane col-sm-12 col-md-12" id="tab4">
+	  <div class="tab-pane col-sm-12 col-md-12" id="tab4">
         <h3 class="title visible-phone"></h3>
         <pre class="prettyprint lang-cs">
 		</pre>
 	  </div>	
-      <div class="feature tab-pane col-sm-12 col-md-12" id="tab5">
+      <div class="tab-pane col-sm-12 col-md-12" id="tab5">
         <h3 class="title visible-phone"></h3>
         <pre class="prettyprint lang-cs">
 		</pre>

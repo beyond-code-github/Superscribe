@@ -1,4 +1,4 @@
-/*/////////////////////////////////////////////////////////////////////
++/*/////////////////////////////////////////////////////////////////////
  // 
  // Custom theme code styles
  // Written by Themelize.me (http://themelize.me)
@@ -67,3 +67,12 @@
  * Other stuff
  *--------------------------------------------------
  */
+ 
+#content p {
+  margin: 0 0 25px;
+}
+
+.feature .title
+{
+	text-transform: uppercase;
+}
