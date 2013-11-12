@@ -6,9 +6,15 @@
     using Microsoft.Owin;
 
     using Superscribe.Models;
+    using Superscribe.Utils;
 
     public class OwinRouteData : IRouteData
     {
+        public OwinRouteData()
+        {
+            this.Parameters = new DynamicDictionary();
+        }
+
         public dynamic Parameters { get; set; }
 
         public object Response { get; set; }
