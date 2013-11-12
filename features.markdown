@@ -8,14 +8,14 @@ title:  Features
 <small>Superscribe comes with a host of features to help you get the most out of your routing</small>
 </h2>
   <div class="tabbable tabs-left vertical-tabs bold-tabs row">
-    <ul class="nav nav-tabs nav-stacked col-sm-4 col-md-4">
+    <ul class="nav nav-tabs nav-stacked col-md-4">
       <li class="active"> <a href="#tab1" data-toggle="tab">Fluent API & DSL<small>Two simple ways to define hierarchical & strongly typed route definitions</small><i class="icon-angle-right"></i></a> </li>
        <li> <a href="#tab2" data-toggle="tab">Easy unit testing<small>Invoke the superscribe routing engine in isolation from the rest of your app</small><i class="icon-angle-right"></i></a> </li>
       <li> <a href="#tab3" data-toggle="tab">Asp.Net Web API routing<small>Replace existing routes with syntax thats much more concise and easy to manage</small><i class="icon-angle-right"></i></a> </li>
       <li> <a href="#tab4" data-toggle="tab">Bring Nancy style modules to Web API<small>All the benefits of the code-centric approach combined with graph based routing</small><i class="icon-angle-right"></i></a> </li>   
       <li> <a href="#tab5" data-toggle="tab">Serve your data direct from OWIN<small>Create ultra-lightweight services for maximum performance</small><i class="icon-angle-right"></i></a> </li>
     </ul>    
-	<div class="tab-content col-sm-8 col-md-8">
+	<div class="tab-content col-md-8">
       <div class="tab-pane active col-sm-12 col-md-12" id="tab1">
       	<h3 class="visible-phone">Defining routes using superscribe's fluent interface</h3>
       	<p>This section starts with a disclaimer. In practice you won't want to write routes using the Fluent API, as they won't look very nice and will be quite verbose; instead you'll be using the DSL wherever possible. However, to work with Superscribe effectively and to lessen any learning curves, it is useful to understand what the DSL is doing behind the scenes. As a result, this section should be considered required reading before continuing to the later topics</p>
