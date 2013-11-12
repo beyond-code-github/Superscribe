@@ -10,7 +10,9 @@
 
     public class SuperscribeNode : IEquatable<SuperscribeNode>
     {
-        public Func<dynamic, string, bool> activationFunction;
+        protected Func<dynamic, string, bool> activationFunction;
+
+        protected Action<dynamic, string> actionFunction;
 
         /// <summary>
         /// Base constructor for superscribe states
@@ -67,7 +69,17 @@
 
         public object Result { get; set; }
 
-        public Action<dynamic, string> ActionFunction { get; set; }
+        public Action<dynamic, string> ActionFunction
+        {
+            get
+            {
+                return this.actionFunction;
+            }
+            set
+            {
+                this.actionFunction = value;
+            }
+        }
 
         public List<FinalFunction> FinalFunctions { get; set; }
 
