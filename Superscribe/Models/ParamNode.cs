@@ -31,7 +31,7 @@
         public string Name { get; set; }
     }
 
-    public abstract class ParamNode<T> : ParamNode
+    public class ParamNode<T> : ParamNode
     {
         protected ParamNode(string name)
         {
