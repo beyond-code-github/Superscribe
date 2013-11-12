@@ -3,20 +3,33 @@
     using Superscribe.Models;
     using Superscribe.Owin;
 
+    public class EvenNumberNode : SuperscribeNode
+    {
+        public EvenNumberNode(string name)
+        {
+            this.activationFunction = (routeData, value) => {
+                int parsed;
+                if (int.TryParse(value, out parsed))
+                    return parsed % 2 == 0; // Only match even numbers
+
+                return false;
+            };
+
+            this.actionFunction = (routeData, value) => {
+                int parsed;
+                if (int.TryParse(value, out parsed))
+                    routeData.Parameters.Add(name, parsed);                
+            };
+        }
+    }
+
     public class HelloWorldModule : SuperscribeOwinModule
     {
         public HelloWorldModule()
         {
-            ʃ.Base.FinalFunctions.Add(new FinalFunction("GET", _ => @"
-                Welcome to Superscribe 
-                <a href='/Hello/World'>Say hello...</a>
-            "));
+            var helloRoute = new ConstantNode("Products").Slash(new EvenNumberNode("id"));
+            helloRoute.FinalFunctions.Add(new FinalFunction("GET", _ => "Product id: " + _.Parameters.id));
 
-            var helloRoute = new ConstantNode("Hello").Slash(new ConstantNode("World"));
-            helloRoute.FinalFunctions.Add(new FinalFunction("GET", _ => "Hello World"));
-
-            var justHelloRoute = new ConstantNode("Hello").Optional();
-            
             ʃ.Base.Zip(helloRoute.Base());
         }
     }
