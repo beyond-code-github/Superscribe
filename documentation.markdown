@@ -111,6 +111,7 @@ title:  Features
 		<h4>Custom Nodes</h4>
 		<p>In addition to leveraging the various subclasses of SuperscribeNode, we can also derive our own custom nodes, giving us full control over it's Action and Activation Functions. Consider the following custom node that matches and captures only even parameters:</p>
 		<pre class="prettyprint lang-cs">
+
 	public class EvenNumberNode : SuperscribeNode
     {
         public EvenNumberNode(string name)
@@ -146,9 +147,124 @@ title:  Features
 		</pre>
 	  </div>
 	  <div class="tab-pane col-sm-12 col-md-12" id="tab2">
-        <h3 class="title visible-phone"></h3>
+        <h2>Defining routes with the DSL</h2>
+        <p>As mentioned in the previous section, defining routing using the fluent API is not ideal for a number of reasons. Built on top of the fluent API is a simple domain specific language... valid C# code made using a combination of lambdas, casts and operator overloads. The syntax provided by the DSL is designed to be terse and minimal, so you can get on with the important business of designing your routes.</p>
+        <div class="well well-mini pull-center">
+          <em>If you haven't already read the Fluent API section, it is reccomended that you do so before continuing so you are familiar with some of the terms and concepts used.</em>
+        </div>
+        <h3 class="title visible-phone">Shorthand operators and ʃ.Route</h3>
+        <p>When dealing with the fluent API, we defined routes by manually instantiating subclasses of SuperscribeNode, created edges with Slash() and then attached them to the base node using Base() and ʃ.Zip():</p>
         <pre class="prettyprint lang-cs">
-		</pre>
+
+    var helloRoute = new ConstantNode("Hello").Slash(new ConstantNode("World"));
+    helloRoute.FinalFunctions.Add(new FinalFunction("GET", _ => "Hello World"));
+
+    ʃ.Base.Zip(helloRoute.Base());
+
+    // "/Hello/World" -> "Hello World"
+        </pre>
+        <p>The DSL provides a shorthand way of doing this by using the ʃ.Route method:</p>
+        <pre class="prettyprint lang-cs">
+
+    var helloRoute = new ConstantNode("Hello").Slash(new ConstantNode("World"));
+    helloRoute.FinalFunctions.Add(new FinalFunction("GET", _ => "Hello World"));
+
+    ʃ.Route(ʅ => ʅ / helloRoute.Base());
+
+    // "/Hello/World" -> "Hello World"
+        </pre>
+        <p>This isn't much of an improvement but we can still do more:<p>
+        <ul> 
+            <li>Instead of calling .Slash we can use the shorthand operator '/'</li>
+            <li>To apply a final function to the "World node we can use the shorthand operator '*':</li>
+            <li>Finally instead of calling Base(), we can use the '+' prefix:</li>
+        </ul>
+        <pre class="prettyprint lang-cs">
+
+    var helloRoute = new ConstantNode("Hello") / new ConstantNode("World") * (o => "Hello World");
+    ʃ.Route(ʅ => ʅ / +helloRoute);
+
+    // "/Hello/World" -> "Hello World"
+        </pre>
+        <p>We've got one more trick up our sleeve... an implicit cast from string to SuperscribeNode provides a way to simplify the instantiation of our constant nodes:</p>
+        <pre class="prettyprint lang-cs">
+
+    ʃ.Route(ʅ => ʅ / "Hello" / "World" * (o => "Hello World"));
+
+    // "/Hello/World" -> "Hello World"
+        </pre>
+        <p>Much more concise. Note that in this case we don't need to use the '+' prefix or call Base() as the route is defined as one unbroken chain of operators.</p>
+        <h3 class="title visible-phone">Route Glue</h3>
+        <p>When calling ʃ.Route, the ʅ parameter is known as the Route Glue. It's so called because we can use it to attach nodes to the base instead of doing this directly. In this last example however we have a problem... when using any of the Superscribe shorthand operators, at least one of the operands must be a SuperscribeNode. If we try to assign part of our route to a variable as we did with the fluent API we run into trouble as both operands are strings and the expression won't compile.</p>
+        <p>We solve this by using the Route Glue in another way... this time to attach several notes together and form a partial route:</p>
+        <pre class="prettyprint lang-cs">
+
+    var helloRoute = ʃ.ʅ / "Hello" / "World" * (o => "Hello World"));
+    ʃ.Route(ʅ => ʅ / +helloRoute );
+
+    // "/Hello/World" -> "Hello World"
+        </pre>
+        <div class="well well-mini pull-center">
+          <em>When using Superscribe modules, there's an even more concise way to access the Route Glue. See the section on Modules for more information.</em>
+        </div>
+        <h3 class="title visible-phone">SuperscribeNode shorthands</h3>
+        <p>Creating a ConstantNode from a string isn't the only way we can take advantage of casting to build routes. In the fluent API section we discovered how to capture parameters using ParamNode<T>:</p>
+        <pre class="prettyprint lang-cs">
+
+    var helloRoute = new ConstantNode("Hello").Slash(new ParamNode<string>("Name"));
+    helloRoute.FinalFunctions.Add(new FinalFunction("GET", _ => "Hello " + _.Parameters.Name));
+
+    ʃ.Base.Zip(helloRoute.Base());
+
+    // "/Hello/Kathryn" -> "Hello Kathryn"
+        </pre>
+        <p>Now here's the DSL version:</p>
+        <pre class="prettyprint lang-cs">
+
+    ʃ.Route(ʅ => ʅ / "Hello" / (ʃString)"Name" * (o => "Hello " + o.Parameters.Name));
+
+    // "/Hello/Kathryn" -> "Hello Kathryn"
+        </pre>
+        <p>Quite simply, ʃString is a subclass of ParamNode<string> with an extra explicit cast operator... the sole purpose of which is to provide us with this much nicer syntax. There are others for each of the primary data types supported by superscribe:</p>
+        <ul>
+            <li><strong>Integer</strong> (ʃInt)</li>
+            <li><strong>Long</strong> (ʃLong)</li>
+            <li><strong>String</strong>(ʃString)</li>
+            <li><strong>Boolean</strong> (Bool)</li>
+        </ul>
+        <p>And of course, because all Superscribe syntax is strongly typed we can create our own shorthands. Here's an example for Guid:</p>
+        <pre class="prettyprint lang-cs">
+
+public class ʃGuid : ParamNode<Guid>
+    {
+        public ʃGuid(string name) : base(name) { }
+
+        public static explicit operator ʃGuid(string name)
+        {
+            return new ʃGuid(name);
+        }
+    }
+        </pre>
+        <h3 class="title visible-phone">Providing options and making choices</h3>
+        <p>Using the fluent API and the Zip() function we were able to compose our route graph by combining several complete routes. This is the preferred approach when routes are defined close to where they are handled, but for those who like to define their routes centrally it can seem like a lot of duplicated code. With the Superscribe DSL we have a new way of building our graph by specifying multiple edges at once:
+        </p>
+        <pre class="prettyprint lang-cs">
+
+    ʃ.Route(ʅ => 
+        ʅ / "Products"      * (o => / "List all products" ) / (
+              ʅ / "Sale"            * (o => "List Products on sale")
+            | ʅ / "BestSellers"     * (o => "List Bestsellers")
+            | ʅ / (ʃInt)"Id"        * (o => "Product #" + o.Params.Id");
+    ));
+
+    // "/Products/" -> "List Products"
+    // "/Products/Sale" -> "List Products on sale"
+    // "/Products/BestSellers" -> "List Bestsellers"
+    // "/Products/13" -> "Product #13"
+        </pre>
+        <p>
+            Once again the RouteGlue helps us out in order to attach each of our edges the the parent node, in this case "Products". We've also kept code and noise to a minimum and ended up with some nice neat definitions.
+        </p>
 	  </div>
       <div class="tab-pane col-sm-12 col-md-12" id="tab3">
         <h3 class="title visible-phone"></h3>
