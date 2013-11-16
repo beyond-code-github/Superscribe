@@ -32,25 +32,49 @@ title:  Home
   <h2 class="title-divider"><span>Getting <span class="de-em">Started</span></span> <small>How do you want to define your routes?</small></h2>
   <div class="tabbable tabs-left vertical-tabs bold-tabs row">
     <ul class="nav nav-tabs nav-stacked col-sm-4 col-md-4">
-      <li class="active"> <a href="#tab1" data-toggle="tab">Module Style <small>Similar to Nancy/Attribute Routing</small><i class="icon-angle-right"></i></a> </li>
-      <li> <a href="#tab2" data-toggle="tab">Centralised <small>Similar to Web API, MVC</small><i class="icon-angle-right"></i></a> </li>
+      <li class="active"> <a href="#tab1" data-toggle="tab">Install<small>Download the libraries you need from Nuget</small><i class="icon-angle-right"></i></a> </li>
+      <li> <a href="#tab2" data-toggle="tab">Configure <small>Enable Superscribe with just a few lines of code</small><i class="icon-angle-right"></i></a> </li>
+      <li> <a href="#tab3" data-toggle="tab">Define <small>Start building your route definitions & handlers</small><i class="icon-angle-right"></i></a> </li>
     </ul>
     <div class="tab-content col-sm-8 col-md-8">
       <div class="tab-pane active col-sm-12 col-md-12" id="tab1">
-        <h3 class="title visible-phone">Configure Web API</h3>
+        <h3 class="title visible-phone">Superscribe Core</h3>
+        <div class="nuget-badge">
+          <p><code>PM&gt; Install-Package Superscribe</code></p>
+        </div>
+        <h3 class="title visible-phone">Web API - Standard or Module style</h3>
+        <div class="nuget-badge">
+          <p><code>PM&gt; Install-Package Superscribe.WebApi</code></p>
+        </div>
+        <h3 class="title visible-phone">OWIN</h3>
+        <div class="nuget-badge">
+          <p><code>PM&gt; Install-Package Superscribe.OWIN</code></p>
+        </div>
+      </div>
+      <div class="tab-pane col-sm-12 col-md-12" id="tab2">
+        <h3 class="title visible-phone">Web API - Standard</h3>
         <pre class="prettyprint lang-cs">
 
 public static class WebApiConfig
 {
     public static void Register(HttpConfiguration config)
     {
-        config.Formatters.Remove(config.Formatters.XmlFormatter);
+        SuperscribeConfig.Register(config);
+    }
+}
+        </pre>
+        <h3 class="title visible-phone">Web API - Modules</h3>
+        <pre class="prettyprint lang-cs">
 
+public static class WebApiConfig
+{
+    public static void Register(HttpConfiguration config)
+    {
         SuperscribeConfig.RegisterModules(config);
     }
 }
         </pre>
-        <h3 class="title visible-phone">Configure OWIN</h3>
+        <h3 class="title visible-phone">OWIN</h3>
         <pre class="prettyprint lang-cs">
 
 public class Startup
@@ -66,198 +90,42 @@ public class Startup
     }
 }
         </pre>
-        <h3 class="title visible-phone">Add a Module</h3>
-        <pre class="prettyprint lang-cs">
-
-public class HelloWorldModule : Superscribe.WebApi.Modules.SuperscribeModule
-{
-    public HelloWorldModule()
-    {
-        this.Get["/"] = ʅ => "Hello World!";
-
-        this.Get["Hello" / (ʃString)"Name"] = 
-          ʅ => string.Format("Hello {0}", ʅ.Parameters.Name);
-    }
-}
-        </pre>
       </div>
-      <div class="tab-pane col-sm-12 col-md-12" id="tab2">
-        <h3 class="title visible-phone">Default Web API Config</h3>
+      <div class="tab-pane col-sm-12 col-md-12" id="tab3">
+        <h3 class="title visible-phone">Web API - Standard</h3>
         <pre class="prettyprint lang-cs">
 
 public static class WebApiConfig
 {
     public static void Register(HttpConfiguration config)
     {
-        config.Routes.MapHttpRoute(
-            name: "DefaultApi",
-            routeTemplate: "api/{controller}/{id}",
-            defaults: new { id = RouteParameter.Optional }
-        );
-    }
-}
-        </pre>
-        <h3 class="title visible-phone">Superscribe Web API Config</h3>
-        <pre class="prettyprint lang-cs">
-
-public static class WebApiConfig
-{
-    public static void Register(HttpConfiguration config)
-    {
-        SuperscribeConfig.Register(config);
-
         ʃ.Route(() => "api" / ʃ.Controller / -(ʃInt)"id");
     }
 }
         </pre>
-      </div>
-      
-    </div>
+        <h3 class="title visible-phone">Web API - Modules</h3>
+        <pre class="prettyprint lang-cs">
+
+public class HelloWorldModule : SuperscribeModule
+{
+    public HelloWorldModule()
+    {
+        this.Get["/"] = ʅ => "Hello World!";
+    }
+}
+        </pre>
+        <h3 class="title visible-phone">OWIN</h3>
+        <pre class="prettyprint lang-cs">
+
+public class HelloWorldModule : SuperscribeOwinModule
+{
+    public HelloWorldModule()
+    {
+        this.Get["/"] = ʅ => "Hello World!";
+    }
+}
+        </pre>        
+      </div> 
+    </div> 
   </div>
 </div>
-
-<div class="block">
-  <h2 class="title-divider"><span>Being <span class="de-em">Productive</span></span> <small>Superscribe makes routes easy to follow, understand and maintain</small></h2>
-  <div class="tabbable tabs-left vertical-tabs bold-tabs row">
-    <ul class="nav nav-tabs nav-stacked col-sm-4 col-md-4">
-      <li class="active"> <a href="#btab1" data-toggle="tab">Native matchers <small>Use built in functionality to define common routes</small><i class="icon-angle-right"></i></a> </li>
-      <li> <a href="#btab2" data-toggle="tab">Hierarchical definitions <small>Route definitions are stored and traversed as a tree or graph</small><i class="icon-angle-right"></i></a> </li>
-      <li> <a href="#btab3" data-toggle="tab">Composing routes <small>Create definitions from reusable, strongly typed nodes</small><i class="icon-angle-right"></i></a> </li>
-    </ul>
-    <div class="tab-content col-sm-8 col-md-8">
-      <div class="tab-pane active col-sm-12 col-md-12" id="btab1">
-        <h3 class="title visible-phone">Constant Matching</h3>
-        <pre class="prettyprint lang-cs">
-
-"api" / "values"
-        </pre>
-        <h3 class="title visible-phone">Regex Matching</h3>
-        <pre class="prettyprint lang-cs">
-
-"api" / ~"^[A-Za-z]+$"
-        </pre>
-        <h3 class="title visible-phone">Parameters</h3>
-        <pre class="prettyprint lang-cs">
-
-"api" / "values" / (ʃString)"Name"
-"api" / "values" / (ʃBool)"Complete"
-
-// Optional
-"api" / "values" / -(ʃLong)"Id"
-        </pre>
-        <h3 class="title visible-phone">Controllers and Actions (Web API only)</h3>
-        <pre class="prettyprint lang-cs">
-
-// Regex direct controller and action name match
-"api" / ʃ.Controller / ʃ.Action / -(ʃInt)"Id"
-
-// Static match and controller name mapping
-"api" / "blog" / "tags".Controller("BlogPostTags") / -(ʃInt)"Id"
-"api" / "media" / "tags".Controller("MediaTags") / -(ʃInt)"Id"
-
-// Override action selection when optional SubFields route is matched
-"api" / "values".Controller("Values") / -"SubFields".Action("GetSubFields")
-        </pre>
-      </div>
-      <div class="tab-pane col-sm-12 col-md-12" id="btab2">
-        <h3 class="title visible-phone">Example Routes</h3>
-        <pre class="prettyprint lang-cs">
-
-/api/fields
-/api/fields/{fieldId}
-/api/fields/visibleFor/{userId}
-/api/forms
-/api/forms/{formId}
-        </pre>
-        <h3 class="title visible-phone">Web API style</h3>
-        <pre class="prettyprint lang-cs">
-
-ʃ.Route(ʅ => ʅ / "api" / (
-      ʅ / "Fields".Controller() / (
-          ʅ / "VisibleFor" / (ʃString)"userId"
-        | ʅ / -(ʃLong)"fieldId"))
-    | ʅ / "Forms".Controller() / -(ʃLong)"formId");  
-        </pre>
-        <h3 class="title visible-phone">Module style</h3>
-        <p>Superscribe will automatically combine identical segments to build a hierarchy from individual routes:</p>
-        <pre class="prettyprint lang-cs">
-
-this.Get[ʅ / "api" / "Fields"] = o => fieldsRepository.All();
-this.Get[ʅ / "api" / "Fields" / (ʃLong)"fieldId"] = o => fieldsRepository.Get(o.Params.fieldId);
-this.Get[ʅ / "api" / "Fields" / "VisibleFor" / (ʃString)"userId] = o => fieldsRepository.GetVisibleFor(o.Params.userId);
-
-this.Get[ʅ / "api" / "Forms"] = o => formsRepository.All();
-this.Get[ʅ / "api" / "Forms" / (ʃLong)"formId"] = o => formsRepository.Get(o.Params.formId);
-        </pre>
-      </div>
-      <div class="tab-pane col-sm-12 col-md-12" id="btab3">
-      <h3 class="title visible-phone">Example Routes</h3>
-        <pre class="prettyprint lang-cs">
-
-/api/products/books
-/api/products/books/{id}
-/api/products/books/bestsellers
-/api/products/films
-/api/products/films/{id}
-/api/products/films/bestsellers
-/api/products/games
-/api/products/games/{id}
-/api/products/games/bestsellers
-        </pre>
-        <h3 class="title visible-phone">Web API style</h3>
-        <pre class="prettyprint lang-cs">
-
-var baseRoute = ʅ / "api" / "products";
-var objectNames = new [] {"Books", "Films", "Games"};
-
-foreach (var name in objectNames)
-{
-    ʃ.Route(ʅ => baseRoute / name.Controller() / (
-        ʅ / -"BestSellers".Action()
-      | ʅ / -(ʃLong)"id"));
-}
-        </pre>
-        <h3 class="title visible-phone">Module style</h3>
-        <pre class="prettyprint lang-cs">
-
-var baseRoute = ʅ / "api" / "products";
-var repos = new Dictionary<string, IRepository> 
-{
-    { "Books", booksRepo }, { "Films", filmsRepo }, { "Games", gamesRepo }
-}
-
-foreach (var object in repos)
-{
-    var name = object.Key;
-    var repo = object.Value;
-
-    this.Get[baseRoute / name] = o => repo.All();
-    this.Get[baseRoute / name / (ʃLong)"id"] = o => repo.Get(o.Params.Id);
-    this.Get[baseRoute / name / "BestSellers"] = o => repo.BestSellers();
-}
-        </pre>
-      </div>       
-    </div>
-  </div>
-</div>
-
-<!--<div class="block">
-  <h2 class="title-divider"><span>Advanced <span class="de-em">Usage</span></span> <small>Leverage the unique possibilities of Graph Based Routing</small></h2>
-  <div class="tabbable tabs-left vertical-tabs bold-tabs row">
-    <ul class="nav nav-tabs nav-stacked col-sm-4 col-md-4">
-      <li class="active"> <a href="#ctab1" data-toggle="tab">Date/Time dependant Routing <small>Make route choices using abitrary code</small><i class="icon-angle-right"></i></a> </li>
-      <li> <a href="#ctab2" data-toggle="tab">Neural Routing <small>With Superscribe, routes can *learn*</small><i class="icon-angle-right"></i></a> </li>
-    </ul>
-    <div class="tab-content col-sm-8 col-md-8">
-      <div class="feature tab-pane active col-sm-12 col-md-12" id="ctab1">
-        <h3 class="title visible-phone">Configure Web API</h3>
-        <pre class="prettyprint lang-cs">
-      </div>
-      <div class="feature tab-pane col-sm-12 col-md-12" id="ctab2">
-        <h3 class="title visible-phone">Default Web API Config</h3>
-        <pre class="prettyprint lang-cs">
-        </pre>
-      </div>          
-    </div>
-  </div>
-</div>-->
