@@ -113,3 +113,12 @@
 	padding: 15px;
 	margin-bottom: 1.2em;
 }
+
+.feature .title {
+  color: #2980b9;
+}
+
+.feature .title .de-em {
+  font-weight: normal;
+  color: rgba(85, 167, 154, 0.8);
+}
