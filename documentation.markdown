@@ -11,7 +11,10 @@ title:  Features
     <ul class="nav nav-tabs nav-stacked col-md-4">
       <li class="active"> <a href="#tab1" data-toggle="tab">Fluent API<small>Define hierarchical and strongly typed routes with Superscribe</small><i class="icon-angle-right"></i></a> </li>
       <li> <a href="#tab2" data-toggle="tab">DSL<small>Shorthand syntax for defining routes that are concise and easy to maintain</small><i class="icon-angle-right"></i></a> </li>
-      <li> <a href="#tab3" data-toggle="tab">Glossary<small>Quick reference for Superscribe terminology</small><i class="icon-angle-right"></i></a> </li>
+      <li> <a href="#tab3" data-toggle="tab">Modules<small>Inspired by NancyFX, a great way to keep your definitions and your handlers together</small><i class="icon-angle-right"></i></a> </li>
+      <li> <a href="#tab4" data-toggle="tab">Superscribe.WebAPI<small>Specific syntax to help you match routes and then invoke controllers and actions</small><i class="icon-angle-right"></i></a> </li>
+      <li> <a href="#tab5" data-toggle="tab">Superscribe.OWIN<small>Route & branch your pipeline and hand control over to OWIN middleware</small><i class="icon-angle-right"></i></a> </li>
+      <li> <a href="#tab6" data-toggle="tab">Glossary<small>Quick reference for Superscribe terminology</small><i class="icon-angle-right"></i></a> </li>
     </ul>    
 	<div class="tab-content col-md-8">
       <div class="tab-pane active col-sm-12 col-md-12" id="tab1">
@@ -147,7 +150,7 @@ title:  Features
 		</pre>
 	  </div>
 	  <div class="tab-pane col-sm-12 col-md-12" id="tab2">
-        <h2>Defining routes with the DSL</h2>
+        <h3>Defining routes with the DSL</h3>
         <p>As mentioned in the previous section, defining routing using the fluent API is not ideal for a number of reasons. Built on top of the fluent API is a simple domain specific language... valid C# code made using a combination of lambdas, casts and operator overloads. The syntax provided by the DSL is designed to be terse and minimal, so you can get on with the important business of designing your routes.</p>
         <div class="well well-mini pull-center">
           <em>If you haven't already read the Fluent API section, it is reccomended that you do so before continuing so you are familiar with some of the terms and concepts used.</em>
@@ -235,7 +238,7 @@ title:  Features
         <p>And of course, because all Superscribe syntax is strongly typed we can create our own shorthands. Here's an example for Guid:</p>
         <pre class="prettyprint lang-cs">
 
-public class ʃGuid : ParamNode<Guid>
+public class ʃGuid : ParamNode&lt;Guid&gt;
     {
         public ʃGuid(string name) : base(name) { }
 
@@ -267,6 +270,16 @@ public class ʃGuid : ParamNode<Guid>
         </p>
 	  </div>
       <div class="tab-pane col-sm-12 col-md-12" id="tab3">
+        <h3 class="title visible-phone"></h3>
+        <pre class="prettyprint lang-cs">
+        </pre>
+      </div>
+      <div class="tab-pane col-sm-12 col-md-12" id="tab4">
+        <h3 class="title visible-phone"></h3>
+        <pre class="prettyprint lang-cs">
+        </pre>
+      </div>
+      <div class="tab-pane col-sm-12 col-md-12" id="tab5">
         <h3 class="title visible-phone"></h3>
         <pre class="prettyprint lang-cs">
         </pre>
