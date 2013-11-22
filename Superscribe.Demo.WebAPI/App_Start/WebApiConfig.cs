@@ -1,6 +1,8 @@
 ﻿namespace Superscribe.Demo.WebApi.App_Start
 {
     using System.Web.Http;
+
+    using Superscribe.Models;
     using Superscribe.WebApi;
 
     public static class WebApiConfig
@@ -10,9 +12,9 @@
             SuperscribeConfig.Register(config);
 
             ʃ.Route(() => "api" / "values".Controller() / (
-                  -"id".Int()
+                  -(ʃInt)"id"
                 | ~"(first|last)".Action()
-                | +("foruser" / "userId".Int())));
+                | +("foruser" / (ʃInt)"userId")));
         }
     }
 }

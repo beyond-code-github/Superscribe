@@ -26,7 +26,7 @@
                 }
                 else
                 {
-                    var node = ʃ.Constant(s);
+                    var node = new ConstantNode(s);
                     this.binding(() => node * (f => value(f)));    
                 }
             }

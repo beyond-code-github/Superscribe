@@ -10,7 +10,7 @@
 
         public static SuperscribeNode operator *(NodeFuture future, string constant)
         {
-            var node = ʃ.Constant(constant);
+            var node = new ConstantNode(constant);
             node.ActivationFunction = future.ActivationFunction;
 
             return future.Parent.Slash(node);

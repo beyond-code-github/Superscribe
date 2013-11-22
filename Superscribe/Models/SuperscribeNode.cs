@@ -197,7 +197,7 @@
         /// <param name="other">String used create constant state</param>
         public static SuperscribeNode operator /(SuperscribeNode node, string other)
         {
-            return node.Slash(Superscribe.ʃ.Constant(other));
+            return node.Slash(new ConstantNode(other));
         }
 
         /// <summary>
@@ -325,7 +325,7 @@
         /// <param name="value">String to create ConstantState from</param>
         public static implicit operator SuperscribeNode(string value)
         {
-            return Superscribe.ʃ.Constant(value);
+            return new ConstantNode(value);
         }
 
         #endregion

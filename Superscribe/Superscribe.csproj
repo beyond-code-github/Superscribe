@@ -40,11 +40,9 @@
     <Compile Include="Models\ActionNode.cs" />
     <Compile Include="Models\ConstantNode.cs" />
     <Compile Include="Models\ControllerNode.cs" />
-    <Compile Include="Models\CommandNode.cs" />
     <Compile Include="Models\FinalFunction.cs" />
     <Compile Include="Models\FinalFunctionList.cs" />
     <Compile Include="Models\IRouteData.cs" />
-    <Compile Include="Models\MethodShorthands.cs" />
     <Compile Include="Models\NodeFuture.cs" />
     <Compile Include="Models\ParamNode.cs" />
     <Compile Include="Models\RouteGlue.cs" />

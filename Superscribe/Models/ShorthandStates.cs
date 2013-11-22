@@ -48,7 +48,7 @@
 
         public static explicit operator ʃInt(string name)
         {
-            return Superscribe.ʃ.Int(name);
+            return new ʃInt(name);
         }
     }
 
@@ -61,7 +61,7 @@
 
         public static explicit operator ʃLong(string name)
         {
-            return Superscribe.ʃ.Long(name);
+            return new ʃLong(name);
         }
     }
 
@@ -74,7 +74,7 @@
 
         public static explicit operator ʃBool(string name)
         {
-            return Superscribe.ʃ.Bool(name);
+            return new ʃBool(name);
         }
     }
 
@@ -87,7 +87,7 @@
 
         public static explicit operator ʃString(string name)
         {
-            return Superscribe.ʃ.String(name);
+            return new ʃString(name);
         }
     }
 }

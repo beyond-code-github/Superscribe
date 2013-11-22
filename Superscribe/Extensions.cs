@@ -40,42 +40,5 @@
         {
             return new ActionNode { Template = pattern, ActionName = actionName };
         }
-
-        /// <summary>
-        /// Matches an integer parameter and adds the name and value to the Parameters dictionary
-        /// </summary>
-        public static ParamNode<int> Int(this string name)
-        {
-            return Superscribe.ʃ.Int(name);
-        }
-
-        /// <summary>
-        /// Matches a boolean parameter and adds the name and value to the Parameters dictionary
-        /// </summary>
-        public static ParamNode<bool> Bool(this string name)
-        {
-            return Superscribe.ʃ.Bool(name);
-        }
-
-        /// <summary>
-        /// Matches a string parameter and adds the name and value to the Parameters dictionary
-        /// </summary>
-        public static ParamNode<string> String(this string name)
-        {
-            return Superscribe.ʃ.String(name);
-        }
-
-        /// <summary>
-        /// Matches the given pattern and then executes the given command
-        /// </summary>
-        public static CommandNode ʃ(this string pattern, Action<dynamic, string> command)
-        {
-            return new CommandNode(pattern, command);
-        }
-
-        public static SuperscribeNode ʃ(this string value)
-        {
-            return Superscribe.ʃ.Constant(value);
-        }
     }
 }

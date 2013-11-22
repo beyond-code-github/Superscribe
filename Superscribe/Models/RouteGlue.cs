@@ -19,7 +19,7 @@
 
         public static SuperscribeNode operator /(RouteGlue state, string other)
         {
-            var node = ʃ.Constant(other);
+            var node = new ConstantNode(other);
             if (!string.IsNullOrEmpty(state.Method))
             {
                 node.AddAllowedMethod(state.Method);    
