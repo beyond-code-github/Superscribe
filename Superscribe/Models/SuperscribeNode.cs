@@ -270,6 +270,19 @@
         }
 
         /// <summary>
+        /// Shorthand for adding a transition to an existing list 
+        /// </summary>
+        /// <param name="node">First transition</param>
+        /// <param name="others">Alternative transitions</param>
+        /// <returns>Modified list of transitions</returns>
+        public static SuperList operator |(SuperscribeNode node, SuperList others)
+        {
+            var list = new SuperList { node };
+            list.AddRange(others);
+            return list;
+        }
+
+        /// <summary>
         /// Shorthand for calling .Base
         /// </summary>
         /// <param name="node">Current state</param>

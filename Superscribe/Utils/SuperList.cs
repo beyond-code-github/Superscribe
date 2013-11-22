@@ -16,6 +16,12 @@
 
             return state;
         }
+
+        public static SuperList operator |(SuperList first, SuperList second)
+        {
+            first.AddRange(second);
+            return first;
+        }
     }
 
     public class DecisionList<T> : List<NonConsumingNode<T>>
