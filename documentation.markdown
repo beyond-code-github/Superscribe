@@ -327,7 +327,7 @@ title:  Features
         {
             this.Post[ʅ / "Produts"] = o => 
             {
-                var model = o.Bind<Product>();               
+                var model = o.Bind&lt;Product&gt;();               
                 // do something with product
             }
         }
@@ -342,8 +342,8 @@ title:  Features
         {
             this.Post[ʅ / "Produts"] = o => 
             {
-                var repository = o.Require<IProductsRepository>();
-                var model = o.Bind<Product>();
+                var repository = o.Require&lt;IProductsRepository&gt;();
+                var model = o.Bind&lt;Product&gt;();
                 repository.create(model);
 
                 return new HttpResponseMessage(HttpStatusCode.Created);
