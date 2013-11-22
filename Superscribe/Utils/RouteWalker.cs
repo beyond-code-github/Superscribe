@@ -6,7 +6,7 @@
 
     using Superscribe.Models;
 
-    public class RouteWalker<T> where T: IRouteData
+    public class RouteWalker<T> where T : IRouteData
     {
         private readonly SuperscribeNode baseNode;
 
@@ -27,7 +27,33 @@
 
         public void WalkRoute(string route, string method, T info)
         {
+            string querystring = null;
             this.Method = method;
+
+            var parts = route.Split('?');
+            if (parts.Length > 0)
+            {
+                route = parts[0];
+            }
+
+            if (parts.Length > 1)
+            {
+                querystring = parts[1];
+            }
+
+            if (!string.IsNullOrEmpty(querystring))
+            {
+                var queries = querystring.Split('&');
+                foreach (var query in queries)
+                {
+                    if (query.Contains("="))
+                    {
+                        var operands = query.Split('=');
+                        info.Parameters[operands[0]] = operands[1];
+                    }
+                }
+            }
+
             this.RemainingSegments = new Queue<string>(route.Split('/'));
             this.WalkRoute(info, this.baseNode);
         }
@@ -67,7 +93,7 @@
 
                     if (function != null)
                     {
-                        onComplete = o => function.Function(o);    
+                        onComplete = o => function.Function(o);
                     }
                 }
 
@@ -99,7 +125,7 @@
         private SuperscribeNode FindNextMatch(T info, string segment, IEnumerable<SuperscribeNode> states)
         {
             return !string.IsNullOrEmpty(segment) ?
-                states.FirstOrDefault(o => o.ActivationFunction(info, segment) && (!o.AllowedMethods.Any() || o.AllowedMethods.Contains(this.Method))) 
+                states.FirstOrDefault(o => o.ActivationFunction(info, segment) && (!o.AllowedMethods.Any() || o.AllowedMethods.Contains(this.Method)))
                 : null;
         }
     }

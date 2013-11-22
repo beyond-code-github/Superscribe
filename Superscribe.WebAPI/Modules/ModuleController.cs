@@ -1,11 +1,8 @@
 ﻿namespace Superscribe.WebApi.Modules
 {
-    using System;
     using System.Net;
     using System.Net.Http;
     using System.Web.Http;
-
-    using Superscribe.Models;
 
     public class ModuleController : ApiController
     {
@@ -23,7 +20,7 @@
 
             var walker = SuperscribeConfig.Walker<ModuleRouteData>();
             
-            walker.WalkRoute(this.Request.RequestUri.AbsolutePath, this.Request.Method.ToString(), webApiInfo);
+            walker.WalkRoute(this.Request.RequestUri.PathAndQuery, this.Request.Method.ToString(), webApiInfo);
 
             if (walker.ExtraneousMatch)
             {

@@ -20,7 +20,7 @@
             var info = new RouteData();
 
             var walker = SuperscribeConfig.Walker<RouteData>();
-            walker.WalkRoute(controllerContext.Request.RequestUri.AbsolutePath, controllerContext.Request.Method.ToString(), info);
+            walker.WalkRoute(controllerContext.Request.RequestUri.PathAndQuery, controllerContext.Request.Method.ToString(), info);
 
             var internalSelector = GetInternalSelector(controllerContext.ControllerDescriptor);
 
