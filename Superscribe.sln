@@ -62,6 +62,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.Demo.WebApiModu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.Samples.FluentApi", "Samples\Superscribe.Samples.FluentApi\Superscribe.Samples.FluentApi.csproj", "{BF7DE7D7-F4DB-45EA-BE27-D8FE576BBE08}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.WebAPI2", "Superscribe.WebAPI2\Superscribe.WebAPI2.csproj", "{2295D548-7A8F-4EC0-8FAB-2CAC81763AAD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -160,6 +162,10 @@ Global
 		{BF7DE7D7-F4DB-45EA-BE27-D8FE576BBE08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF7DE7D7-F4DB-45EA-BE27-D8FE576BBE08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF7DE7D7-F4DB-45EA-BE27-D8FE576BBE08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2295D548-7A8F-4EC0-8FAB-2CAC81763AAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2295D548-7A8F-4EC0-8FAB-2CAC81763AAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2295D548-7A8F-4EC0-8FAB-2CAC81763AAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2295D548-7A8F-4EC0-8FAB-2CAC81763AAD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
