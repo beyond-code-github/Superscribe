@@ -9,13 +9,13 @@ title:  Features
 </h2>
   <div class="tabbable tabs-left vertical-tabs bold-tabs row">
     <ul class="nav nav-tabs nav-stacked col-md-4">
-    	<li class="active"> <a href="#tab1" data-toggle="tab">Replacement Asp.Net Web API routing<small>Replace existing routes with syntax thats much more concise and easy to manage</small><i class="icon-angle-right"></i></a> </li>
-    	<li> <a href="#tab2" data-toggle="tab">Easy unit testing<small>Invoke the superscribe routing engine in isolation from the rest of your app</small><i class="icon-angle-right"></i></a> </li>     	
-      	<li> <a href="#tab3" data-toggle="tab">Bring Nancy style modules to Web API<small>All the benefits of the code-centric approach combined with graph based routing</small><i class="icon-angle-right"></i></a> </li>   
-      	<li> <a href="#tab4" data-toggle="tab">Serve your data direct from OWIN<small>Create ultra-lightweight services for maximum performance</small><i class="icon-angle-right"></i></a> </li>
+    	<li class="active"> <a href="#webapi" data-toggle="tab">Replacement Asp.Net Web API routing<small>Replace existing routes with syntax thats much more concise and easy to manage</small><i class="icon-angle-right"></i></a> </li>
+    	<li> <a href="#testing" data-toggle="tab">Easy unit testing<small>Invoke the superscribe routing engine in isolation from the rest of your app</small><i class="icon-angle-right"></i></a> </li>     	
+      	<li> <a href="#modules" data-toggle="tab">Bring Nancy style modules to Web API<small>All the benefits of the code-centric approach combined with graph based routing</small><i class="icon-angle-right"></i></a> </li>   
+      	<li> <a href="#owin" data-toggle="tab">Serve your data direct from OWIN<small>Create ultra-lightweight services for maximum performance</small><i class="icon-angle-right"></i></a> </li>
     </ul>    
 	<div class="tab-content col-md-8">
-      <div class="tab-pane active col-sm-12 col-md-12" id="tab1">
+      <div class="tab-pane active col-sm-12 col-md-12" id="webapi">
       	<h3>Simplify your Asp.Net Web API Routes</h3>
       	<p>Routing in Web API is based on legacy MVC logic, and although Attribute Routing improves things greatly it's still not a catch-all fix. Many route combinations are very difficult to implement, such as multiple actions, with the same parameters, mapped to the same http verbs. Superscribe solves all these problems by allowing you to be more descriptive with much less code.</p>
       	<p>Here's a comparison of Web API verus Superscribe for an app that serves the following urls:</p>
@@ -108,7 +108,7 @@ title:  Features
 	      | ʅ / "categories".Controller("portfoliocategories") / -(ʃInt)"id")));
 		</pre>
 	  </div>
-	  <div class="tab-pane col-sm-12 col-md-12" id="tab2">
+	  <div class="tab-pane col-sm-12 col-md-12" id="testing">
         <h3>Test your route handlers in isolation</h3>
         <p>The Superscribe engine is built in a way which means it's easy to parse urls without invoking the rest of your application using the Route Walker. Provided you have implemented your handlers in a decoupled fashion, you can add route definitions, perform tests on your matching, then reset back to scratch for the next iteration with minimal fuss</p>
         <pre class="prettyprint lang-cs">
@@ -156,7 +156,7 @@ title:  Features
     }
 		</pre>
 	  </div>
-	  <div class="tab-pane col-sm-12 col-md-12" id="tab3">
+	  <div class="tab-pane col-sm-12 col-md-12" id="modules">
         <h3>Module style route handlers in Asp.Net Web Api</h3>
         <p>Attribute routing in Asp.Net is pretty useful, but it still constrains you to the traditional construct of Controller\Action. With very little effort you can now break the mold and use Nancy\Sinatra style modules, complete with model binding and dependency injection. If you like to define your routes close to where they're handled then this is the solution for you, and of course you still get all the benefits of Graph Based Routing.</p>
         <h3 class="title visible-phone">Setup</h3>
@@ -185,7 +185,7 @@ title:  Features
     }
 		</pre>
 	  </div>	
-      <div class="tab-pane col-sm-12 col-md-12" id="tab4">
+      <div class="tab-pane col-sm-12 col-md-12" id="owin">
         <h3>Superscribe and OWIN, pipeline to pipeline</h3>
         <p></p>
         <pre class="prettyprint lang-cs">
