@@ -270,9 +270,88 @@ title:  Features
         </p>
 	  </div>
        <div class="tab-pane col-sm-12 col-md-12" id="modules">
-        <h3 class="title visible-phone"></h3>
+        <h3 class="visible-phone">Handling routes with Modules</h3>
+        <p>Asp.Net Web Api uses controllers and actions because it was originally derived from the MVC framework and although things have moved on since then, it still shares some of the same constructs. With Graph based routing we can break free of these restrictions and handle our routes using whatever classes we wish. A great example of this comes in the form of modules, inspired by the Ruby web framework Sinatra, and the .Net framework NancyFX</p>
+        <h3 class="title visible-phone">Assembly Scanning</h3>
+        <p>When the module configuration is activated on app startup, Superscribe scans your assemblies for classes that derive from <em>SuperscribeModule</em> and then instantiates them in turn. All route handlers for modules are defined in the constructor, so this process results in all of our route definitions being added to the graph. Modules can be enabled in Superscribe.WebApi with the following config:</p>
         <pre class="prettyprint lang-cs">
+
+    public static class WebApiConfig
+    {
+        public static void Register(HttpConfiguration config)
+        {
+            SuperscribeConfig.RegisterModules(config);
+        }
+    }
         </pre>
+        <p>A basic module takes the following form:</p>
+        <pre class="prettyprint lang-cs">
+
+    public class HelloWorldModule : SuperscribeModule
+    {
+        public HelloWorldModule()
+        {
+            this.Get["/"] = o => "Hello World!";
+        }
+    }
+        </pre>
+        <p>The primary difference when routing with modules compared to traditional Web API is that we don't get any of the action selection logic that maps requests to actions, so we have to be prescriptive about our http methods and every definition must be assigned a final function.</p>
+        <p>In addition to Get[], SuperscribeModule also exposes properties for Put, Post, Patch and Delete methods. Each one takes an indexer within which we can use a subset of the Superscribe DSL syntax. Note from the previous example, to use these indexers to attach routes to ʃ.Base we simply pass "/".</p>
+        <h3 class="title visible-phone">Building the Route Graph</h3>
+        <p>One aspect of the DSL that is no longer appropriate when dealing with modules is the ability to specify multiple edges at once using the options syntax. Instead, we have to repeat the whole route for each handler:</p>
+        <pre class="prettyprint lang-cs">
+
+    public class HelloWorldModule : SuperscribeModule
+    {
+        public HelloWorldModule()
+        {
+            this.Get[ʅ / "Hello" / "World"] = o => "Hello World!";
+
+            this.Get[ʅ / "Hello" / (ʃString)"Name"] = o => "Hello " + o.Parameters.Name;
+        }
+    }
+        </pre>
+        <p>Each call to this.Get, or any of the other method helpers ensures that the route graph is still constructed efficiently. Behind the scenes each route is 'Zipped' together (see the Fluent Api section) so that identical segments will be merged. In the above example, we end up with a single "Hello" node with two edges.</p>
+        <p>Finally you'll notice we've also got access to the route glue ʅ as a property of SuperscribeModule which works in the usual way.</p>
+        <div class="well well-mini pull-center">
+          <em>It is still possible to compose routes from parts within modules using the route glue, but doing so can go against the ethos of modules which is to make it easy to see what route a particualr handler serves.</em>
+        </div>
+        <h3 class="title visible-phone">Model Binding and Dependencies</h3>
+        <p>When we used the fluent api or DSL directly, we accessed parameters in our final function via the RouteData object and it's Parameters dictionary. We've still got that feature within our modules, but the RouteData object is now of type ModuleRouteData instead. This gives us more flexibility to do the things that controller/action selection would usually take care of</p>
+        <p>One of the most useful of these is model binding... taking data from the request body or querystring and mapping it to a strongly typed model. We're still working on top of Web Api behind the scenes so we can achieve the same result quite easily using the ModuleRouteData .Bind() function:</p>
+        <pre class="prettyprint lang-cs">
+
+    public class ProductsModule : SuperscribeModule
+    {
+        public ProductsModule()
+        {
+            this.Post[ʅ / "Produts"] = o => 
+            {
+                var model = o.Bind<Product>();               
+                // do something with product
+            }
+        }
+    }
+        </pre>
+        <p>If we want to actually store our Product then we also need to access the database, and the best way to do that and keep things loosely coupled is to inject a dependency. For that we can use the .Require function which simply wraps up the standard Web Api DepedencyResolver:</p>
+         <pre class="prettyprint lang-cs">
+
+    public class ProductsModule : SuperscribeModule
+    {
+        public ProductsModule()
+        {
+            this.Post[ʅ / "Produts"] = o => 
+            {
+                var repository = o.Require<IProductsRepository>();
+                var model = o.Bind<Product>();
+                repository.create(model);
+
+                return new HttpResponseMessage(HttpStatusCode.Created);
+            }
+        }
+    }
+        </pre>
+        <p>Now we've got all the ingredients we need to build our app using modules... Web Api is still taking care of content negotiation for us and we can easily build in other aspects such as validation as needed. We can also take control over the response as we need to by returning HttpResponseMessage just as we would in a regular controller.</p>
       </div>
       <div class="tab-pane col-sm-12 col-md-12" id="webapi">
         <h3 class="visible-phone">Replacing Asp.Net Web Api routing with Superscribe</h3>
