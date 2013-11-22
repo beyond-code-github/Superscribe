@@ -8,7 +8,7 @@
     {
         protected ParamNode()
         {
-            this.ActionFunction = (data, segment) =>
+            this.actionFunction = (data, segment) =>
             {
                 object value;
                 var success = this.TryParse(segment, out value);
@@ -21,6 +21,12 @@
                 {
                     data.ParamConversionError = true;
                 }
+            };
+
+            this.activationFunction = (data, segment) =>
+            {
+                object value;
+                return this.TryParse(segment, out value);
             };
         }
 
