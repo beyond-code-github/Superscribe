@@ -38,12 +38,12 @@
                 return new ActionNode { Pattern = new Regex("([a-z]|[A-Z]|[0-9])+", RegexOptions.Compiled) };
             }
         }
-        
-        public static object ʅ
+
+        public static RouteGlue ʅ
         {
             get
             {
-                throw new NotImplementedException();
+                return new RouteGlue();
             }
         }
         
