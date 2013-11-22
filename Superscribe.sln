@@ -66,6 +66,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.WebAPI2", "Supe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.WebApi2.MultipleCollectionsPerController", "Samples\Superscribe.WebApi2.MultipleCollectionsPerController\Superscribe.WebApi2.MultipleCollectionsPerController.csproj", "{ECBCF52A-8B97-4950-8A21-D24FDAD3D2AB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.UnitTesting", "Samples\Superscribe.UnitTesting\Superscribe.UnitTesting.csproj", "{55FAE778-D891-462F-824F-DDE9DEDF0EE3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -172,6 +174,10 @@ Global
 		{ECBCF52A-8B97-4950-8A21-D24FDAD3D2AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECBCF52A-8B97-4950-8A21-D24FDAD3D2AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECBCF52A-8B97-4950-8A21-D24FDAD3D2AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55FAE778-D891-462F-824F-DDE9DEDF0EE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55FAE778-D891-462F-824F-DDE9DEDF0EE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55FAE778-D891-462F-824F-DDE9DEDF0EE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55FAE778-D891-462F-824F-DDE9DEDF0EE3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -198,5 +204,6 @@ Global
 		{0B0D9BE5-C83F-4CA9-B857-29C8FDB9AE7E} = {67430440-F6AD-41EC-A829-F2457B09B672}
 		{BF7DE7D7-F4DB-45EA-BE27-D8FE576BBE08} = {67430440-F6AD-41EC-A829-F2457B09B672}
 		{ECBCF52A-8B97-4950-8A21-D24FDAD3D2AB} = {67430440-F6AD-41EC-A829-F2457B09B672}
+		{55FAE778-D891-462F-824F-DDE9DEDF0EE3} = {67430440-F6AD-41EC-A829-F2457B09B672}
 	EndGlobalSection
 EndGlobal
