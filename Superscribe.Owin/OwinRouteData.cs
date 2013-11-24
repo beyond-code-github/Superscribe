@@ -1,11 +1,11 @@
 ﻿namespace Superscribe.Owin
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     
-    using Microsoft.Owin;
-
     using Superscribe.Models;
+    using Superscribe.Owin.Extensions;
     using Superscribe.Utils;
 
     public class OwinRouteData : IRouteData
@@ -20,24 +20,22 @@
         public object Response { get; set; }
 
         public int StatusCode { get; set; }
-
-        public IOwinRequest OwinRequest { get; set; }
-
-        public OwinResponse OwinResponse { get; set; }
-
-        public SuperscribeOwinConfig Config { get; set; }
         
+        public SuperscribeOwinConfig Config { get; set; }
+
+        public IDictionary<string, object> Environment { get; set; }
+
         public T Bind<T>() where T : class
         {
             string[] incomingMediaTypes;
-            if (this.OwinRequest.Headers.TryGetValue("content-type", out incomingMediaTypes))
+            if (this.Environment.TryGetHeaderValues("content-type", out incomingMediaTypes))
             {
                 var mediaTypes = ConnegHelpers.GetWeightedValues(incomingMediaTypes);
                 var mediaType = mediaTypes.FirstOrDefault(o => this.Config.MediaTypeHandlers.Keys.Contains(o) && this.Config.MediaTypeHandlers[o].Read != null);
                 if (!string.IsNullOrEmpty(mediaType))
                 {
                     var formatter = this.Config.MediaTypeHandlers[mediaType];
-                    return formatter.Read(this.OwinRequest, typeof(T)) as T;
+                    return formatter.Read(this.Environment, typeof(T)) as T;
                 }
                         
                 throw new NotSupportedException("Media type is not supported");

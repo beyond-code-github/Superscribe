@@ -6,6 +6,7 @@
 
     using Superscribe.Demo.Neural.NeuralNetwork;
     using Superscribe.Owin;
+    using Superscribe.Owin.Extensions;
 
     public class Startup
     {
@@ -14,7 +15,7 @@
             var config = new SuperscribeOwinConfig();
             config.MediaTypeHandlers.Add(
                 "application/json",
-                new MediaTypeHandler { Write = (res, o) => res.WriteAsync(JsonConvert.SerializeObject(o)) });
+                new MediaTypeHandler { Write = (env, o) => env.WriteResponse(JsonConvert.SerializeObject(o)) });
             
             app.UseSuperscribe(config);
         }

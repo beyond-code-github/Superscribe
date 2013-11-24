@@ -1,27 +1,32 @@
 ﻿namespace Superscribe.Demo.Owin
 {
+    using System;
+    using System.Collections.Generic;
     using System.IO;
+    using System.Threading.Tasks;
 
     using Newtonsoft.Json;
 
     using global::Owin;
 
     using Superscribe.Owin;
+    using Superscribe.Owin.Extensions;
 
     public class Startup
     {
         public void Configuration(IAppBuilder app)
         {
             var config = new SuperscribeOwinConfig();
+
             config.MediaTypeHandlers.Add(
                 "application/json",
                 new MediaTypeHandler
                     {
-                        Write = (res, o) => res.WriteAsync(JsonConvert.SerializeObject(o)),
-                        Read = (req, type) =>
+                        Write = (env, o) => env.WriteResponse(JsonConvert.SerializeObject(o)),
+                        Read = (env, type) =>
                             {
                                 object obj;
-                                using (var reader = new StreamReader(req.Body))
+                                using (var reader = new StreamReader(env.GetRequestBody()))
                                 {
                                     obj = JsonConvert.DeserializeObject(reader.ReadToEnd(), type);
                                 };
@@ -34,7 +39,7 @@
                 "text/html",
                 new MediaTypeHandler
                     {
-                        Write = (res, o) => res.WriteAsync(o.ToString())
+                        Write = (env, o) => env.WriteResponse(o.ToString())
                     });
 
             app.UseSuperscribeModules(config);

@@ -7,6 +7,7 @@
     using Newtonsoft.Json;
 
     using Superscribe.Owin;
+    using Superscribe.Owin.Extensions;
 
     public class Startup
     {
@@ -17,11 +18,11 @@
                 "application/json",
                 new MediaTypeHandler
                     {
-                        Write = (res, o) => res.WriteAsync(JsonConvert.SerializeObject(o)),
-                        Read = (req, type) =>
+                        Write = (env, o) => env.WriteResponse(JsonConvert.SerializeObject(o)),
+                        Read = (env, type) =>
                             {
                                 object obj;
-                                using (var reader = new StreamReader(req.Body))
+                                using (var reader = new StreamReader(env.GetRequestBody()))
                                 {
                                     obj = JsonConvert.DeserializeObject(reader.ReadToEnd(), type);
                                 };
@@ -34,7 +35,7 @@
                 "text/html",
                 new MediaTypeHandler
                     {
-                        Write = (res, o) => res.WriteAsync(o.ToString())
+                        Write = (env, o) => env.WriteResponse(o.ToString())
                     });
 
             app.UseSuperscribeModules(config);
