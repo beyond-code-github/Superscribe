@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Policy;
 
     using Superscribe.Models;
 
@@ -70,7 +71,7 @@
 
         public void WalkRoute(T info, SuperscribeNode match)
         {
-            Func<T, object> onComplete = null;
+            FinalFunction onComplete = null;
             while (match != null)
             {
                 if (match.ActionFunction != null)
@@ -86,6 +87,14 @@
                     }
                 }
 
+                if (onComplete != null)
+                {
+                    if (onComplete.IsExclusive)
+                    {
+                        onComplete = null;
+                    }
+                }
+
                 if (match.FinalFunctions.Count > 0)
                 {
                     var function = match.FinalFunctions.FirstOrDefault(o => o.Method == this.Method)
@@ -93,7 +102,7 @@
 
                     if (function != null)
                     {
-                        onComplete = o => function.Function(o);
+                        onComplete = function;
                     }
                 }
 
@@ -118,7 +127,8 @@
 
             if (onComplete != null)
             {
-                info.Response = onComplete(info);
+                //o => function.Function(o)
+                info.Response = onComplete.Function(info);
             }
         }
 

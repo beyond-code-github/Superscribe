@@ -52,4 +52,22 @@
 
         private It should_execute_the_final_function = () => routeData.Response.ShouldEqual("Hello world");
     }
+
+    public class When_specifying_an_exclusive_final_function_against_a_leaf_node : FinalFunctionTests
+    {
+        private Establish context = () => ʃ.Route(ʅ => ʅ / "Hello" / "World" * Final.Exclusive * HelloWorld);
+
+        private Because of = () => subject.WalkRoute("/Hello/World", "GET", routeData);
+
+        private It should_execute_the_final_function = () => routeData.Response.ShouldEqual("Hello world");
+    }
+
+    public class When_specifying_an_exclusive_final_function_against_a_node_mid_graph : FinalFunctionTests
+    {
+        private Establish context = () => ʃ.Route(ʅ => ʅ / "Hello" * Final.Exclusive * HelloWorld / "World");
+
+        private Because of = () => subject.WalkRoute("/Hello/World", "GET", routeData);
+
+        private It should_not_execute_the_final_function = () => routeData.Response.ShouldNotEqual("Hello world");
+    }
 }

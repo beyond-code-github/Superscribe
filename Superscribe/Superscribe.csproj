@@ -42,6 +42,7 @@
     <Compile Include="Models\ControllerNode.cs" />
     <Compile Include="Models\FinalFunction.cs" />
     <Compile Include="Models\FinalFunctionList.cs" />
+    <Compile Include="Models\ExclusiveFinalFuture.cs" />
     <Compile Include="Models\IRouteData.cs" />
     <Compile Include="Models\NodeFuture.cs" />
     <Compile Include="Models\ParamNode.cs" />
