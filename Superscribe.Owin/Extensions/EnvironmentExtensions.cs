@@ -13,10 +13,15 @@
             return (Stream)environment["owin.RequestBody"];
         }
 
-        public static async Task WriteResponse(this IDictionary<string, object> environment, string text)
+        public static Task WriteResponse(this IDictionary<string, object> environment, string text)
         {
             var data = Encoding.UTF8.GetBytes(text);
-            await ((Stream)environment["owin.ResponseBody"]).WriteAsync(data, 0, data == null ? 0 : data.Length, CancellationToken.None);
+            return ((Stream)environment["owin.ResponseBody"]).WriteAsync(data, 0, data == null ? 0 : data.Length, CancellationToken.None);
+        }
+
+        public static Stream GetResponse(this IDictionary<string, object> environment)
+        {
+            return ((Stream)environment["owin.ResponseBody"]);
         }
 
         public static void SetResponseStatusCode(this IDictionary<string, object> environment, int statusCode)

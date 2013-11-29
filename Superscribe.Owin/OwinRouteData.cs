@@ -4,8 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using global::Owin;
-
     using Superscribe.Models;
     using Superscribe.Owin.Extensions;
     using Superscribe.Utils;
@@ -15,6 +13,7 @@
         public OwinRouteData()
         {
             this.Parameters = new DynamicDictionary();
+            this.Pipeline = new List<object>();
         }
 
         public dynamic Parameters { get; set; }
@@ -22,13 +21,13 @@
         public object Response { get; set; }
 
         public int StatusCode { get; set; }
-
-        public IAppBuilder Builder { get; set; }
-
+        
         public SuperscribeOwinConfig Config { get; set; }
 
         public IDictionary<string, object> Environment { get; set; }
         
+        public List<object> Pipeline { get; set; }
+
         public T Bind<T>() where T : class
         {
             string[] incomingMediaTypes;

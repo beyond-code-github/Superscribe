@@ -30,14 +30,12 @@
             var path = environment["owin.RequestPath"].ToString();
             var method = environment["owin.RequestMethod"].ToString();
 
-            var routeData = new OwinRouteData { Builder = builder, Environment = environment, Config = config };
+            var routeData = new OwinRouteData { Environment = environment, Config = config };
+            environment["superscribe.RouteData"] = routeData;
 
             var walker = new RouteWalker<OwinRouteData>(ʃ.Base);
             walker.WalkRoute(path, method, routeData);
             
-            // Default status code to 200
-            environment.SetResponseStatusCode(200);
-
             if (walker.IncompleteMatch)
             {
                 environment.SetResponseStatusCode(404);
@@ -52,40 +50,23 @@
                 return;
             }
 
-            var responseTask = routeData.Response as Task;
-            if (responseTask != null)
+            if (routeData.Pipeline.Any())
             {
-                await responseTask;
-                await next.Invoke(environment);
-            }
-            
-            // Set status code
-            if (routeData.StatusCode > 0)
-            {
-                environment.SetResponseStatusCode(routeData.StatusCode);
-            }
-
-            string[] outgoingMediaTypes;
-            if (environment.TryGetHeaderValues("accept", out outgoingMediaTypes))
-            {
-                var mediaTypes = ConnegHelpers.GetWeightedValues(outgoingMediaTypes);
-                var mediaType = mediaTypes.FirstOrDefault(o => config.MediaTypeHandlers.Keys.Contains(o) && config.MediaTypeHandlers[o].Write != null);
-                if (!string.IsNullOrEmpty(mediaType))
+                IAppBuilder branch = builder.New();
+                foreach (var middleware in routeData.Pipeline)
                 {
-                    var formatter = config.MediaTypeHandlers[mediaType];
-                    environment.SetResponseContentType(mediaType);
-
-                    await formatter.Write(environment, routeData.Response);
-                    await next.Invoke(environment);
-
-                    return;
+                    branch.Use(middleware);
                 }
 
-                throw new NotSupportedException("Media type is not supported");
+                branch.Use(typeof(RedirectMiddleware), this.next);
+
+                var continuation = (Func<IDictionary<string, object>, Task>)branch.Build(typeof(Func<IDictionary<string, object>, Task>));
+                await continuation(environment);
             }
-
-            throw new NotSupportedException("Response type is not supported");
-
+            else
+            {
+                await this.next(environment);    
+            }
         }
     }
 }
