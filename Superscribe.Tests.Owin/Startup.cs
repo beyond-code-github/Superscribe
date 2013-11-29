@@ -48,8 +48,8 @@
             ʃ.Route(ʅ => o => "Hello World");
 
             app.Use(typeof(TestMiddleware), "before")
-                .Use(typeof(SuperscribeMiddleware), config)
-                .Use(typeof(TestMiddleware), "after");
+                .Use(typeof(TestMiddleware), "after")
+                .Use(typeof(OwinRouter), config);
         }
     }
 }

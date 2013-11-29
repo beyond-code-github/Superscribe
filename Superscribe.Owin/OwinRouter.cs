@@ -5,18 +5,23 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using global::Owin;
+
     using Superscribe.Owin.Extensions;
     using Superscribe.Utils;
 
-    public class SuperscribeMiddleware
+    public class OwinRouter
     {
         private readonly Func<IDictionary<string, object>, Task> next;
 
+        private readonly IAppBuilder builder;
+
         private readonly SuperscribeOwinConfig config;
 
-        public SuperscribeMiddleware(Func<IDictionary<string, object>, Task> next, SuperscribeOwinConfig config)
+        public OwinRouter(Func<IDictionary<string, object>, Task> next, IAppBuilder builder, SuperscribeOwinConfig config)
         {
             this.next = next;
+            this.builder = builder;
             this.config = config;
         }
 
@@ -25,7 +30,7 @@
             var path = environment["owin.RequestPath"].ToString();
             var method = environment["owin.RequestMethod"].ToString();
 
-            var routeData = new OwinRouteData { Environment = environment, Config = config };
+            var routeData = new OwinRouteData { Builder = builder, Environment = environment, Config = config };
 
             var walker = new RouteWalker<OwinRouteData>(ʃ.Base);
             walker.WalkRoute(path, method, routeData);

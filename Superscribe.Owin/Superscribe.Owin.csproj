@@ -42,7 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\EnvironmentExtensions.cs" />
-    <Compile Include="SuperscribeMiddleware.cs" />
+    <Compile Include="Models\Middleware.cs" />
+    <Compile Include="Models\MiddlewareNode.cs" />
+    <Compile Include="OwinRouter.cs" />
     <Compile Include="ConnegHelpers.cs" />
     <Compile Include="MediaTypeHandler.cs" />
     <Compile Include="OwinRouteData.cs" />

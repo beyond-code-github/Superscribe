@@ -31,7 +31,7 @@
 
         private static IAppBuilder SuperscribeHandler(IAppBuilder builder, SuperscribeOwinConfig config)
         {
-            return builder.Use(typeof(SuperscribeMiddleware), config);
+            return builder.Use(typeof(OwinRouter), builder, config);
         }
     }
 }
