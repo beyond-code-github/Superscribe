@@ -6,11 +6,11 @@
 
     public class MethodSet<T>
     {
-        private readonly Action<Func<SuperscribeNode>> binding;
+        private readonly Action<Func<GraphNode>> binding;
 
         private readonly string method;
 
-        public MethodSet(Action<Func<SuperscribeNode>> binding, string method)
+        public MethodSet(Action<Func<GraphNode>> binding, string method)
         {
             this.binding = binding;
             this.method = method;
@@ -32,7 +32,7 @@
             }
         }
 
-        public Func<T, object> this[SuperscribeNode s]
+        public Func<T, object> this[GraphNode s]
         {
             set
             {

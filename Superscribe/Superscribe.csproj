@@ -48,7 +48,7 @@
     <Compile Include="Models\ParamNode.cs" />
     <Compile Include="Models\RouteGlue.cs" />
     <Compile Include="Models\ShorthandStates.cs" />
-    <Compile Include="Models\SuperscribeNode.cs" />
+    <Compile Include="Models\GraphNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SuperscribeModule.cs" />
     <Compile Include="Utils\DynamicDictionary.cs" />

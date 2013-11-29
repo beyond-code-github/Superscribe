@@ -13,7 +13,7 @@
     /// </summary>
     public class ʃ
     {
-        public static SuperscribeNode Base = new SuperscribeNode();
+        public static GraphNode Base = new GraphNode();
 
         #region Static Methods
 
@@ -52,7 +52,7 @@
         /// </summary>
         /// <param name="config">Route configuration function</param>
         /// <returns>The last state in the chain</returns>
-        public static SuperscribeNode Route(Func<SuperscribeNode> config)
+        public static GraphNode Route(Func<GraphNode> config)
         {
             var leaf = config();
             Base.Zip(leaf.Base());
@@ -64,14 +64,14 @@
         /// </summary>
         /// <param name="config">Route configuration function</param>
         /// <returns>The last state in the chain</returns>
-        public static SuperscribeNode Route(Func<RouteGlue, SuperscribeNode> config)
+        public static GraphNode Route(Func<RouteGlue, GraphNode> config)
         {
             var leaf = config(new RouteGlue());
             Base.Zip(leaf.Base());
             return leaf;
         }
 
-        public static SuperscribeNode Route(Func<RouteGlue, SuperList> config)
+        public static GraphNode Route(Func<RouteGlue, SuperList> config)
         {
             var list = config(new RouteGlue());
             foreach (var node in list)
@@ -82,14 +82,14 @@
             return Base;
         }
 
-        public static SuperscribeNode Route(Func<RouteGlue, Func<dynamic, object>> config)
+        public static GraphNode Route(Func<RouteGlue, Func<dynamic, object>> config)
         {
             var final = config(new RouteGlue());
             Base.FinalFunctions.Add(new FinalFunction { Function = final });
             return Base;
         }
 
-        public static SuperscribeNode Get(Func<SuperscribeNode> config)
+        public static GraphNode Get(Func<GraphNode> config)
         {
             var leaf = config();
             leaf.AddAllowedMethod("GET");
@@ -98,7 +98,7 @@
             return leaf;
         }
 
-        public static SuperscribeNode Get(Func<RouteGlue, SuperscribeNode> config)
+        public static GraphNode Get(Func<RouteGlue, GraphNode> config)
         {
             var leaf = config(new RouteGlue("GET"));
             leaf.AddAllowedMethod("GET");
@@ -107,7 +107,7 @@
             return leaf;
         }
 
-        public static SuperscribeNode Post(Func<SuperscribeNode> config)
+        public static GraphNode Post(Func<GraphNode> config)
         {
             var leaf = config();
             leaf.AddAllowedMethod("POST");
@@ -116,7 +116,7 @@
             return leaf;
         }
 
-        public static SuperscribeNode Post(Func<RouteGlue, SuperscribeNode> config)
+        public static GraphNode Post(Func<RouteGlue, GraphNode> config)
         {
             var leaf = config(new RouteGlue("POST"));
             leaf.AddAllowedMethod("POST");
@@ -125,7 +125,7 @@
             return leaf;
         }
 
-        public static SuperscribeNode Put(Func<SuperscribeNode> config)
+        public static GraphNode Put(Func<GraphNode> config)
         {
             var leaf = config();
             leaf.AddAllowedMethod("PUT");
@@ -134,7 +134,7 @@
             return leaf;
         }
 
-        public static SuperscribeNode Put(Func<RouteGlue, SuperscribeNode> config)
+        public static GraphNode Put(Func<RouteGlue, GraphNode> config)
         {
             var leaf = config(new RouteGlue("PUT"));
             leaf.AddAllowedMethod("PUT");
@@ -143,7 +143,7 @@
             return leaf;
         }
 
-        public static SuperscribeNode Patch(Func<SuperscribeNode> config)
+        public static GraphNode Patch(Func<GraphNode> config)
         {
             var leaf = config();
             leaf.AddAllowedMethod("PATCH");
@@ -152,7 +152,7 @@
             return leaf;
         }
 
-        public static SuperscribeNode Patch(Func<RouteGlue, SuperscribeNode> config)
+        public static GraphNode Patch(Func<RouteGlue, GraphNode> config)
         {
             var leaf = config(new RouteGlue("PATCH"));
             leaf.AddAllowedMethod("PATCH");
@@ -161,7 +161,7 @@
             return leaf;
         }
 
-        public static SuperscribeNode Delete(Func<SuperscribeNode> config)
+        public static GraphNode Delete(Func<GraphNode> config)
         {
             var leaf = config();
             leaf.AddAllowedMethod("DELETE");
@@ -170,7 +170,7 @@
             return leaf;
         }
 
-        public static SuperscribeNode Delete(Func<RouteGlue, SuperscribeNode> config)
+        public static GraphNode Delete(Func<RouteGlue, GraphNode> config)
         {
             var leaf = config(new RouteGlue("DELETE"));
             leaf.AddAllowedMethod("DELETE");
@@ -183,7 +183,7 @@
 
         public static void Reset()
         {
-            Base = new SuperscribeNode();
+            Base = new GraphNode();
         }
     }
 }

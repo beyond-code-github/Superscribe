@@ -9,9 +9,9 @@
 
     public class RouteWalker<T> where T : IRouteData
     {
-        private readonly SuperscribeNode baseNode;
+        private readonly GraphNode baseNode;
 
-        public RouteWalker(SuperscribeNode baseNode)
+        public RouteWalker(GraphNode baseNode)
         {
             this.baseNode = baseNode;
         }
@@ -69,7 +69,7 @@
             return string.Empty;
         }
 
-        public void WalkRoute(T info, SuperscribeNode match)
+        public void WalkRoute(T info, GraphNode match)
         {
             FinalFunction onComplete = null;
             while (match != null)
@@ -132,7 +132,7 @@
             }
         }
 
-        private SuperscribeNode FindNextMatch(T info, string segment, IEnumerable<SuperscribeNode> states)
+        private GraphNode FindNextMatch(T info, string segment, IEnumerable<GraphNode> states)
         {
             return !string.IsNullOrEmpty(segment) ?
                 states.FirstOrDefault(o => o.ActivationFunction(info, segment) && (!o.AllowedMethods.Any() || o.AllowedMethods.Contains(this.Method)))

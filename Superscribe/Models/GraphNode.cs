@@ -8,7 +8,7 @@
 
     using Superscribe.Utils;
 
-    public class SuperscribeNode : IEquatable<SuperscribeNode>
+    public class GraphNode : IEquatable<GraphNode>
     {
         protected Func<dynamic, string, bool> activationFunction;
 
@@ -17,10 +17,10 @@
         /// <summary>
         /// Base constructor for superscribe states
         /// </summary>
-        public SuperscribeNode()
+        public GraphNode()
         {
-            this.Edges = new ConcurrentQueue<SuperscribeNode>();
-            this.QueryString = new ConcurrentQueue<SuperscribeNode>();
+            this.Edges = new ConcurrentQueue<GraphNode>();
+            this.QueryString = new ConcurrentQueue<GraphNode>();
             this.AllowedMethods = new ConcurrentQueue<string>();
             this.FinalFunctions = new List<FinalFunction>();
 
@@ -40,7 +40,7 @@
         /// <summary>
         /// The parent state
         /// </summary>
-        protected SuperscribeNode Parent { get; set; }
+        protected GraphNode Parent { get; set; }
 
         /// <summary>
         /// Boolean flag indicating if the transition into this state is optional
@@ -50,12 +50,12 @@
         /// <summary>
         /// Concurrent queue of available transitions from this state
         /// </summary>
-        public ConcurrentQueue<SuperscribeNode> Edges { get; set; }
+        public ConcurrentQueue<GraphNode> Edges { get; set; }
 
         /// <summary>
         /// Concurrent queue of available querystring transitions
         /// </summary>
-        public ConcurrentQueue<SuperscribeNode> QueryString { get; set; }
+        public ConcurrentQueue<GraphNode> QueryString { get; set; }
 
         /// <summary>
         /// Regex pattern to use when matching
@@ -104,7 +104,7 @@
 
         #region Methods
 
-        public SuperscribeNode Zip(SuperscribeNode nextNode)
+        public GraphNode Zip(GraphNode nextNode)
         {
             nextNode.Parent = this;
             foreach (var existingNode in this.Edges)
@@ -124,32 +124,32 @@
             return nextNode;
         }
 
-        public SuperscribeNode Slash(SuperscribeNode nextNode)
+        public GraphNode Slash(GraphNode nextNode)
         {
             nextNode.Parent = this;
             this.Edges.Enqueue(nextNode);
             return nextNode;
         }
 
-        private SuperscribeNode Query(SuperscribeNode queryNode)
+        private GraphNode Query(GraphNode queryNode)
         {
             this.QueryString.Enqueue(queryNode);
             return queryNode;
         }
 
-        public SuperscribeNode Optional()
+        public GraphNode Optional()
         {
             this.IsOptional = true;
             return this;
         }
 
-        public virtual SuperscribeNode ʃ(Action<dynamic, string> command)
+        public virtual GraphNode ʃ(Action<dynamic, string> command)
         {
             this.ActionFunction = command;
             return this;
         }
 
-        private SuperscribeNode MatchAsRegex()
+        private GraphNode MatchAsRegex()
         {
             this.Pattern = new Regex(this.Template);
             return this;
@@ -158,7 +158,7 @@
         /// <summary>
         /// Works backwards up the state\transition chain and returns the topmost state
         /// </summary>
-        public SuperscribeNode Base()
+        public GraphNode Base()
         {
             return this.Base(this, this.Parent);
         }
@@ -176,7 +176,7 @@
         /// </summary>
         /// <param name="node">The current state</param>
         /// <param name="parent">The parent of the current state</param>
-        private SuperscribeNode Base(SuperscribeNode node, SuperscribeNode parent)
+        private GraphNode Base(GraphNode node, GraphNode parent)
         {
             if (parent == null)
             {
@@ -195,7 +195,7 @@
         /// </summary>
         /// <param name="node">State</param>
         /// <param name="other">String used create constant state</param>
-        public static SuperscribeNode operator /(SuperscribeNode node, string other)
+        public static GraphNode operator /(GraphNode node, string other)
         {
             return node.Slash(new ConstantNode(other));
         }
@@ -205,7 +205,7 @@
         /// </summary>
         /// <param name="node">Any state</param>
         /// <param name="other">Any transition</param>
-        public static SuperscribeNode operator /(SuperscribeNode node, SuperscribeNode other)
+        public static GraphNode operator /(GraphNode node, GraphNode other)
         {
             return node.Slash(other);
         }
@@ -215,7 +215,7 @@
         /// </summary>
         /// <param name="node">State</param>
         /// <param name="others">IEnumerble of transitions</param>
-        public static SuperscribeNode operator /(SuperscribeNode node, IEnumerable<SuperscribeNode> others)
+        public static GraphNode operator /(GraphNode node, IEnumerable<GraphNode> others)
         {
             foreach (var s in others)
             {
@@ -231,7 +231,7 @@
         /// <param name="node"></param>
         /// <param name="activation"></param>
         /// <returns></returns>
-        public static NodeFuture operator /(SuperscribeNode node, Func<dynamic, string, bool> activation)
+        public static NodeFuture operator /(GraphNode node, Func<dynamic, string, bool> activation)
         {
             return new NodeFuture { Parent = node, ActivationFunction = activation };
         }
@@ -241,7 +241,7 @@
         /// </summary>
         /// <param name="node">State</param>
         /// <param name="other">Querystring transition</param>
-        public static SuperscribeNode operator &(SuperscribeNode node, SuperscribeNode other)
+        public static GraphNode operator &(GraphNode node, GraphNode other)
         {
             return node.Query(other);
         }
@@ -252,7 +252,7 @@
         /// <param name="node">First transition</param>
         /// <param name="other">Second transition</param>
         /// <returns>New list of transitions</returns>
-        public static SuperList operator |(SuperscribeNode node, SuperscribeNode other)
+        public static SuperList operator |(GraphNode node, GraphNode other)
         {
             return new SuperList { node, other };
         }
@@ -263,7 +263,7 @@
         /// <param name="states">List of transitions</param>
         /// <param name="other">Alternative transition</param>
         /// <returns>Modified list of transitions</returns>
-        public static SuperList operator |(SuperList states, SuperscribeNode other)
+        public static SuperList operator |(SuperList states, GraphNode other)
         {
             states.Add(other);
             return states;
@@ -275,7 +275,7 @@
         /// <param name="node">First transition</param>
         /// <param name="others">Alternative transitions</param>
         /// <returns>Modified list of transitions</returns>
-        public static SuperList operator |(SuperscribeNode node, SuperList others)
+        public static SuperList operator |(GraphNode node, SuperList others)
         {
             var list = new SuperList { node };
             list.AddRange(others);
@@ -287,7 +287,7 @@
         /// </summary>
         /// <param name="node">Current state</param>
         /// <returns>The state at the base of the current transition chain</returns>
-        public static SuperscribeNode operator +(SuperscribeNode node)
+        public static GraphNode operator +(GraphNode node)
         {
             return node.Base();
         }
@@ -296,7 +296,7 @@
         /// Shorthand for calling .Optional
         /// </summary>
         /// <param name="node">Transition to be made optional</param>
-        public static SuperscribeNode operator -(SuperscribeNode node)
+        public static GraphNode operator -(GraphNode node)
         {
             node.Optional();
             return node;
@@ -306,19 +306,19 @@
         /// Shorthand for calling .MatchAsRegex
         /// </summary>
         /// <param name="node">Transition to be made optional</param>
-        public static SuperscribeNode operator ~(SuperscribeNode node)
+        public static GraphNode operator ~(GraphNode node)
         {
             node.MatchAsRegex();
             return node;
         }
 
-        public static SuperscribeNode operator *(SuperscribeNode node, Func<dynamic, object> final)
+        public static GraphNode operator *(GraphNode node, Func<dynamic, object> final)
         {
             node.FinalFunctions.Add(new FinalFunction { Function = o => o.Response = final(o) });
             return node;
         }
 
-        public static SuperscribeNode operator *(SuperscribeNode node, FinalFunctionList finals)
+        public static GraphNode operator *(GraphNode node, FinalFunctionList finals)
         {
             node.FinalFunctions.AddRange(finals);
             foreach (var final in finals)
@@ -336,7 +336,7 @@
         /// Implicit conversion between string and a ConstantState
         /// </summary>
         /// <param name="value">String to create ConstantState from</param>
-        public static implicit operator SuperscribeNode(string value)
+        public static implicit operator GraphNode(string value)
         {
             return new ConstantNode(value);
         }
@@ -345,7 +345,7 @@
 
         #region IEquatable Members
 
-        public bool Equals(SuperscribeNode other)
+        public bool Equals(GraphNode other)
         {
             if (ReferenceEquals(null, other))
             {
@@ -389,7 +389,7 @@
             {
                 return false;
             }
-            return Equals((SuperscribeNode)obj);
+            return Equals((GraphNode)obj);
         }
 
         public override int GetHashCode()

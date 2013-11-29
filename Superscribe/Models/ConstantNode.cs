@@ -1,6 +1,6 @@
 ﻿namespace Superscribe.Models
 {
-    public class ConstantNode : SuperscribeNode
+    public class ConstantNode : GraphNode
     {
         public ConstantNode(string value)
         {

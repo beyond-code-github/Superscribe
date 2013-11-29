@@ -1,6 +1,6 @@
 ﻿namespace Superscribe.Models
 {
-    public class ControllerNode : SuperscribeNode
+    public class ControllerNode : GraphNode
     {
         public ControllerNode()
         {

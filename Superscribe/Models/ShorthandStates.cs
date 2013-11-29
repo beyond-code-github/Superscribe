@@ -4,7 +4,7 @@
 
     using Superscribe.Utils;
 
-    public class NonConsumingNode : SuperscribeNode
+    public class NonConsumingNode : GraphNode
     {
 
     }

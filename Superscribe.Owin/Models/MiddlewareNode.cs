@@ -2,9 +2,9 @@
 {
     using Superscribe.Models;
 
-    public class MiddlewareNode : SuperscribeNode
+    public class MiddlewareNode : GraphNode
     {
-        public static SuperscribeNode operator *(SuperscribeNode node, MiddlewareNode middleware)
+        public static GraphNode operator *(GraphNode node, MiddlewareNode middleware)
         {
             node.ActionFunction = middleware.ActionFunction;
             return node;

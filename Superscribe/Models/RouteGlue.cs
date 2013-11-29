@@ -17,7 +17,7 @@
 
         public string Method { get; set; }
 
-        public static SuperscribeNode operator /(RouteGlue state, string other)
+        public static GraphNode operator /(RouteGlue state, string other)
         {
             var node = new ConstantNode(other);
             if (!string.IsNullOrEmpty(state.Method))
@@ -28,7 +28,7 @@
             return node;
         }
 
-        public static SuperscribeNode operator /(RouteGlue state, SuperscribeNode other)
+        public static GraphNode operator /(RouteGlue state, GraphNode other)
         {
             var node = other.Base();
             if (!string.IsNullOrEmpty(state.Method))

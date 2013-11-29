@@ -4,9 +4,9 @@
 
     using Superscribe.Models;
 
-    public class SuperList : List<SuperscribeNode>
+    public class SuperList : List<GraphNode>
     {
-        public static SuperscribeNode operator /(string name, SuperList others)
+        public static GraphNode operator /(string name, SuperList others)
         {
             var state = new ConstantNode(name);
             foreach (var s in others)
@@ -26,7 +26,7 @@
 
     public class DecisionList<T> : List<NonConsumingNode<T>>
     {
-        public static SuperscribeNode operator /(string name, DecisionList<T> others)
+        public static GraphNode operator /(string name, DecisionList<T> others)
         {
             var state = new ConstantNode(name);
             foreach (var s in others)

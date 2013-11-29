@@ -4,11 +4,11 @@
 
     public class NodeFuture
     {
-        public SuperscribeNode Parent { get; set; }
+        public GraphNode Parent { get; set; }
 
         public Func<dynamic, string, bool> ActivationFunction { get; set; }
 
-        public static SuperscribeNode operator *(NodeFuture future, string constant)
+        public static GraphNode operator *(NodeFuture future, string constant)
         {
             var node = new ConstantNode(constant);
             node.ActivationFunction = future.ActivationFunction;
@@ -16,7 +16,7 @@
             return future.Parent.Slash(node);
         }
 
-        public static SuperscribeNode operator *(NodeFuture future, SuperscribeNode node)
+        public static GraphNode operator *(NodeFuture future, GraphNode node)
         {
             node.ActivationFunction = future.ActivationFunction;
 

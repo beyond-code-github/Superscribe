@@ -3,7 +3,7 @@
     using Superscribe.Models;
     using Superscribe.Owin;
 
-    public class EvenNumberNode : SuperscribeNode
+    public class EvenNumberNode : GraphNode
     {
         public EvenNumberNode(string name)
         {

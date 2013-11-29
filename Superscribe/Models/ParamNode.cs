@@ -4,7 +4,7 @@
     using System.ComponentModel;
     using System.Globalization;
 
-    public abstract class ParamNode : SuperscribeNode
+    public abstract class ParamNode : GraphNode
     {
         protected ParamNode()
         {

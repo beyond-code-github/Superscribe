@@ -43,7 +43,7 @@
             //}
         }
 
-        private static void GenerateRoutes(SuperscribeNode site, string name)
+        private static void GenerateRoutes(GraphNode site, string name)
         {
             var baseroute = site / name;
 
