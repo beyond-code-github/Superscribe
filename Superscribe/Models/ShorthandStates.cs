@@ -1,44 +1,5 @@
 ﻿namespace Superscribe.Models
 {
-    using System;
-
-    using Superscribe.Utils;
-
-    public class NonConsumingNode : GraphNode
-    {
-
-    }
-
-    public class NonConsumingNode<T> : NonConsumingNode
-    {
-        public static NonConsumingNode<T> operator *(NonConsumingNode<T> node, DecisionList<T> other)
-        {
-            foreach (var decision in other)
-            {
-                decision.Parent = node;
-                node.Edges.Enqueue(decision);
-            }
-
-            return node;
-        }
-
-        public static NonConsumingNode<T> operator *(NonConsumingNode<T> node, Func<dynamic, object> other)
-        {
-            node.FinalFunctions.Add(new FinalFunction { Function = other });
-            return node;
-        }
-
-        public static DecisionList<T> operator |(NonConsumingNode<T> node, NonConsumingNode<T> other)
-        {
-            return new DecisionList<T> { node, other };
-        }
-
-        public void SetMatchFromParentValue(Predicate<T> other)
-        {
-            this.ActivationFunction = (routedata, s) => other((T)this.Parent.Result);
-        }
-    }
-
     public class ʃInt : ParamNode<int>
     {
         public ʃInt(string name)

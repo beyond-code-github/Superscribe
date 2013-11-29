@@ -23,18 +23,4 @@
             return first;
         }
     }
-
-    public class DecisionList<T> : List<NonConsumingNode<T>>
-    {
-        public static GraphNode operator /(string name, DecisionList<T> others)
-        {
-            var state = new ConstantNode(name);
-            foreach (var s in others)
-            {
-                state.Slash(s);
-            }
-
-            return state;
-        }
-    }
 }

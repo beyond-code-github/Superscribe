@@ -79,14 +79,11 @@
                     match.ActionFunction(info, this.PeekNextSegment());
                 }
 
-                if (!(match is NonConsumingNode))
+                if (this.RemainingSegments.Any())
                 {
-                    if (this.RemainingSegments.Any())
-                    {
-                        this.RemainingSegments.Dequeue();
-                    }
+                    this.RemainingSegments.Dequeue();
                 }
-
+                
                 if (onComplete != null)
                 {
                     if (onComplete.IsExclusive)
@@ -110,7 +107,7 @@
                 if (nextMatch == null
                     && !match.FinalFunctions.Any(o => string.IsNullOrEmpty(o.Method) || o.Method == this.Method)
                     && match.Edges.Any()
-                    && match.Edges.All(o => !(o.IsOptional || o is NonConsumingNode)))
+                    && match.Edges.All(o => !(o.IsOptional)))
                 {
                     this.IncompleteMatch = true;
                     return;

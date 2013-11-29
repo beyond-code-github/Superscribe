@@ -64,30 +64,6 @@
             return function;
         }
 
-        public static NonConsumingNode operator /(RouteGlue state, Action<dynamic> other)
-        {
-            var nonConsuming = new NonConsumingNode<double>();
-            nonConsuming.ActivationFunction = (routedata, s) => true;
-            nonConsuming.ActionFunction = (data, segment) => other(data);
-
-            return nonConsuming;
-        }
-
-        public static NonConsumingNode<double> operator /(RouteGlue state, Func<dynamic, string, double> other)
-        {
-            var nonConsuming = new NonConsumingNode<double>();
-            nonConsuming.ActivationFunction = (routedata, s) => true;
-            nonConsuming.ActionFunction = (data, segment) => nonConsuming.Result = other(data, segment);
-            return nonConsuming;
-        }
-
-        public static NonConsumingNode<double> operator /(RouteGlue state, Predicate<double> other)
-        {
-            var nonConsuming = new NonConsumingNode<double>();
-            nonConsuming.SetMatchFromParentValue(other);
-            return nonConsuming;
-        }
-
         public RouteGlue this[string method]
         {
             get
