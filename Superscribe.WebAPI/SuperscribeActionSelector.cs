@@ -6,7 +6,6 @@
     using System.Threading;
     using System.Web.Http.Controllers;
 
-    using Superscribe.Models;
     using Superscribe.WebApi.Internals;
 
     public class SuperscribeActionSelector : IHttpActionSelector
@@ -17,9 +16,12 @@
 
         public HttpActionDescriptor SelectAction(HttpControllerContext controllerContext)
         {
-            var info = new RouteData();
+            var info = new WebApiRouteData
+                           {
+                               Request = controllerContext.Request
+                           };
 
-            var walker = SuperscribeConfig.Walker<RouteData>();
+            var walker = SuperscribeConfig.Walker<WebApiRouteData>();
             walker.WalkRoute(controllerContext.Request.RequestUri.PathAndQuery, controllerContext.Request.Method.ToString(), info);
 
             var internalSelector = GetInternalSelector(controllerContext.ControllerDescriptor);

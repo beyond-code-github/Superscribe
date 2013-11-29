@@ -1,5 +1,6 @@
-﻿namespace Superscribe.Models
+﻿namespace Superscribe.Testing
 {
+    using Superscribe.Models;
     using Superscribe.Utils;
 
     public class RouteData : IRouteData
@@ -12,7 +13,7 @@
         {
             this.Parameters = new DynamicDictionary();
         }
-
+        
         public dynamic Parameters { get; set; }
 
         public bool ActionNameSpecified { get; private set; }
@@ -48,7 +49,7 @@
         public object Response { get; set; }
 
         public bool ParamConversionError { get; set; }
-
+        
         public T Bind<T>() where T : class
         {
             throw new System.NotImplementedException();

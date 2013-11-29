@@ -57,6 +57,7 @@
     <Compile Include="Internals\TaskHelpers.cs" />
     <Compile Include="Internals\TaskHelpersExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebApiRouteData.cs" />
     <Compile Include="SuperscribeActionInvoker.cs" />
     <Compile Include="SuperscribeActionSelector.cs" />
     <Compile Include="SuperscribeConfig.cs" />

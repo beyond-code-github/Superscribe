@@ -49,6 +49,7 @@
     <Compile Include="CombinationConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteConfig.cs" />
+    <Compile Include="RouteData.cs" />
     <Compile Include="SuperscribeTestConfig.cs" />
   </ItemGroup>
   <ItemGroup>

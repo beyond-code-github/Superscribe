@@ -17,9 +17,9 @@
 
         public HttpActionDescriptor SelectAction(HttpControllerContext controllerContext)
         {
-            var info = new RouteData();
+            var info = new WebApiRouteData();
 
-            var walker = SuperscribeConfig.Walker<RouteData>();
+            var walker = SuperscribeConfig.Walker<WebApiRouteData>();
             walker.WalkRoute(controllerContext.Request.RequestUri.PathAndQuery, controllerContext.Request.Method.ToString(), info);
 
             var internalSelector = this.GetInternalSelector(controllerContext.ControllerDescriptor);

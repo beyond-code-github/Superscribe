@@ -23,8 +23,8 @@
             var actionDescriptor = actionContext.ActionDescriptor;
             var controllerContext = actionContext.ControllerContext;
 
-            var webApiInfo = new RouteData();
-            var walker = SuperscribeConfig.Walker<RouteData>();
+            var webApiInfo = new WebApiRouteData();
+            var walker = SuperscribeConfig.Walker<WebApiRouteData>();
             walker.WalkRoute(controllerContext.Request.RequestUri.PathAndQuery, controllerContext.Request.Method.ToString(), webApiInfo);
 
             foreach (var param in actionContext.ActionArguments)

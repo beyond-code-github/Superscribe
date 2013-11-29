@@ -8,15 +8,13 @@
     using System.Web.Http.Controllers;
     using System.Web.Http.Dispatcher;
 
-    using Superscribe.Models;
-
     public class SuperscribeControllerSelector : IHttpControllerSelector
     {
         public HttpControllerDescriptor SelectController(HttpRequestMessage request)
         {
-            var info = new RouteData();
+            var info = new WebApiRouteData();
 
-            var walker = SuperscribeConfig.Walker<RouteData>();
+            var walker = SuperscribeConfig.Walker<WebApiRouteData>();
             walker.WalkRoute(request.RequestUri.PathAndQuery, request.Method.ToString(), info);
 
             // We should have consumed all of the route by now, if we haven't then throw a 404

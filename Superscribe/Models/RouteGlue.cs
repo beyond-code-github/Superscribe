@@ -63,8 +63,8 @@
             var function = new FinalFunction { Method = state.Method, Function = other };
             return function;
         }
-        
-        public static NonConsumingNode operator /(RouteGlue state, Action<RouteData> other)
+
+        public static NonConsumingNode operator /(RouteGlue state, Action<dynamic> other)
         {
             var nonConsuming = new NonConsumingNode<double>();
             nonConsuming.ActivationFunction = (routedata, s) => true;
@@ -72,8 +72,8 @@
 
             return nonConsuming;
         }
-        
-        public static NonConsumingNode<double> operator /(RouteGlue state, Func<RouteData, string, double> other)
+
+        public static NonConsumingNode<double> operator /(RouteGlue state, Func<dynamic, string, double> other)
         {
             var nonConsuming = new NonConsumingNode<double>();
             nonConsuming.ActivationFunction = (routedata, s) => true;

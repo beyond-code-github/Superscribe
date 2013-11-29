@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="SuperscribeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RouteData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Superscribe\Superscribe.csproj">

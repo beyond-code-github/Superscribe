@@ -2,7 +2,7 @@
 {
     using Machine.Specifications;
 
-    using Superscribe.Models;
+    using Superscribe.Testing;
     using Superscribe.Utils;
 
     public abstract class ActivationFunctionTests

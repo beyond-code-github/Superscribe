@@ -48,7 +48,6 @@
     <Compile Include="Models\RouteGlue.cs" />
     <Compile Include="Models\ShorthandStates.cs" />
     <Compile Include="Models\SuperscribeNode.cs" />
-    <Compile Include="Models\RouteData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SuperscribeModule.cs" />
     <Compile Include="Utils\DynamicDictionary.cs" />
