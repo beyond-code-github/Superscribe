@@ -1,4 +1,4 @@
-﻿namespace Superscribe.Testing.Http
+﻿namespace Superscribe.Testing.WebApi
 {
     using Superscribe.Models;
     using Superscribe.Utils;

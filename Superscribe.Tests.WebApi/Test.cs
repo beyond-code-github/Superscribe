@@ -1,4 +1,4 @@
-﻿namespace Superscribe.Testing.Http
+﻿namespace Superscribe.Testing.WebApi
 {
     using System.Net;
     using System.Net.Http;
@@ -6,7 +6,7 @@
 
     using Machine.Specifications;
 
-    using global::WebAPI.Testing;
+    using WebAPI.Testing;
 
     public abstract class RouteTestsBase
     {

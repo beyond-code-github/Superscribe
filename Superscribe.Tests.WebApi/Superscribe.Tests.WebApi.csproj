@@ -6,8 +6,8 @@
     <ProjectGuid>{76CF0F79-4342-430E-8B10-F62A1ACB6DC3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Superscribe.Testing.Http</RootNamespace>
-    <AssemblyName>Superscribe.Testing.Http</AssemblyName>
+    <RootNamespace>Superscribe.Testing.WebApi</RootNamespace>
+    <AssemblyName>Superscribe.Testing.WebApi</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

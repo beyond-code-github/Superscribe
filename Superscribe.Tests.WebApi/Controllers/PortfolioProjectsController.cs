@@ -1,4 +1,4 @@
-﻿namespace Superscribe.Testing.Http.Controllers
+﻿namespace Superscribe.Testing.WebApi.Controllers
 {
     using System.Web.Http;
 
