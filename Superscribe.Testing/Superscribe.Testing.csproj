@@ -36,21 +36,8 @@
     <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\BlogTagsController.cs" />
-    <Compile Include="Controllers\BlogPostsController.cs" />
-    <Compile Include="Controllers\BlogPostArchivesController.cs" />
-    <Compile Include="Controllers\BlogPostMediaController.cs" />
-    <Compile Include="Controllers\FormsController.cs" />
-    <Compile Include="Controllers\PortfolioCategoriesController.cs" />
-    <Compile Include="Controllers\PortfolioProjectsController.cs" />
-    <Compile Include="Controllers\PortfolioTagsController.cs" />
-    <Compile Include="Controllers\PortfolioProjectMediaController.cs" />
-    <Compile Include="BenchmarkConfig.cs" />
-    <Compile Include="CombinationConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RouteConfig.cs" />
     <Compile Include="RouteData.cs" />
-    <Compile Include="SuperscribeTestConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Superscribe.WebAPI\Superscribe.WebApi.csproj">

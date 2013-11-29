@@ -1,4 +1,4 @@
-﻿namespace Superscribe.Testing
+﻿namespace Superscribe.Testing.Http
 {
     using System;
     using System.Web.Http;
