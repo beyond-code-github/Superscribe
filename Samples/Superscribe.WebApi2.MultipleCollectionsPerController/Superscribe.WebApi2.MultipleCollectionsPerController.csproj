@@ -141,10 +141,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Superscribe.WebAPI2\Superscribe.WebAPI2.csproj">
-      <Project>{2295d548-7a8f-4ec0-8fab-2cac81763aad}</Project>
-      <Name>Superscribe.WebAPI2</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Superscribe\Superscribe.csproj">
       <Project>{0882D762-CA4D-48A5-956E-2121DECE000E}</Project>
       <Name>Superscribe</Name>
