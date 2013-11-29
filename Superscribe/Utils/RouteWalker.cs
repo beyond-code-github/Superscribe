@@ -50,7 +50,7 @@
                     if (query.Contains("="))
                     {
                         var operands = query.Split('=');
-                        info.Parameters[operands[0]] = operands[1];
+                        info.Parameters[operands[0]] = Uri.UnescapeDataString(operands[1]);
                     }
                 }
             }
