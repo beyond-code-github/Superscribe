@@ -6,27 +6,21 @@
 
     public abstract class ParamNode : GraphNode
     {
+        private object value;
+
         protected ParamNode()
         {
-            this.actionFunction = (data, segment) =>
-            {
-                object value;
-                var success = this.TryParse(segment, out value);
-
-                if (success)
-                {
-                    data.Parameters.Add(this.Name, value);
-                }
-                else
-                {
-                    data.ParamConversionError = true;
-                }
-            };
+            this.actionFunction = (data, segment) => data.Parameters.Add(this.Name, this.value);
 
             this.activationFunction = (data, segment) =>
             {
-                object value;
-                return this.TryParse(segment, out value);
+                if (!this.TryParse(segment, out this.value))
+                {
+                    data.ParamConversionError = true;
+                    return false;
+                }
+
+                return true;
             };
         }
 

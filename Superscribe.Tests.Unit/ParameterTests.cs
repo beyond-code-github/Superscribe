@@ -101,7 +101,7 @@
 
         private Because of = () => subject.WalkRoute("/Confirm/18000000000", "GET", routeData);
 
-        private It should_execute_the_final_function = () => routeData.ParamConversionError.ShouldEqual(true);
+        private It should_throw_an_error = () => routeData.ParamConversionError.ShouldEqual(true);
     }
 
     public class When_capturing_a_long_parameter : ParameterTests
