@@ -5,7 +5,14 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe", "Superscribe\Superscribe.csproj", "{0882D762-CA4D-48A5-956E-2121DECE000E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.Tests.WebApi", "Superscribe.Tests.WebApi\Superscribe.Tests.WebApi.csproj", "{76CF0F79-4342-430E-8B10-F62A1ACB6DC3}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{CFBFB689-2965-4344-BE13-F73C3466E9C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.WebApi", "Superscribe.WebAPI\Superscribe.WebApi.csproj", "{4589FE86-FF6A-4A97-ACB9-5E4D5F813A04}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B337B58C-A775-4583-AFAD-F064707DC7AE} = {B337B58C-A775-4583-AFAD-F064707DC7AE}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E5858B7A-A7C7-42E8-98B0-CF2E353EB1A6}"
 	ProjectSection(SolutionItems) = preProject
@@ -14,9 +21,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E5858B
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.Tests.Unit", "Superscribe.Tests.Unit\Superscribe.Tests.Unit.csproj", "{64CF0BA2-55F6-48BB-82E0-B17A6FBC5D94}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.Testing", "Superscribe.Testing\Superscribe.Testing.csproj", "{48D44F6B-7745-4517-B95A-AFAA86AAF835}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{AD7F58EE-B719-42B3-9B12-14D03EB9D416}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "Build\WebApi\WebApi.csproj", "{B337B58C-A775-4583-AFAD-F064707DC7AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,20 +37,29 @@ Global
 		{0882D762-CA4D-48A5-956E-2121DECE000E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0882D762-CA4D-48A5-956E-2121DECE000E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0882D762-CA4D-48A5-956E-2121DECE000E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{64CF0BA2-55F6-48BB-82E0-B17A6FBC5D94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{64CF0BA2-55F6-48BB-82E0-B17A6FBC5D94}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{64CF0BA2-55F6-48BB-82E0-B17A6FBC5D94}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{64CF0BA2-55F6-48BB-82E0-B17A6FBC5D94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76CF0F79-4342-430E-8B10-F62A1ACB6DC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76CF0F79-4342-430E-8B10-F62A1ACB6DC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76CF0F79-4342-430E-8B10-F62A1ACB6DC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76CF0F79-4342-430E-8B10-F62A1ACB6DC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4589FE86-FF6A-4A97-ACB9-5E4D5F813A04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4589FE86-FF6A-4A97-ACB9-5E4D5F813A04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4589FE86-FF6A-4A97-ACB9-5E4D5F813A04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4589FE86-FF6A-4A97-ACB9-5E4D5F813A04}.Release|Any CPU.Build.0 = Release|Any CPU
 		{48D44F6B-7745-4517-B95A-AFAA86AAF835}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{48D44F6B-7745-4517-B95A-AFAA86AAF835}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48D44F6B-7745-4517-B95A-AFAA86AAF835}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48D44F6B-7745-4517-B95A-AFAA86AAF835}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B337B58C-A775-4583-AFAD-F064707DC7AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B337B58C-A775-4583-AFAD-F064707DC7AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B337B58C-A775-4583-AFAD-F064707DC7AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B337B58C-A775-4583-AFAD-F064707DC7AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{64CF0BA2-55F6-48BB-82E0-B17A6FBC5D94} = {CFBFB689-2965-4344-BE13-F73C3466E9C2}
+		{76CF0F79-4342-430E-8B10-F62A1ACB6DC3} = {CFBFB689-2965-4344-BE13-F73C3466E9C2}
 		{48D44F6B-7745-4517-B95A-AFAA86AAF835} = {CFBFB689-2965-4344-BE13-F73C3466E9C2}
+		{B337B58C-A775-4583-AFAD-F064707DC7AE} = {AD7F58EE-B719-42B3-9B12-14D03EB9D416}
 	EndGlobalSection
 EndGlobal
