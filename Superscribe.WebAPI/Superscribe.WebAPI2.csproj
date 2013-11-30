@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Superscribe.WebApi</RootNamespace>
-    <AssemblyName>Superscribe.WebApi</AssemblyName>
+    <AssemblyName>Superscribe.WebApi2</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

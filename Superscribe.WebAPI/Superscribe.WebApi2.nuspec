@@ -15,6 +15,6 @@
     <copyright>Pete Smith 2013</copyright>
   </metadata>
   <files>
-    <file src="bin\net45\Release\Superscribe.WebApi.dll" target="lib\net45\Superscribe.WebApi.dll" />
+    <file src="bin\net45\Release\Superscribe.WebApi2.dll" target="lib\net45\Superscribe.WebApi2.dll" />
   </files>
 </package>
