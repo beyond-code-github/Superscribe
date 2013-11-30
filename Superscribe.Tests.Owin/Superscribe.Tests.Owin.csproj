@@ -37,20 +37,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Machine.Fakes">
+    <Reference Include="Machine.Fakes, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Machine.Fakes.1.8.0\lib\net40\Machine.Fakes.dll</HintPath>
     </Reference>
-    <Reference Include="Machine.Fakes.Adapters.Moq">
+    <Reference Include="Machine.Fakes.Adapters.Moq, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Machine.Fakes.Moq.1.8.0\lib\net40\Machine.Fakes.Adapters.Moq.dll</HintPath>
     </Reference>
-    <Reference Include="Machine.Specifications">
-      <HintPath>..\packages\Machine.Specifications.0.5.18-beta07\lib\net40\Machine.Specifications.dll</HintPath>
+    <Reference Include="Machine.Specifications, Version=0.5.16.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Machine.Specifications.0.5.16\lib\net40\Machine.Specifications.dll</HintPath>
     </Reference>
-    <Reference Include="Machine.Specifications.Clr4">
-      <HintPath>..\packages\Machine.Specifications.0.5.18-beta07\lib\net40\Machine.Specifications.Clr4.dll</HintPath>
-    </Reference>
-    <Reference Include="Machine.Specifications.Should">
-      <HintPath>..\packages\Machine.Specifications.0.5.18-beta07\lib\net40\Machine.Specifications.Should.dll</HintPath>
+    <Reference Include="Machine.Specifications.Clr4, Version=0.5.16.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Machine.Specifications.0.5.16\lib\net40\Machine.Specifications.Clr4.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Owin">
@@ -62,7 +63,8 @@
     <Reference Include="Microsoft.Owin.Testing">
       <HintPath>..\packages\Microsoft.Owin.Testing.2.0.2\lib\net45\Microsoft.Owin.Testing.dll</HintPath>
     </Reference>
-    <Reference Include="Moq">
+    <Reference Include="Moq, Version=4.1.1311.615, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Moq.4.1.1311.0615\lib\net40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="Owin">

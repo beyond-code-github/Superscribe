@@ -33,21 +33,20 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Machine.Fakes">
-      <HintPath>..\packages\Machine.Fakes.1.5.0\lib\net40\Machine.Fakes.dll</HintPath>
+      <HintPath>..\packages\Machine.Fakes.1.8.0\lib\net40\Machine.Fakes.dll</HintPath>
     </Reference>
     <Reference Include="Machine.Fakes.Adapters.Moq">
-      <HintPath>..\packages\Machine.Fakes.Moq.1.5.0\lib\net40\Machine.Fakes.Adapters.Moq.dll</HintPath>
+      <HintPath>..\packages\Machine.Fakes.Moq.1.8.0\lib\net40\Machine.Fakes.Adapters.Moq.dll</HintPath>
     </Reference>
-    <Reference Include="Machine.Specifications, Version=0.5.18.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Machine.Specifications.0.5.12\lib\net40\Machine.Specifications.dll</HintPath>
+    <Reference Include="Machine.Specifications">
+      <HintPath>..\packages\Machine.Specifications.0.5.16\lib\net40\Machine.Specifications.dll</HintPath>
     </Reference>
     <Reference Include="Machine.Specifications.Clr4">
-      <HintPath>..\packages\Machine.Specifications.0.5.18-beta02\lib\net40\Machine.Specifications.Clr4.dll</HintPath>
+      <HintPath>..\packages\Machine.Specifications.0.5.16\lib\net40\Machine.Specifications.Clr4.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Moq">
-      <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+      <HintPath>..\packages\Moq.4.1.1311.0615\lib\net40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
