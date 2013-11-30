@@ -50,6 +50,8 @@
                 return;
             }
 
+            environment["route.Parameters"] = routeData.Parameters;
+
             if (routeData.Pipeline.Any())
             {
                 IAppBuilder branch = builder.New();
