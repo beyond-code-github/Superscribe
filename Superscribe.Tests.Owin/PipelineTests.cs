@@ -139,13 +139,13 @@
     public abstract class When_building_a_pipeline_with_options : PipelineTests
     {
         private Establish context = () => ʃ.Route(ʅ => ʅ / "Hello" * Pipeline.Action<FirstComponent>() / (
-                                                              ʅ / "World" * Pipeline.Action<SecondComponent>()
-                                                            | ʅ / "Foobar" * Pipeline.Action<ThirdComponent>()));
+                                                              ʅ / "Foo" * Pipeline.Action<SecondComponent>()
+                                                            | ʅ / "Bar" * Pipeline.Action<ThirdComponent>()));
     }
 
     public class When_building_a_pipeline_with_options_invoking_the_first : When_building_a_pipeline_with_options
     {
-        private Because of = () => responseMessage = client.GetAsync("http://localhost/Hello/World").Result;
+        private Because of = () => responseMessage = client.GetAsync("http://localhost/Hello/Foo").Result;
 
         private It should_execute_the_final_function = () => responseMessage.Content.ReadAsStringAsync().Result.ShouldEqual("before#1before#2after#2after#1");
 
@@ -154,7 +154,7 @@
 
     public class When_building_a_pipeline_with_options_invoking_the_second : When_building_a_pipeline_with_options
     {
-        private Because of = () => responseMessage = client.GetAsync("http://localhost/Hello/Foobar").Result;
+        private Because of = () => responseMessage = client.GetAsync("http://localhost/Hello/Bar").Result;
 
         private It should_execute_the_final_function = () => responseMessage.Content.ReadAsStringAsync().Result.ShouldEqual("before#1before#3after#3after#1");
 
