@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package>
+  <metadata> 
+    <version>0.0</version>
+    <authors>Roysvork</authors>
+    <owners>Roysvork</owners>
+    <id>Superscribe</id>
+    <title>Superscribe</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Superscribe is a graph based routing framework written in C#</description>
+    <copyright>Pete Smith 2013</copyright>
+  </metadata>
+  <files>
+    <file src="bin\Release\Superscribe.dll" target="lib\net40\Superscribe.dll" />
+  </files>
+</package>
