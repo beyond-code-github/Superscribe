@@ -39,14 +39,14 @@
             if (walker.IncompleteMatch)
             {
                 environment.SetResponseStatusCode(404);
-                environment.WriteResponse("404 - Route was incomplete").RunSynchronously();
+                environment.WriteResponse("404 - Route was incomplete");
                 return;
             }
 
             if (walker.ExtraneousMatch)
             {
                 environment.SetResponseStatusCode(404);
-                environment.WriteResponse("404 - Route match failed").RunSynchronously(); ;
+                environment.WriteResponse("404 - Route match failed");
                 return;
             }
 

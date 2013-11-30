@@ -1,6 +1,7 @@
 ﻿namespace Superscribe.Tests.Owin
 {
     using System.IO;
+    using System.Net;
     using System.Net.Http;
 
     using Machine.Specifications;
@@ -59,5 +60,21 @@
 
         private It should_wire_up_get_handlers =
             () => responseMessage.Content.ReadAsStringAsync().Result.ShouldEqual("Hello World");
+    }
+
+    public class When_hitting_a_route_that_is_incomplete: ModuleTests
+    {
+        private Because of = () => responseMessage = client.GetAsync("http://localhost/NotDefined").Result;
+
+        private It should_return_a_404 =
+            () => responseMessage.StatusCode.ShouldEqual(HttpStatusCode.NotFound);
+    }
+
+    public class When_hitting_an_extraneous_route : ModuleTests
+    {
+        private Because of = () => responseMessage = client.GetAsync("http://localhost/Hello/More").Result;
+
+        private It should_return_a_404 =
+            () => responseMessage.StatusCode.ShouldEqual(HttpStatusCode.NotFound);
     }
 }
