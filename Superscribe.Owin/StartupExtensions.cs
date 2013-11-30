@@ -10,7 +10,7 @@
         public static IAppBuilder UseSuperscribe(
             this IAppBuilder builder, SuperscribeOwinConfig config)
         {
-            return SuperscribeHandler(builder, config);
+            return SuperscribeRouter(builder, config);
         }
 
         public static IAppBuilder UseSuperscribeModules(
@@ -26,10 +26,10 @@
                 Activator.CreateInstance(module.Type);
             }
 
-            return SuperscribeHandler(builder, config);
+            return builder.Use(typeof(OwinHandler), config);
         }
 
-        private static IAppBuilder SuperscribeHandler(IAppBuilder builder, SuperscribeOwinConfig config)
+        private static IAppBuilder SuperscribeRouter(IAppBuilder builder, SuperscribeOwinConfig config)
         {
             return builder.Use(typeof(OwinRouter), builder, config);
         }
