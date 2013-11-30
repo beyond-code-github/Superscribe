@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package>
+  <metadata> 
+    <version>0.0</version>
+    <authors>Roysvork</authors>
+    <owners>Roysvork</owners>
+    <id>Superscribe.Owin</id>
+    <title>Superscribe.Owin</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Superscribe middleware routing and modules handler for OWIN</description>
+    <dependencies>
+        <dependency id="Superscribe" version="0.3.0" />        
+        <dependency id="Owin" version="1.0.0" />
+    </dependencies>
+    <copyright>Pete Smith 2013</copyright>
+  </metadata>
+  <files>
+    <file src="bin\Release\Superscribe.Owin.dll" target="lib\net45\Superscribe.Owin.dll" />
+  </files>
+</package>
