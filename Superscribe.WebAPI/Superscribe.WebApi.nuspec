@@ -9,7 +9,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Superscribe action\controller selectors and module handler for Asp.Net Web API</description>
     <dependencies>
-    	<dependency id="Superscribe" version="0.3.0" />
+    	<dependency id="Superscribe" version="0.3.0-pre" />
     	<dependency id="Microsoft.AspNet.WebApi.Core" version="[4.0.30506]" />
     </dependencies>
     <copyright>Pete Smith 2013</copyright>
