@@ -40,10 +40,6 @@
     <Compile Include="RouteData.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Superscribe.WebAPI\Superscribe.WebApi.csproj">
-      <Project>{4589FE86-FF6A-4A97-ACB9-5E4D5F813A04}</Project>
-      <Name>Superscribe.WebApi</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Superscribe\Superscribe.csproj">
       <Project>{0882d762-ca4d-48a5-956e-2121dece000e}</Project>
       <Name>Superscribe</Name>
