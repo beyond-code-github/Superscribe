@@ -44,6 +44,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Pipelining\Middleware.cs" />
     <Compile Include="RedirectMiddleware.cs" />
     <Compile Include="Extensions\EnvironmentExtensions.cs" />
     <Compile Include="OwinHandler.cs" />
