@@ -39,7 +39,7 @@
                         Write = (env, o) => env.WriteResponse(o.ToString())
                     });
 
-            app.UseSuperscribeModules(config);
+            app.UseSuperscribeHandler(config);
         }
     }
 }

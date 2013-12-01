@@ -57,7 +57,15 @@
                 IAppBuilder branch = builder.New();
                 foreach (var middleware in routeData.Pipeline)
                 {
-                    branch.Use(middleware);
+                    var func = middleware as Func<IAppBuilder, IAppBuilder>;
+                    if (func != null)
+                    {
+                        branch = func(branch);
+                    }
+                    else
+                    {
+                        branch.Use(middleware);    
+                    }
                 }
 
                 branch.Use(typeof(RedirectMiddleware), this.next);

@@ -10,7 +10,7 @@
 
     using Superscribe.Owin;
     using Superscribe.Owin.Extensions;
-
+    
     public class Module : SuperscribeOwinModule
     {
         public Module()
@@ -38,10 +38,7 @@
                         "text/html",
                         new MediaTypeHandler
                         {
-                            Read = (env, o) =>
-                            {
-                                using (var reader = new StreamReader(env.GetRequestBody())) return reader.ReadToEnd();
-                            },
+                            Read = (env, o) => { using (var reader = new StreamReader(env.GetRequestBody())) return reader.ReadToEnd(); },
                             Write = (env, o) => env.WriteResponse(o.ToString())
                         });
 
