@@ -6,6 +6,7 @@
 
     using Superscribe.Models;
     using Superscribe.Owin.Extensions;
+    using Superscribe.Owin.Pipelining;
     using Superscribe.Utils;
 
     public class OwinRouteData : IRouteData
@@ -13,7 +14,7 @@
         public OwinRouteData()
         {
             this.Parameters = new DynamicDictionary();
-            this.Pipeline = new List<object>();
+            this.Pipeline = new List<Middleware>();
         }
 
         public dynamic Parameters { get; set; }
@@ -25,8 +26,8 @@
         public SuperscribeOwinConfig Config { get; set; }
 
         public IDictionary<string, object> Environment { get; set; }
-        
-        public List<object> Pipeline { get; set; }
+
+        public List<Middleware> Pipeline { get; set; }
 
         public T Bind<T>() where T : class
         {

@@ -6,14 +6,14 @@
 
     public class Pipeline
     {
-        public static OwinNodeFuture Action<T>()
+        public static OwinNodeFuture Action<T>(params object[] args)
         {
-            return new OwinNodeFuture(typeof(T));
+            return new OwinNodeFuture(typeof(T), args);
         }
 
-        public static OwinNodeFuture Action(Func<IAppBuilder, IAppBuilder> func)
+        public static OwinNodeFuture Action(Func<IAppBuilder, IAppBuilder> func, params object[] args)
         {
-            return new OwinNodeFuture(func);
+            return new OwinNodeFuture(func, args);
         }
     }
 }

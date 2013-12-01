@@ -66,6 +66,26 @@
         }
     }
 
+    public class PadResponse
+    {
+        private readonly Func<IDictionary<string, object>, Task> next;
+
+        private readonly string tag;
+
+        public PadResponse(Func<IDictionary<string, object>, Task> next, string tag)
+        {
+            this.next = next;
+            this.tag = tag;
+        }
+
+        public async Task Invoke(IDictionary<string, object> environment)
+        {
+            await environment.WriteResponse("<" + this.tag + ">");
+            await this.next(environment);
+            await environment.WriteResponse("</" + this.tag + ">");
+        }
+    }
+
     public abstract class PipelineTests
     {
         protected static TestServer owinTestServer;
@@ -157,6 +177,18 @@
         private Because of = () => responseMessage = client.GetAsync("http://localhost/Hello/Bar").Result;
 
         private It should_execute_the_final_function = () => responseMessage.Content.ReadAsStringAsync().Result.ShouldEqual("before#1before#3after#3after#1");
+
+        private It should_return_200 = () => responseMessage.StatusCode.ShouldEqual(HttpStatusCode.OK);
+    }
+
+    public class When_building_a_pipeline_with_middleware_that_takes_parameters : PipelineTests
+    {
+        private Establish context = () => ʃ.Route(ʅ => ʅ / "Pad" * Pipeline.Action<PadResponse>("h1") / (
+                                                                 ʅ / "Response" * Pipeline.Action<FirstComponent>()));
+
+        private Because of = () => responseMessage = client.GetAsync("http://localhost/Pad/Response").Result;
+
+        private It should_execute_the_final_function = () => responseMessage.Content.ReadAsStringAsync().Result.ShouldEqual("<h1>before#1after#1</h1>");
 
         private It should_return_200 = () => responseMessage.StatusCode.ShouldEqual(HttpStatusCode.OK);
     }

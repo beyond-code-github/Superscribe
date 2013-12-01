@@ -10,7 +10,7 @@
     {
         public GraphNode Node { get; set; }
 
-        public List<object> Middleware { get; set; }
+        public List<Middleware> Middleware { get; set; }
 
         /// <summary>
         /// Base constructor for superscribe states
@@ -18,7 +18,7 @@
         public OwinNode(GraphNode node)
         {
             this.Node = node;
-            this.Middleware = new List<object>();
+            this.Middleware = new List<Middleware>();
         }
 
         public static implicit operator GraphNode(OwinNode owinNode)

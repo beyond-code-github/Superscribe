@@ -6,11 +6,11 @@
 
     public class OwinNodeFuture
     {
-        private readonly object middleware;
+        private readonly Middleware middleware;
 
-        public OwinNodeFuture(object middleware)
+        public OwinNodeFuture(object middleware, params object[] args)
         {
-            this.middleware = middleware;
+            this.middleware = new Middleware { Obj = middleware, Args = args };
         }
 
         public static OwinNode operator *(GraphNode node, OwinNodeFuture future)

@@ -57,14 +57,14 @@
                 IAppBuilder branch = builder.New();
                 foreach (var middleware in routeData.Pipeline)
                 {
-                    var func = middleware as Func<IAppBuilder, IAppBuilder>;
+                    var func = middleware.Obj as Func<IAppBuilder, IAppBuilder>;
                     if (func != null)
                     {
                         branch = func(branch);
                     }
                     else
                     {
-                        branch.Use(middleware);    
+                        branch.Use(middleware.Obj, middleware.Args);    
                     }
                 }
 
