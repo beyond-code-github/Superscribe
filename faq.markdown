@@ -20,7 +20,7 @@ title:  FAQ
 <p><strong>A:</strong> At it's core, Superscribe provides a fully compliant Graph Based Routing implementation written in C#. It also goes one step further than this, providing a DSL for creating definitions quickly and easily, as well as helpers for dealing with OWIN pipelines and Asp.Net Web Api which are not part of  Graph Based Routing itself.
 </p>
 <h3 class="visible-phone">
-  Q: Why bother with a graph? What's wrong with a Tree?
+  Q: Why bother with a graph? What's wrong with a tree?
 </h3>
 <p><strong>A:</strong> There's nothing wrong with a Tree, in fact the vast majority of routing cases will fit well with a Tree implementation. A Tree is still a type of graph however so these still work with no problems.
 </p>
@@ -45,4 +45,14 @@ title:  FAQ
     using SuperString = Superscribe.Models.ʃString;
     using SuperBool = Superscribe.Models.ʃBool;
 </pre>
+<h3 class="visible-phone">
+  Q: Can I use Superscribe with Asp.Net MVC?
+</h3>
+<p><strong>A:</strong> Not at present. We'll be looking into whether or not this is possible in the new year so stay tuned.
+</p>
+<h3 class="visible-phone">
+  Q: Can I use Superscribe with Nancy FX?
+</h3>
+<p><strong>A:</strong> Not at present, but due to Nancy's extensibility points this will be coming very soon!
+</p>
 </div>
