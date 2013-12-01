@@ -43,7 +43,7 @@ title:  Home
         <div class="nuget-badge">
           <p><code>PM&gt; Install-Package Superscribe</code></p>
         </div>
-        <h3 class="title visible-phone">Web API - Standard or Module style</h3>
+        <h3 class="title visible-phone">Web API</h3>
         <div class="nuget-badge">
           <p><code>PM&gt; Install-Package Superscribe.WebApi</code></p>
         </div>
@@ -56,75 +56,110 @@ title:  Home
         <h3 class="title visible-phone">Web API - Standard</h3>
         <pre class="prettyprint lang-cs">
 
-public static class WebApiConfig
-{
-    public static void Register(HttpConfiguration config)
-    {
-        SuperscribeConfig.Register(config);
-    }
-}
+  public static class WebApiConfig
+  {
+      public static void Register(HttpConfiguration config)
+      {
+          SuperscribeConfig.Register(config);
+      }
+  }
         </pre>
         <h3 class="title visible-phone">Web API - Modules</h3>
         <pre class="prettyprint lang-cs">
 
-public static class WebApiConfig
-{
-    public static void Register(HttpConfiguration config)
-    {
-        SuperscribeConfig.RegisterModules(config);
-    }
-}
+  public static class WebApiConfig
+  {
+      public static void Register(HttpConfiguration config)
+      {
+          SuperscribeConfig.RegisterModules(config);
+      }
+  }
         </pre>
-        <h3 class="title visible-phone">OWIN</h3>
+        <h3 class="title visible-phone">OWIN Router</h3>
         <pre class="prettyprint lang-cs">
 
-public class Startup
-{
-    public void Configuration(IAppBuilder app)
-    {
-        var config = new SuperscribeOwinConfig();
-        config.MediaTypeHandlers.Add(
-            "text/html", 
-            new MediaTypeHandler { Write = (res, o) => res.WriteAsync(o.ToString()) });
+  public class Startup
+  {
+      public void Configuration(IAppBuilder app)
+      {
+          app.UseSuperscribeRouter(new SuperscribeOwinConfig());
+      }
+  }
+        </pre>
+      <h3 class="title visible-phone">OWIN Handler</h3>
+        <pre class="prettyprint lang-cs">
 
-        app.UseSuperscribeModules(config);
-    }
-}
+  public class Startup
+  {
+      public void Configuration(IAppBuilder app)
+      {
+          // Define serialization for text/html
+          var config = new SuperscribeOwinConfig();
+          config.MediaTypeHandlers.Add(
+              "text/html",
+              new MediaTypeHandler
+              {
+                  Read = (env, o) => { 
+                    using (var reader = new StreamReader(env.GetRequestBody())) 
+                      return reader.ReadToEnd();
+                  },
+                  Write = (env, o) => env.WriteResponse(o.ToString())
+              });
+
+          app.UseSuperscribeRouter(config)
+              .UseSuperscribeHandler(config);
+      }
+  }
         </pre>
       </div>
       <div class="tab-pane col-sm-12 col-md-12" id="define">
-        <h3 class="title visible-phone">Web API - Standard</h3>
+        <h3 class="title visible-phone">Web API</h3>
         <pre class="prettyprint lang-cs">
 
-public static class WebApiConfig
-{
-    public static void Register(HttpConfiguration config)
-    {
-        ʃ.Route(() => "api" / ʃ.Controller / -(ʃInt)"id");
-    }
-}
+  public static class WebApiConfig
+  {
+      public static void Register(HttpConfiguration config)
+      {
+          SuperscribeConfig.Register(config);
+
+          ʃ.Route(() => "api" / ʃ.Controller / -(ʃInt)"id");
+      }
+  }
         </pre>
-        <h3 class="title visible-phone">Web API - Modules</h3>
+        <h3 class="title visible-phone">Modules</h3>
         <pre class="prettyprint lang-cs">
 
-public class HelloWorldModule : SuperscribeModule
-{
-    public HelloWorldModule()
-    {
-        this.Get["/"] = ʅ => "Hello World!";
-    }
-}
+  public class HelloWorldModule : SuperscribeModule
+  {
+      public HelloWorldModule()
+      {
+          this.Get["/"] = ʅ => "Hello World!";
+      }
+  }
+
+  public class HelloWorldModule : SuperscribeOwinModule
+  {
+      public HelloWorldModule()
+      {
+          this.Get["/"] = ʅ => "Hello World!";
+      }
+  }
         </pre>
-        <h3 class="title visible-phone">OWIN</h3>
+        <h3 class="title visible-phone">OWIN Router</h3>
         <pre class="prettyprint lang-cs">
 
-public class HelloWorldModule : SuperscribeOwinModule
-{
-    public HelloWorldModule()
-    {
-        this.Get["/"] = ʅ => "Hello World!";
-    }
-}
+  public class Startup
+  {
+      public void Configuration(IAppBuilder app)
+      {
+          app.UseSuperscribeRouter(new SuperscribeOwinConfig());
+
+          // Set up a route that will respond to both Web Api and Nancy 
+          ʃ.Route(ʅ => ʅ / "api" / (
+                ʅ / "webapi" * Pipeline.Action(o => o.UseWebApi(httpconfig))
+              | ʅ / "nancy" * Pipeline.Action(o => o.UseNancy())));
+      }
+  }
         </pre>        
       </div> 
     </div> 

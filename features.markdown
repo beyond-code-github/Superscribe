@@ -12,7 +12,7 @@ title:  Features
     	<li class="active"> <a href="#webapi" data-toggle="tab">Replacement Asp.Net Web API routing<small>Replace existing routes with syntax thats much more concise and easy to manage</small><i class="icon-angle-right"></i></a> </li>
     	<li> <a href="#testing" data-toggle="tab">Easy unit testing<small>Invoke the superscribe routing engine in isolation from the rest of your app</small><i class="icon-angle-right"></i></a> </li>     	
       	<li> <a href="#modules" data-toggle="tab">Bring Nancy style modules to Web API<small>All the benefits of the code-centric approach combined with graph based routing</small><i class="icon-angle-right"></i></a> </li>   
-      	<li> <a href="#owin" data-toggle="tab">Serve your data direct from OWIN<small>Create ultra-lightweight services for maximum performance</small><i class="icon-angle-right"></i></a> </li>
+      	<li> <a href="#owin" data-toggle="tab">OWIN routing as middleware<small>Let your routing choose which middleware to include</small><i class="icon-angle-right"></i></a> </li>
     </ul>    
 	<div class="tab-content col-md-8">
       <div class="tab-pane active col-sm-12 col-md-12" id="webapi">
@@ -186,9 +186,66 @@ title:  Features
 		</pre>
 	  </div>	
       <div class="tab-pane col-sm-12 col-md-12" id="owin">
-        <h3>Superscribe and OWIN, pipeline to pipeline</h3>
-        <p></p>
+        <h3>Combine your routing and OWIN pipelines</h3>
+        <p>
+        	With the Superscribe.Owin package, your routing routing pipeline and your OWIN pipeline become one. Superscribe provides two OWIN middlewares... <em>SuperscribeRouter</em> for middleware routing and branching, and <em>SuperscribeHandler</em> to allow you to respond to requests in a really streamlined way.
+        </p>
+        <h3 class="title">SuperscribeRouter</h3>
         <pre class="prettyprint lang-cs">
+
+ 	public class Startup
+    {
+        public void Configuration(IAppBuilder app)
+        {
+			// Web Api config
+			var httpconfig = new HttpConfiguration();
+			httpconfig.Routes.MapHttpRoute(
+			    name: "DefaultApi",
+			    routeTemplate: "api/webapi/",
+			    defaults: new { controller = "Hello" }
+			);
+
+			app.UseSuperscribeRouter(new SuperscribeOwinConfig());
+
+			// Set up a route that will respond to both Web Api and Nancy 
+			ʃ.Route(ʅ => ʅ / "api" / (
+			      ʅ / "webapi" * Pipeline.Action(o => o.UseWebApi(httpconfig))
+			    | ʅ / "nancy" * Pipeline.Action(o => o.UseNancy())));
+		}
+	}
+		</pre>
+		<h3 class="title">SuperscribeHandler</h3>
+        <pre class="prettyprint lang-cs">
+
+	public class Module : SuperscribeOwinModule
+    {
+        public Module()
+        {
+            this.Get["Hello"] = o => "Hello World";
+        }
+    }
+
+    public class Startup
+    {
+        public void Configuration(IAppBuilder app)
+        {
+        	// Define serialization for text/html
+			var config = new SuperscribeOwinConfig();
+		    config.MediaTypeHandlers.Add(
+		        "text/html",
+		        new MediaTypeHandler
+		        {
+		            Read = (env, o) => { 
+		            	using (var reader = new StreamReader(env.GetRequestBody())) 
+		            		return reader.ReadToEnd();
+		            },
+		            Write = (env, o) => env.WriteResponse(o.ToString())
+		        });
+
+		    builder.UseSuperscribeRouter(config)
+		        .UseSuperscribeHandler(config);
+		}
+	}
 		</pre>
 	  </div>
 	</div>
