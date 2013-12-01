@@ -13,8 +13,7 @@ title:  Features
       <li> <a href="#dsl" data-toggle="tab">DSL<small>Shorthand syntax for defining routes that are concise and easy to maintain</small><i class="icon-angle-right"></i></a> </li>
       <li> <a href="#modules" data-toggle="tab">Modules<small>Inspired by NancyFX, a great way to keep your definitions and your handlers together</small><i class="icon-angle-right"></i></a> </li>
       <li> <a href="#webapi" data-toggle="tab">Superscribe.WebAPI<small>Specific syntax to help you match routes and then invoke controllers and actions</small><i class="icon-angle-right"></i></a> </li>
-      <li> <a href="#owin" data-toggle="tab">Superscribe.OWIN<small>Route & branch your pipeline and hand control over to OWIN middleware</small><i class="icon-angle-right"></i></a> </li>
-      <li> <a href="#glossary" data-toggle="tab">Glossary<small>Quick reference for Superscribe terminology</small><i class="icon-angle-right"></i></a> </li>
+      <li> <a href="#owin" data-toggle="tab">Superscribe.OWIN<small>Branch your pipeline during routing and hand control to any OWIN middleware</small><i class="icon-angle-right"></i></a> </li>
     </ul>    
 	<div class="tab-content col-md-8">
       <div class="tab-pane active col-sm-12 col-md-12" id="fluentapi">
@@ -459,8 +458,267 @@ title:  Features
         </pre>
       </div>
       <div class="tab-pane col-sm-12 col-md-12" id="owin">
-        <h3 class="title visible-phone"></h3>
+        <h3 class="visible-phone">OWIN Middleware Routing and Request Handling</h3>
+        <p>To build a basic functional API, we need several things:</p>
+            <ul>
+                <li><strong>Hosting</strong></li>
+                <li><strong>Routing</strong></li>
+                <li><strong>Handlers</strong></li>
+                <li><strong>Content Negotation</strong></li>
+            </ul>
+            <p>By using Owin for hosting, and Superscribe for routing we can get halfway there. But what about the rest? Superscribe.Owin provides the answer  via it's two middleware components, <em>SuperscribeRouter</em> and <em>SuperscribeHandler</em></p>
+        <h3 class="visible-phone title">OwinRouter</h3>
+        <p>
+            OwinRouter is a middleware component that allows the Owin pipeline to invoke the Superscribe engine, and hence hook into all the advantages and syntax of Superscribe (as well as a few extra ones - see below). In it's most basic form, it allows us to direct control to a particular middleware component that will respond to our request:
+        </p>
+        <pre class="prettyprint">
+
+    public class Startup
+    {
+        public void Configuration(IAppBuilder app)
+        {
+            var httpconfig = new HttpConfiguration();
+            httpconfig.Routes.MapHttpRoute(
+                "DefaultApi", "api/webapi/", new { controller = "Hello" });
+
+            // Tell Owin to use the SuperscribeRouter middleware
+            app.UseSuperscribeRouter(new SuperscribeOwinConfig());
+
+            // Set up a route that will respond via either Web Api or Nancy
+            ʃ.Route(ʅ => ʅ / "api" / (
+                  ʅ / "webapi" * Pipeline.Action(o => o.UseWebApi(httpconfig))
+                | ʅ / "nancy" * Pipeline.Action(o => o.UseNancy())));
+        }
+    }
+        </pre>
+        <h3 class="visible-phone title">OwinHandler</h3>
+        <p>
+            We don't have to ask WebApi or Nancy to respond to our requests of course, and that's where OwinHandler comes in. This middleware component goes at the end of your pipeline and will take the RouteData object, apply content negotiation and then write the appropriate content to the Http Response stream.
+        </p>
+        <p>The following shows how we can respond to a basic "Hello World" request using both SuperscribeRouter and SuperscribeHandler</p>
+        <pre class="prettyprint">
+
+    public class Startup
+    {
+        public void Configuration(IAppBuilder app)
+        {
+            var config = new SuperscribeOwinConfig();
+            config.MediaTypeHandlers.Add("text/html", new MediaTypeHandler { 
+                Write = (env, o) => env.WriteResponse(o.ToString()) });
+
+            app.UseSuperscribeRouter(config)
+                .UseSuperscribeHandler(config);
+
+            ʃ.Route(ʅ => ʅ / "Hello" / "World" * (o => "Hello World"));
+        }
+    }
+        </pre>
+        <p>We use SuperscribeOwinConfig to wire up any content types that we expect to have to handle. In this example we are dealing just with text/html in a <strong>write-only</strong> capacity.</p>
+        <h3 class="visible-phone title">Modules</h3>
+        <p>OwinHandler will also scan your assembly for any classes that inherit from <em>SuperscribeOwinModule</em>, and invoke their constructor in the same way that Superscribe.WebApi does when in module mode. Owin modules work in exactly the same way as regular modules (and as such all the regular module documentation applies too).<p>
+        <p>Here's a more complicated scenario involving a module, both GET and POST handlers and some json model binding:</p>
+        <pre class="prettyprint">
+
+    public class Startup
+    {
+        public void Configuration(IAppBuilder app)
+        {
+            var config = new SuperscribeOwinConfig();
+            config.MediaTypeHandlers.Add("text/html", new MediaTypeHandler { 
+                Write = (env, o) => env.WriteResponse(o.ToString()) });
+            config.MediaTypeHandlers.Add("application/json", new MediaTypeHandler {
+                Write = (env, o) => env.WriteResponse(JsonConvert.SerializeObject(o)),
+                Read = (env, type) =>
+                {
+                    object obj;
+                    using (var reader = new StreamReader(env.GetRequestBody()))
+                    {
+                        obj = JsonConvert.DeserializeObject(reader.ReadToEnd(), type);
+                    };
+
+                    return obj;
+                }
+            });
+
+            app.UseSuperscribeRouter(config)
+                .UseSuperscribeHandler(config);
+        }
+    }
+        </pre>
+        <pre class="prettyprint">
+
+    public ProductsModule()
+    {
+        this.Get["Products"] = o => products;
+
+        this.Get["Products" / (ʃInt)"Id"] = o => 
+            products.FirstOrDefault(p => o.Parameters.Id == p.Id);
+
+        this.Get["Products" / (ʃString)"Category"] = o => 
+            products.Where(p => o.Parameters.Category == p.Category);
+
+        this.Post["Products"] = o =>
+            {
+                var product = o.Bind<Product>();
+                return new { Message = string.Format(
+                    "Received product id: {0}, description: {1}", 
+                    product.Id, product.Description) };
+            };
+    }
+        </pre>
+        <h3 class="visible-phone title">Pipelining and Middleware Routing</h3>
+        <p>Hopefully by now you've read about Action Functions and Final Functions and understand their purpose. With great power comes great responsibility... it's possible to some very crazy (bad) things with Superscribe if you're not disciplined. Sometimes if you have very complex sequence of Actions to be taken, it's best to use Action Functions to add these to a collection and execute them *after* routing is complete.</p>
+        <p>
+            In Superscribe, this process of deferring the execution of Action and Final function behavior is known as Pipelining. If you are familiar with OWIN and think this word sounds familiar then that's for a very good reason. When using Superscribe with OWIN, there is no real difference between your Routing pipeline and your OWIN pipeline.
+        </p>
+        <p>As an example, consider the following Owin middleware that wraps any response with a given tag:</p>
+        <pre class="prettyprint">
+
+    public class PadResponse
+    {
+        private readonly string tag;
+
+        private readonly Func&lt;IDictionary&lt;string, object&gt;, Task&gt; next;
+
+        public PadResponse(Func&lt;IDictionary&lt;string, object&gt;, Task&gt; next, string tag)
+        {
+            this.tag = tag;
+            this.next = next;
+        }
+
+        public async Task Invoke(IDictionary&lt;string, object&gt; environment)
+        {
+            await environment.WriteResponse("&lt;" + this.tag + "&gt;");
+            await this.next(environment);
+            await environment.WriteResponse("&lt;" + this.tag + "&gt;");
+        }
+    }
+        </pre>
+        <p>
+            We can build ourselves a Superscribe.Owin app without pipelining by putting this middleware in the usual OWIN pipeline which will give the response: <h1>Hello World</h1>
+        </p>
+        <pre class="prettyprint">
+
+    public class Startup
+    {
+        public void Configuration(IAppBuilder app)
+        {
+            var config = new SuperscribeOwinConfig();
+            config.MediaTypeHandlers.Add(
+                "text/html",
+                new MediaTypeHandler { Write = (env, o) => env.WriteResponse(o.ToString()) });
+
+            app.UseSuperscribeRouter(config)
+                .Use(typeof(PadResponse), "h1")
+                .UseSuperscribeHandler(config);
+
+            ʃ.Route(ʅ => ʅ / "Hello" / "World" * (o => "Hello World"));
+        }
+    }
+        </pre>
+        <p>
+            Now here's the same setup using Pipelining that yeilds exactly the same result:
+        </p>
+        <pre class="prettyprint">
+
+    public class Startup
+    {
+        public void Configuration(IAppBuilder app)
+        {
+            var config = new SuperscribeOwinConfig();
+            config.MediaTypeHandlers.Add(
+                "text/html",
+                new MediaTypeHandler { Write = (env, o) => env.WriteResponse(o.ToString()) });
+
+            app.UseSuperscribeRouter(config)
+                .UseSuperscribeHandler(config);
+
+            ʃ.Route(ʅ => ʅ / "Hello" * Pipeline.Action&lt;PadResponse&gt;("h1") 
+                                / "World" * (o => "Hello World"));
+        }
+    }
+        </pre>
+        <p>
+            The difference with this last example is that we have now linked our Owin pipeline to our Routing pipeline. The pad resonse middleware will only be executed when we hit a route that starts with "Hello". We can see how this works by throwing another route into the mix:
+        </p>
+        <pre class="prettyprint">
         
+    public class Startup
+    {
+        public void Configuration(IAppBuilder app)
+        {
+            var config = new SuperscribeOwinConfig();
+            config.MediaTypeHandlers.Add(
+                "text/html",
+                new MediaTypeHandler { Write = (env, o) => env.WriteResponse(o.ToString()) });
+           
+            // Advanced superscribe pipelining example
+
+            app.UseSuperscribeRouter(config)
+              .UseSuperscribeHandler(config);
+
+            ʃ.Route(ʅ => ʅ / "Hello" * Pipeline.Action&lt;PadResponse&gt;("H1") 
+                                / "World" * (o => "Hello World"));
+
+            ʃ.Route(ʅ => ʅ / "Mad" * Pipeline.Action&lt;PadResponse&gt;("marquee") 
+                                / "World" * (o => "Hello World"));
+        }
+    }
+        </pre>
+        <p>Now we get a completely different behavior when we hit the Mad/World route. It's easy to extend this to more useful scenarios, such as providing authentication for certain areas of your API, or to enable debugging temporarily</p>
+        <h3 class="visible-phone title">Accessing Parameters and RouteData from middleware</h3>
+        <p>
+            As discussed in the previous section, when using pipelining the middleware\actions get executed <strong>after</strong> routing has completed and so have access to all the parameters and variables that were set during matching. Superscribe makes these available to subsequent middleware via entries in the Owin environment dictionary:
+        </p>
+        <ul>
+            <li><strong>"route.Parameters"</strong> - Contains just the route\querystring parameters that were captured</li>
+            <li><strong>"superscribe.RouteData"</strong> - The complete Superscribe RouteData object</li>            
+        </ul>
+        <p>
+            Any subsequent middleware can then utilise these values, as seen below:
+        </p>
+        <pre class="prettyprint">
+
+    public class AddName
+    {
+        private readonly Func<IDictionary<string, object>, Task> next;
+
+        public AddName(Func<IDictionary<string, object>, Task> next)
+        {
+            this.next = next;
+        }
+
+        public async Task Invoke(IDictionary<string, object> environment)
+        {
+            await this.next(environment);
+
+            var parameters = environment["route.Parameters"] as IDictionary<string, object>;
+            if (parameters != null && parameters.ContainsKey("Name"))
+            {
+                await environment.WriteResponse(" " + parameters["Name"]);    
+            }
+        }
+    }
+        </pre>
+        <pre class="prettyprint">
+
+    public class Startup
+    {
+        public void Configuration(IAppBuilder app)
+        {
+            var config = new SuperscribeOwinConfig();
+            config.MediaTypeHandlers.Add(
+                "text/html",
+                new MediaTypeHandler { Write = (env, o) => env.WriteResponse(o.ToString()) });
+
+            app.UseSuperscribeRouter(config)
+                .Use(typeof(AddName))
+                .UseSuperscribeHandler(config);
+
+            ʃ.Route(ʅ => ʅ / "Hello" / (ʃString)"Name" * (o => "Hello"));
+        }
+    }
+        </pre>
       </div>
 	</div>
   </div>
