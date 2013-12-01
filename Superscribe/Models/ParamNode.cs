@@ -16,7 +16,6 @@
             {
                 if (!this.TryParse(segment, out this.value))
                 {
-                    data.ParamConversionError = true;
                     return false;
                 }
 

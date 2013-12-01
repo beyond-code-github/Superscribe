@@ -95,14 +95,14 @@
         private It should_execute_the_final_function = () => routeData.Response.ShouldEqual("Access granted");
     }
 
-    public class When_capturing_an_int_parameter_that_is_too_long : ParameterTests
-    {
-        private Establish context = () => ʃ.Route(root => root / "Confirm" / (ʃInt)"Age" * CheckAge);
+    //public class When_capturing_an_int_parameter_that_is_too_long : ParameterTests
+    //{
+    //    private Establish context = () => ʃ.Route(root => root / "Confirm" / (ʃInt)"Age" * CheckAge);
 
-        private Because of = () => subject.WalkRoute("/Confirm/18000000000", "GET", routeData);
+    //    private Because of = () => subject.WalkRoute("/Confirm/18000000000", "GET", routeData);
 
-        private It should_throw_an_error = () => routeData.ParamConversionError.ShouldEqual(true);
-    }
+    //    private It should_throw_an_error = () => routeData.ParamConversionError.ShouldEqual(true);
+    //}
 
     public class When_capturing_a_long_parameter : ParameterTests
     {
