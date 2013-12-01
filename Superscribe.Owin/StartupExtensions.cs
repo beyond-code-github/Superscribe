@@ -7,13 +7,13 @@
 
     public static class StartupExtensions
     {
-        public static IAppBuilder UseSuperscribe(
+        public static IAppBuilder UseSuperscribeRouter(
             this IAppBuilder builder, SuperscribeOwinConfig config)
         {
             return SuperscribeRouter(builder, config);
         }
 
-        public static IAppBuilder UseSuperscribeModules(
+        public static IAppBuilder UseSuperscribeHandler(
             this IAppBuilder builder, SuperscribeOwinConfig config)
         {
             var modules = (from assembly in AppDomain.CurrentDomain.GetAssemblies()

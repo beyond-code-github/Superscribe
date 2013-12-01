@@ -17,7 +17,7 @@
                 "application/json",
                 new MediaTypeHandler { Write = (env, o) => env.WriteResponse(JsonConvert.SerializeObject(o)) });
             
-            app.UseSuperscribe(config);
+            app.UseSuperscribeRouter(config);
         }
 
         private double ComputeResult(dynamic o, string segment)

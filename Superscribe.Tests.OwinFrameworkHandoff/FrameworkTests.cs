@@ -35,7 +35,7 @@
                         defaults: new { controller = "Hello" }
                     );
 
-                    builder.UseSuperscribe(new SuperscribeOwinConfig());
+                    builder.UseSuperscribeRouter(new SuperscribeOwinConfig());
 
                     // Set up a route that will respond only to even numbers using the fluent api
                     ʃ.Route(ʅ => ʅ / "api" / (

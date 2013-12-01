@@ -42,8 +42,8 @@
                             Write = (env, o) => env.WriteResponse(o.ToString())
                         });
 
-                    builder.UseSuperscribe(config)
-                        .UseSuperscribeModules(config);
+                    builder.UseSuperscribeRouter(config)
+                        .UseSuperscribeHandler(config);
                 });
 
             client = owinTestServer.HttpClient;

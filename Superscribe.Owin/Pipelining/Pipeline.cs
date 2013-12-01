@@ -11,7 +11,7 @@
             return new OwinNodeFuture(typeof(T));
         }
 
-        public static OwinNodeFuture Use(Func<IAppBuilder, IAppBuilder> func)
+        public static OwinNodeFuture Action(Func<IAppBuilder, IAppBuilder> func)
         {
             return new OwinNodeFuture(func);
         }
