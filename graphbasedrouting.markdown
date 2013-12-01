@@ -53,7 +53,7 @@ title:  Features
         <img src="img/basicstatemachine.png" />
         <h3 class="visible-phone title">Parameters and the Querystring</h3>
         <p>
-          In Graph Based Routing, parameter capture is the responsibility of Action Functions defined against nodes that represent values. They are then added them to the <strong>Parameters</strong> Dictionary which sits on the </string>RouteData</string> object so they become available to subsequent nodes and final function. No provision is made in the implementation itself to capture parameters at this time, with the exception of the Querystring.</p>
+          In Graph Based Routing, parameter capture is the responsibility of Action Functions defined against nodes that represent values. They are then added them to the <strong>Parameters</strong> Dictionary which sits on the <strong>RouteData</strong> object so they become available to subsequent nodes and final function. No provision is made in the implementation itself to capture parameters at this time, with the exception of the Querystring.</p>
         <p>
           Because Querystring parameters can come in any order, they cannot be treated as graph nodes for the purposes of matching. Any compatible Graph Based Routing implementation will decode and store all querystring parameters <strong>prior to matching</strong> the remainder of the URL. This means that all nodes have access to querystring values, and if matching based on these values is required this can be performed accordingly in the relevant Activation Function.
         </p>
@@ -62,7 +62,69 @@ title:  Features
         <h3 class="visible-phone">Graph Based Routing Specification</h3>
       </div>
       <div class="tab-pane col-sm-12 col-md-12" id="tab3">
-        <h3 class="visible-phone">Pseudocode Algorithm</h3>
+        <h3 class="visible-phone">Graph Based Routing Pseudocode</h3>
+        <p>The following pseudocode represents a completely standards compliant graph based routing algortihm that can be used a base for any language specific implementations.</p>
+         <pre class="prettyprint">
+
+  queue RemainingSegments;
+  string Method;
+
+  FUNCTION WalkRoute (string route, string method, dictionary routedata)  
+    FOR EACH querystring parameter IN route
+      SET routedata.Parameters dictionary entry for [parameter.name] TO parameter.value
+
+    remove querystring from route
+    SET RemainingSegments TO array of route split by '/'
+    SET Method TO method parameter value
+
+    CALL WalkRouteRecursive WITH routedata, basenode
+  END FUNCTION
+
+
+  FUNCTION WalkRouteRecursive (dictionary routedata, graphnode match)  
+    finalfunction oncomplete;
+
+    WHILE match IS NOT null    
+      IF match has an Action Function THEN CALL Action Function WITH routedata, current segment
+      IF there are remaining segments THEN DEQUEUE the current segment FROM RemainingSegments
+
+      IF oncomplete IS set AND oncomplete IS exclusive THEN  SET oncomplete TO null
+      IF match has any final functions defined for the current method THEN
+        SET oncomplete TO final function for this method
+
+      SET nextmatch to result of CALL FindNextMatch WITH routedata, current segment, match.Edges
+      IF nextmatch IS null
+        AND current match has no Final Function for this method
+        AND current match has edges
+        AND current match has no optional edges THEN
+
+          SET IncompleteMatch flag to true
+          EXIT FUNCTION
+      END IF
+
+      SET match TO nextmatch
+    END WHILE
+
+    IF there are still remaining segments THEN SET ExtraneousMatch flag to true
+    IF oncomplete IS set CALL oncomplete WITH routedata
+  END FUNCTION
+
+
+  FUNCTION FindNextMatch (routedata, string segment, list edges)    
+    FOR EACH potential next match IN edges
+      IF the potential match allows the current http method
+        AND the potential match Activation Function returns true THEN
+          SET match to potential match
+      ELSE
+          SET match to null
+      END IF
+    END FOR
+
+    RETURN match
+  END FUNCTION
+
+        </pre>
       </div>
     </div>
+  </div>
 </div>
