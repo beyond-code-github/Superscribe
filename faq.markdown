@@ -32,7 +32,7 @@ title:  FAQ
 <h3 class="visible-phone">
   Q: How do I type ʅ and ʃ?
 </h3>
-<p><strong>A:</strong> You can enable enhanced alt-codes in Windows 7, 8<a href="http://en.wikipedia.org/wiki/Unicode_input#Hexadecimal_code_input">using the instructions here.</a> Once you've done that, you can hold Alt and type +285 for ʅ, and +283 for ʃ. Mac OS also supports typing unicode characters by four digit hexadecmial code using the Option key (replace the + with 0).
+<p><strong>A:</strong> You can enable enhanced alt-codes in Windows 7 & 8 <a href="http://en.wikipedia.org/wiki/Unicode_input#Hexadecimal_code_input">using the instructions here.</a> Once you've done that, you can hold Alt and type +285 for ʅ, and +283 for ʃ. Mac OS also supports typing unicode characters by four digit hexadecmial code using the Option key (replace the + with 0).
 </p>
 <h3 class="visible-phone">
   Q: I still don't like those characters, can't you change them?
@@ -53,6 +53,6 @@ title:  FAQ
 <h3 class="visible-phone">
   Q: Can I use Superscribe with Nancy FX?
 </h3>
-<p><strong>A:</strong> Not at present, but due to Nancy's extensibility points this will be coming very soon!
+<p><strong>A:</strong> At present you can use OWIN routing to hand off from your middleware pipeline to Nancy but then Nancy's routing will take over. Work is under development to allow Nancy to re-use the results of Supersribes route parsing, so watch this space.
 </p>
 </div>
