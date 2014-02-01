@@ -16,14 +16,17 @@
         public static IAppBuilder UseSuperscribeHandler(
             this IAppBuilder builder, SuperscribeOwinConfig config)
         {
-            var modules = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
-                           from type in assembly.GetTypes()
-                           where typeof(SuperscribeOwinModule).IsAssignableFrom(type) && type != typeof(SuperscribeOwinModule)
-                           select new { Type = type }).ToList();
-
-            foreach (var module in modules)
+            if (config.ScanForModules)
             {
-                Activator.CreateInstance(module.Type);
+                var modules = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
+                               from type in assembly.GetTypes()
+                               where typeof(SuperscribeOwinModule).IsAssignableFrom(type) && type != typeof(SuperscribeOwinModule)
+                               select new { Type = type }).ToList();
+
+                foreach (var module in modules)
+                {
+                    Activator.CreateInstance(module.Type);
+                }
             }
 
             return builder.Use(typeof(OwinHandler), config);
