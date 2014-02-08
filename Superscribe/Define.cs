@@ -1,17 +1,22 @@
 ﻿namespace Superscribe
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Text.RegularExpressions;
 
     using Superscribe.Models;
     using Superscribe.Utils;
 
     /// <summary>
+    /// Superscribe shorthand
+    /// </summary>
+    public class ʃ : Define
+    {
+    }
+
+    /// <summary>
     /// Superscribe helper class
     /// </summary>
-    public class ʃ
+    public class Define
     {
         public static GraphNode Base = new GraphNode();
 

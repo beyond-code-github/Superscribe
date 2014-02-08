@@ -54,7 +54,7 @@
     <Compile Include="Utils\DynamicDictionary.cs" />
     <Compile Include="Utils\SuperList.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="ʃ.cs" />
+    <Compile Include="Define.cs" />
     <Compile Include="Utils\RouteWalker.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
