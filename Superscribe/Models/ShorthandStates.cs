@@ -1,54 +1,54 @@
 ﻿namespace Superscribe.Models
 {
-    public class ʃInt : ParamNode<int>
+    public class Int : ParamNode<int>
     {
-        public ʃInt(string name)
+        public Int(string name)
             : base(name)
         {
         }
 
-        public static explicit operator ʃInt(string name)
+        public static explicit operator Int(string name)
         {
-            return new ʃInt(name);
+            return new Int(name);
         }
     }
 
-    public class ʃLong : ParamNode<long>
+    public class Long : ParamNode<long>
     {
-        public ʃLong(string name)
+        public Long(string name)
             : base(name)
         {
         }
 
-        public static explicit operator ʃLong(string name)
+        public static explicit operator Long(string name)
         {
-            return new ʃLong(name);
+            return new Long(name);
         }
     }
 
-    public class ʃBool : ParamNode<bool>
+    public class Bool : ParamNode<bool>
     {
-        public ʃBool(string name)
+        public Bool(string name)
             : base(name)
         {
         }
 
-        public static explicit operator ʃBool(string name)
+        public static explicit operator Bool(string name)
         {
-            return new ʃBool(name);
+            return new Bool(name);
         }
     }
 
-    public class ʃString : ParamNode<string>
+    public class String : ParamNode<string>
     {
-        public ʃString(string name)
+        public String(string name)
             : base(name)
         {
         }
 
-        public static explicit operator ʃString(string name)
+        public static explicit operator String(string name)
         {
-            return new ʃString(name);
+            return new String(name);
         }
     }
 }

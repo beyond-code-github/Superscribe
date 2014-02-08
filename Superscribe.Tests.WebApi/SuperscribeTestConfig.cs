@@ -12,21 +12,21 @@
             SuperscribeConfig.Register(config);
             ʃ.Reset();
 
-            ʃ.Route(ʅ => ʅ / "api" / (ʃLong)"parentId" /
+            ʃ.Route(ʅ => ʅ / "api" / (Long)"parentId" /
                         "Forms".Controller() / (
-                            ʅ / "VisibleFor".Action() / (ʃString)"appDataId"
-                          | ʅ / -(ʃLong)"id"));
+                            ʅ / "VisibleFor".Action() / (String)"appDataId"
+                          | ʅ / -(Long)"id"));
 
-            ʃ.Route(ʅ => ʅ / "sites" / (ʃInt)"siteId" / (
+            ʃ.Route(ʅ => ʅ / "sites" / (Int)"siteId" / (
                 ʅ / "blog" / (
                       ʅ / "tags".Controller("blogtags")
                     | ʅ / "posts".Controller("blogposts") / (
-                          ʅ / -(ʃInt)"postId" / -"media".Controller("blogpostmedia") / -(ʃInt)"id"
-                        | ʅ / "archives".Controller("blogpostarchives") / -(ʃInt)"year" / (ʃInt)"month"))
+                          ʅ / -(Int)"postId" / -"media".Controller("blogpostmedia") / -(Int)"id"
+                        | ʅ / "archives".Controller("blogpostarchives") / -(Int)"year" / (Int)"month"))
                 | ʅ / "portfolio" / (
-                      ʅ / "projects".Controller("portfolioprojects") / -(ʃInt)"projectId" / -"media".Controller("portfolioprojectmedia") / -(ʃInt)"id"
+                      ʅ / "projects".Controller("portfolioprojects") / -(Int)"projectId" / -"media".Controller("portfolioprojectmedia") / -(Int)"id"
                     | ʅ / "tags".Controller("portfoliotags")
-                    | ʅ / "categories".Controller("portfoliocategories") / -(ʃInt)"id")));
+                    | ʅ / "categories".Controller("portfoliocategories") / -(Int)"id")));
         }
     }
 }

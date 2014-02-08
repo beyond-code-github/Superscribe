@@ -21,9 +21,9 @@
         {
             this.Get["Products"] = o => this.products;
 
-            this.Get["Products" / (ʃInt)"Id"] = o => this.products.FirstOrDefault(p => o.Parameters.Id == p.Id);
+            this.Get["Products" / (Int)"Id"] = o => this.products.FirstOrDefault(p => o.Parameters.Id == p.Id);
 
-            this.Get["Products" / (ʃString)"Category"] = o => this.products.Where(p => o.Parameters.Category == p.Category);
+            this.Get["Products" / (String)"Category"] = o => this.products.Where(p => o.Parameters.Category == p.Category);
 
             this.Post["Products"] = o =>
                 {

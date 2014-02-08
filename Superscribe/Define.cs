@@ -22,29 +22,7 @@
 
         #region Static Methods
 
-        /// <summary>
-        /// Matches any valid identifier and sets ControllerName
-        /// </summary>
-        public static ControllerNode Controller
-        {
-            get
-            {
-                return new ControllerNode { Pattern = new Regex("([a-z]|[A-Z]|[0-9])+", RegexOptions.Compiled) };
-            }
-        }
-
-        /// <summary>
-        /// Matches any valid identifier and sets ActionName
-        /// </summary>
-        public static ActionNode Action
-        {
-            get
-            {
-                return new ActionNode { Pattern = new Regex("([a-z]|[A-Z]|[0-9])+", RegexOptions.Compiled) };
-            }
-        }
-
-        public static RouteGlue ʅ
+        public static RouteGlue Glue
         {
             get
             {
