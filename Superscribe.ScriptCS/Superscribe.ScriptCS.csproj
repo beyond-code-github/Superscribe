@@ -63,7 +63,7 @@
     <Compile Include="ScriptPack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Superscribe.cs" />
+    <Compile Include="SuperscribeCS.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

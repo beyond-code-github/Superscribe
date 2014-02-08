@@ -14,7 +14,7 @@
 
         IScriptPackContext IScriptPack.GetContext()
         {
-            return new Superscribe();
+            return new SuperscribeCS();
         }
 
         void IScriptPack.Initialize(IScriptPackSession session)
