@@ -2,13 +2,11 @@
 {
     using System;
 
-    using global::Superscribe.Owin;
-
     using Microsoft.Owin.Hosting;
 
     using ScriptCs.Contracts;
 
-    public class Superscribe : IScriptPackContext
+    public class SuperscribeCS : IScriptPackContext
     {
         public void Listen()
         {
