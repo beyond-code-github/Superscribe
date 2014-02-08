@@ -13,6 +13,8 @@
         <dependency id="Superscribe.Owin" version="(0.3.2,0.4.0)" />
         <dependency id="Owin" version="1.0.0" />
         <dependency id="ScriptCs.Contracts" version="0.8.0" />
+        <dependency id="Microsoft.Owin.Hosting" version="2.1.0" />
+        <dependency id="Nowin" version="0.11.0" />
         <dependency id="Newtonsoft.Json" version="6.0.1" />
     </dependencies>
     <copyright>Pete Smith 2014</copyright>

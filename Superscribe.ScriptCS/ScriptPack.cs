@@ -19,13 +19,11 @@
 
         void IScriptPack.Initialize(IScriptPackSession session)
         {
-            session.AddReference("System.Net.Http");
+            session.AddReference("Superscribe");
+            
             var namespaces = new[]
                 {
-                    "System.Web.Http",
-                    "System.Web.Http.SelfHost",
-                    "System.Web.Http.Dispatcher",
-                    "Owin"
+                    "Superscribe"
                 }.ToList();
 
             namespaces.ForEach(session.ImportNamespace);
