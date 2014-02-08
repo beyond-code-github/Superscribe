@@ -12,6 +12,8 @@
     {
         public static GraphNode Base = new GraphNode();
 
+        public static Func<StringRouteParser> StringRouteParser = () => new StringRouteParser();
+
         #region Static Methods
 
         public static RouteGlue Glue
@@ -62,6 +64,20 @@
             var final = config(new RouteGlue());
             Base.FinalFunctions.Add(new FinalFunction { Function = final });
             return Base;
+        }
+        
+        public static void Route(string config, Func<object, string> func)
+        {
+            var finalNode = Base;
+            var node = StringRouteParser().MapToGraph(config);
+
+            if (node != null)
+            {
+                Base.Zip(node);
+                finalNode = node;
+            }
+
+            finalNode.FinalFunctions.Add(new FinalFunction { Function = func });
         }
 
         public static GraphNode Get(Func<GraphNode> config)
