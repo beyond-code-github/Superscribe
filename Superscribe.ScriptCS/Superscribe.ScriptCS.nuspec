@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package>
+  <metadata> 
+    <version>0.1</version>
+    <authors>Roysvork</authors>
+    <owners>Roysvork</owners>
+    <id>Superscribe.ScriptCS</id>
+    <title>Superscribe.ScriptCS</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Superscribe routing script pack for ScriptCS</description>
+    <dependencies>
+        <dependency id="Superscribe" version="0.4.0" />        
+        <dependency id="Superscribe.Owin" version="0.4.0" />
+        <dependency id="Owin" version="1.0.0" />
+        <dependency id="ScriptCs.Contracts" version="0.8.0" />
+        <dependency id="Newtonsoft.Json" version="0.6.1" />
+    </dependencies>
+    <copyright>Pete Smith 2014</copyright>
+  </metadata>
+  <files>
+    <file src="bin\Release\Superscribe.ScriptCS.dll" target="lib\net45\Superscribe.ScriptCS.dll" />
+  </files>
+</package>
