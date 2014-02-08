@@ -40,7 +40,7 @@
         /// <summary>
         /// The parent state
         /// </summary>
-        protected GraphNode Parent { get; set; }
+        public GraphNode Parent { get; set; }
 
         /// <summary>
         /// Boolean flag indicating if the transition into this state is optional
