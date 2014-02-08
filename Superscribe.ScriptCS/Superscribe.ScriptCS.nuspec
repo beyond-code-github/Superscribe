@@ -10,10 +10,10 @@
     <description>Superscribe routing script pack for ScriptCS</description>
     <dependencies>
         <dependency id="Superscribe" version="(0.3.1,0.4.0)" />        
-        <dependency id="Superscribe.Owin" version="(0.3.1,0.4.0)" />
+        <dependency id="Superscribe.Owin" version="(0.3.2,0.4.0)" />
         <dependency id="Owin" version="1.0.0" />
         <dependency id="ScriptCs.Contracts" version="0.8.0" />
-        <dependency id="Newtonsoft.Json" version="0.6.1" />
+        <dependency id="Newtonsoft.Json" version="6.0.1" />
     </dependencies>
     <copyright>Pete Smith 2014</copyright>
   </metadata>
