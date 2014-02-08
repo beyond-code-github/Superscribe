@@ -19,8 +19,7 @@
 
         void IScriptPack.Initialize(IScriptPackSession session)
         {
-            session.AddReference("Superscribe");
-            
+            //session.AddReference("Superscribe");
             var namespaces = new[]
                 {
                     "Superscribe"
