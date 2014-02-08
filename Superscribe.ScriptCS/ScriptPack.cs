@@ -22,6 +22,7 @@
             //session.AddReference("Superscribe");
             var namespaces = new[]
                 {
+                    "Superscribe.ScriptCS",
                     "Superscribe"
                 }.ToList();
 
