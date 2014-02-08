@@ -19,7 +19,7 @@
 
             subject = new RouteWalker<RouteData>(Define.Base);
         };
-
+        
         protected static object Hello(dynamic o)
         {
             return string.Format("Hello {0}", o.Parameters.Name);
@@ -44,6 +44,24 @@
     public class When_defining_a_route_with_no_modifiers_and_issuing_a_get : HttpMethodTests
     {
         private Establish context = () => Define.Route(root => root / "Hello" / (String)"Name" * Hello);
+
+        private Because of = () => subject.WalkRoute("/Hello/Pete", "GET", routeData);
+
+        private It should_respond_correctly = () => routeData.Response.ShouldEqual("Hello Pete");
+    }
+
+    public class When_defining_a_route_with_simple_string_syntax_and_issuing_a_get : HttpMethodTests
+    {
+        private Establish context = () => Define.Route("Hello/Pete", o => "Hello Pete");
+
+        private Because of = () => subject.WalkRoute("/Hello/Pete", "GET", routeData);
+
+        private It should_respond_correctly = () => routeData.Response.ShouldEqual("Hello Pete");
+    }
+    
+    public class When_defining_a_route_with_simple_syntax_and_issuing_a_get : HttpMethodTests
+    {
+        private Establish context = () => Define.Route("Hello" / (String)"Name", Hello);
 
         private Because of = () => subject.WalkRoute("/Hello/Pete", "GET", routeData);
 

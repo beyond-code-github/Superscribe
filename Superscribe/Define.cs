@@ -66,18 +66,24 @@
             return Base;
         }
         
-        public static void Route(string config, Func<object, string> func)
+        public static void Route(string config, Func<dynamic, object> func)
         {
             var finalNode = Base;
             var node = StringRouteParser().MapToGraph(config);
 
             if (node != null)
             {
-                Base.Zip(node);
+                Base.Zip(node.Base());
                 finalNode = node;
             }
 
             finalNode.FinalFunctions.Add(new FinalFunction { Function = func });
+        }
+        
+        public static void Route(GraphNode config, Func<dynamic, object> func)
+        {
+            config.FinalFunctions.Add(new FinalFunction { Function = func });
+            Base.Zip(config.Base());
         }
 
         public static GraphNode Get(Func<GraphNode> config)
