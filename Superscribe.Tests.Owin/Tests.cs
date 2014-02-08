@@ -58,7 +58,7 @@
                                 Write = (env, o) => env.WriteResponse(o.ToString())
                             });
 
-                        ʃ.Route(ʅ => o => "Hello World");
+                        Define.Route(ʅ => o => "Hello World");
 
                         builder.Use(typeof(TestMiddleware), "before")
                             .Use(typeof(OwinRouter), builder, config)

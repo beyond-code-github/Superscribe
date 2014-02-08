@@ -14,9 +14,9 @@
         private Establish context = () =>
         {
             routeData = new RouteData();
-            ʃ.Reset();
+            Define.Reset();
 
-            subject = new RouteWalker<RouteData>(ʃ.Base);
+            subject = new RouteWalker<RouteData>(Define.Base);
         };
 
         protected static object HelloWorld(dynamic o)
@@ -27,7 +27,7 @@
     
     public class When_specifying_an_activation_function_that_resolves_to_true : ActivationFunctionTests
     {
-        private Establish context = () => ʃ.Route(ʅ => ʅ / "Hello" / ((o, s) => true) * "World" * HelloWorld);
+        private Establish context = () => Define.Route(ʅ => ʅ / "Hello" / ((o, s) => true) * "World" * HelloWorld);
 
         private Because of = () => subject.WalkRoute("/Hello/World", "GET", routeData);
 
@@ -36,7 +36,7 @@
 
     public class When_specifying_an_activation_function_that_resolves_to_false : ActivationFunctionTests
     {
-        private Establish context = () => ʃ.Route(ʅ => ʅ / "Hello" / ((o, s) => false) * "World" * HelloWorld);
+        private Establish context = () => Define.Route(ʅ => ʅ / "Hello" / ((o, s) => false) * "World" * HelloWorld);
 
         private Because of = () => subject.WalkRoute("/Hello/World", "GET", routeData);
 

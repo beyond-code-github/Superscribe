@@ -11,7 +11,7 @@
         {
             SuperscribeConfig.Register(config);
 
-            ʃ.Route(() => "api" / "values".Controller() / (
+            Define.Route(() => "api" / "values".Controller() / (
                   -(Int)"id"
                 | ~"(first|last)".Action()
                 | +("foruser" / (Int)"userId")));

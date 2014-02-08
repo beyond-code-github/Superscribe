@@ -8,11 +8,11 @@
         {
             this.ʅ = new RouteGlue();
 
-            this.Get = new MethodSet<T>(o => ʃ.Get(o), "GET");
-            this.Put = new MethodSet<T>(o => ʃ.Put(o), "PUT");
-            this.Post = new MethodSet<T>(o => ʃ.Post(o), "POST");
-            this.Patch = new MethodSet<T>(o => ʃ.Patch(o), "PATCH");
-            this.Delete = new MethodSet<T>(o => ʃ.Delete(o), "DELETE");
+            this.Get = new MethodSet<T>(o => Define.Get(o), "GET");
+            this.Put = new MethodSet<T>(o => Define.Put(o), "PUT");
+            this.Post = new MethodSet<T>(o => Define.Post(o), "POST");
+            this.Patch = new MethodSet<T>(o => Define.Patch(o), "PATCH");
+            this.Delete = new MethodSet<T>(o => Define.Delete(o), "DELETE");
         }
 
         public RouteGlue ʅ { get; set; }

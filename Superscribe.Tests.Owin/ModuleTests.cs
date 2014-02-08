@@ -31,7 +31,7 @@
 
         protected Establish context = () =>
         {
-            ʃ.Reset();
+            Define.Reset();
             owinTestServer = TestServer.Create(
                 builder =>
                 {

@@ -1,17 +1,9 @@
 ﻿namespace Superscribe
 {
     using System;
-    using System.Text.RegularExpressions;
 
     using Superscribe.Models;
     using Superscribe.Utils;
-
-    /// <summary>
-    /// Superscribe shorthand
-    /// </summary>
-    public class ʃ : Define
-    {
-    }
 
     /// <summary>
     /// Superscribe helper class

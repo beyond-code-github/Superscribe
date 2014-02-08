@@ -24,7 +24,7 @@
 
         protected Establish context = () =>
         {
-            ʃ.Reset();
+            Define.Reset();
             owinTestServer = TestServer.Create(
                 builder =>
                 {
@@ -38,7 +38,7 @@
                     builder.UseSuperscribeRouter(new SuperscribeOwinConfig());
 
                     // Set up a route that will respond only to even numbers using the fluent api
-                    ʃ.Route(ʅ => ʅ / "api" / (
+                    Define.Route(ʅ => ʅ / "api" / (
                           ʅ / "webapi" * Pipeline.Action(o => o.UseWebApi(httpconfig))
                         | ʅ / "nancy" * Pipeline.Action(o => o.UseNancy())));
                 });

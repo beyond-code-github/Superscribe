@@ -33,7 +33,7 @@
             var routeData = new OwinRouteData { Environment = environment, Config = config };
             environment["superscribe.RouteData"] = routeData;
 
-            var walker = new RouteWalker<OwinRouteData>(ʃ.Base);
+            var walker = new RouteWalker<OwinRouteData>(Define.Base);
             walker.WalkRoute(path, method, routeData);
             
             if (walker.IncompleteMatch)

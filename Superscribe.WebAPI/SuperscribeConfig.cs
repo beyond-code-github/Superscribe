@@ -70,7 +70,7 @@
 
         public static RouteWalker<T> Walker<T>() where T : IRouteData
         {
-            return new RouteWalker<T>(ʃ.Base);
+            return new RouteWalker<T>(Define.Base);
         }
     }
 }

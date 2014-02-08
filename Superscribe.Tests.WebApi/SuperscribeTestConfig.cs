@@ -10,14 +10,14 @@
         public static void Register(HttpConfiguration config)
         {
             SuperscribeConfig.Register(config);
-            ʃ.Reset();
+            Define.Reset();
 
-            ʃ.Route(ʅ => ʅ / "api" / (Long)"parentId" /
+            Define.Route(ʅ => ʅ / "api" / (Long)"parentId" /
                         "Forms".Controller() / (
                             ʅ / "VisibleFor".Action() / (String)"appDataId"
                           | ʅ / -(Long)"id"));
 
-            ʃ.Route(ʅ => ʅ / "sites" / (Int)"siteId" / (
+            Define.Route(ʅ => ʅ / "sites" / (Int)"siteId" / (
                 ʅ / "blog" / (
                       ʅ / "tags".Controller("blogtags")
                     | ʅ / "posts".Controller("blogposts") / (
