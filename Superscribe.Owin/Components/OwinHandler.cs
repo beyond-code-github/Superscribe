@@ -1,4 +1,4 @@
-﻿namespace Superscribe.Owin
+﻿namespace Superscribe.Owin.Components
 {
     using System;
     using System.Collections.Generic;
@@ -6,15 +6,16 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Superscribe.Owin.Engine;
     using Superscribe.Owin.Extensions;
 
     public class OwinHandler
-    { 
-        private readonly SuperscribeOwinConfig config;
+    {
+        private readonly IOwinRouteEngine engine;
 
-        public OwinHandler(Func<IDictionary<string, object>, Task> next, SuperscribeOwinConfig config)
+        public OwinHandler(Func<IDictionary<string, object>, Task> next, IOwinRouteEngine engine)
         {
-            this.config = config;
+            this.engine = engine;
         }
 
         public async Task Invoke(IDictionary<string, object> environment)
@@ -32,10 +33,10 @@
             if (environment.TryGetHeaderValues("accept", out outgoingMediaTypes))
             {
                 var mediaTypes = ConnegHelpers.GetWeightedValues(outgoingMediaTypes);
-                var mediaType = mediaTypes.FirstOrDefault(o => config.MediaTypeHandlers.Keys.Contains(o) && config.MediaTypeHandlers[o].Write != null);
+                var mediaType = mediaTypes.FirstOrDefault(o => this.engine.Config.MediaTypeHandlers.Keys.Contains(o) && this.engine.Config.MediaTypeHandlers[o].Write != null);
                 if (!string.IsNullOrEmpty(mediaType))
                 {
-                    var formatter = config.MediaTypeHandlers[mediaType];
+                    var formatter = this.engine.Config.MediaTypeHandlers[mediaType];
                     environment.SetResponseContentType(mediaType);
 
                     await formatter.Write(environment, routeData.Response);

@@ -6,13 +6,14 @@
     using System.Linq;
     using System.Text.RegularExpressions;
 
+    using Superscribe.Engine;
     using Superscribe.Utils;
 
     public class GraphNode : IEquatable<GraphNode>
     {
-        protected Func<dynamic, string, bool> activationFunction;
+        protected Func<RouteData, string, bool> activationFunction;
 
-        protected Action<dynamic, string> actionFunction;
+        protected Action<RouteData, string> actionFunction;
 
         /// <summary>
         /// Base constructor for superscribe states
@@ -69,7 +70,7 @@
 
         public object Result { get; set; }
 
-        public Action<dynamic, string> ActionFunction
+        public Action<RouteData, string> ActionFunction
         {
             get
             {
@@ -85,7 +86,7 @@
 
         public bool ActivationFunctionChanged { set; get; }
 
-        public Func<dynamic, string, bool> ActivationFunction
+        public Func<RouteData, string, bool> ActivationFunction
         {
             get
             {

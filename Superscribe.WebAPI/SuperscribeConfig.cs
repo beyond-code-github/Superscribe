@@ -6,8 +6,8 @@
     using System.Web.Http.Controllers;
     using System.Web.Http.Dispatcher;
 
-    using Superscribe.Models;
-    using Superscribe.Utils;
+    using Superscribe.Engine;
+    using Superscribe.WebApi.Dependencies;
     using Superscribe.WebApi.Internals;
     using Superscribe.WebApi.Modules;
 
@@ -30,7 +30,7 @@
 
             var modules = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
                            from type in assembly.GetTypes()
-                           where typeof(SuperscribeModule).IsAssignableFrom(type) && type != typeof(SuperscribeModule)
+                           where typeof(SuperscribeModule<>).IsAssignableFrom(type) && type != typeof(SuperscribeModule<>)
                            select new { Type = type }).ToList();
 
             foreach (var module in modules)
@@ -39,16 +39,18 @@
             }
         }
 
-        public static void Register(HttpConfiguration configuration, string qualifier = "")
+        public static IRouteEngine Register(HttpConfiguration configuration, string qualifier = "")
         {
-            RegisterCommon(configuration, qualifier);
-
+            var engine = RegisterCommon(configuration, qualifier);
+            
             configuration.Services.Replace(typeof(IHttpActionSelector), new SuperscribeActionSelector());
             configuration.Services.Replace(typeof(IHttpControllerSelector), new SuperscribeControllerSelector());
             configuration.Services.Replace(typeof(IHttpActionInvoker), new SuperscribeActionInvoker());
+
+            return engine;
         }
 
-        private static void RegisterCommon(HttpConfiguration configuration, string qualifier)
+        private static IRouteEngine RegisterCommon(HttpConfiguration configuration, string qualifier)
         {
             var template = "{*wildcard}";
             if (!string.IsNullOrEmpty(qualifier))
@@ -57,7 +59,7 @@
             }
 
             HttpConfiguration = configuration;
-
+            
             // We need a single default route that will match everything
             // configuration.Routes.Clear();
             configuration.Routes.MapHttpRoute(
@@ -66,11 +68,11 @@
                 defaults: new { controller = "values", id = RouteParameter.Optional });
 
             ControllerTypeCache = new HttpControllerTypeCache(configuration);
-        }
 
-        public static RouteWalker<T> Walker<T>() where T : IRouteData
-        {
-            return new RouteWalker<T>(Define.Base);
+            var engine = RouteEngineFactory.Create();
+            configuration.DependencyResolver = new SuperscribeDependencyAdapter(configuration.DependencyResolver, engine);
+
+            return engine;
         }
     }
 }

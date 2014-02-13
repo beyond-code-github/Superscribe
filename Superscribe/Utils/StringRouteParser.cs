@@ -5,7 +5,12 @@
 
     using Superscribe.Models;
 
-    public class StringRouteParser
+    public interface IStringRouteParser
+    {
+        GraphNode MapToGraph(string routePattern);
+    }
+
+    public class StringRouteParser : IStringRouteParser
     {
         public GraphNode MapToGraph(string routePattern)
         {

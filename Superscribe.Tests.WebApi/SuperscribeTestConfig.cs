@@ -2,22 +2,26 @@
 {
     using System.Web.Http;
 
+    using Superscribe.Engine;
     using Superscribe.Models;
     using Superscribe.WebApi;
+    using Superscribe.WebApi.Dependencies;
 
     public static class SuperscribeTestConfig
     {
         public static void Register(HttpConfiguration config)
         {
             SuperscribeConfig.Register(config);
-            Define.Reset();
+            var engine = RouteEngineFactory.Create();
 
-            Define.Route(ʅ => ʅ / "api" / (Long)"parentId" /
+            config.DependencyResolver = new SuperscribeDependencyAdapter(config.DependencyResolver, engine);
+
+            engine.Route(ʅ => ʅ / "api" / (Long)"parentId" /
                         "Forms".Controller() / (
                             ʅ / "VisibleFor".Action() / (String)"appDataId"
                           | ʅ / -(Long)"id"));
 
-            Define.Route(ʅ => ʅ / "sites" / (Int)"siteId" / (
+            engine.Route(ʅ => ʅ / "sites" / (Int)"siteId" / (
                 ʅ / "blog" / (
                       ʅ / "tags".Controller("blogtags")
                     | ʅ / "posts".Controller("blogposts") / (

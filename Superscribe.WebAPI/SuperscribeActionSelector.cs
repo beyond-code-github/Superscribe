@@ -3,9 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Http;
     using System.Threading;
     using System.Web.Http.Controllers;
 
+    using Superscribe.Engine;
     using Superscribe.WebApi.Internals;
 
     public class SuperscribeActionSelector : IHttpActionSelector
@@ -13,22 +15,22 @@
         private ActionSelectorCacheItem fastCache;
 
         private readonly object cacheKey = new object();
-
+        
         public HttpActionDescriptor SelectAction(HttpControllerContext controllerContext)
         {
-            var info = new WebApiRouteData
-                           {
-                               Request = controllerContext.Request
-                           };
+            var walker = controllerContext.Request.GetDependencyScope().GetService(typeof(IRouteWalker)) as IRouteWalker;
 
-            var walker = SuperscribeConfig.Walker<WebApiRouteData>();
-            walker.WalkRoute(controllerContext.Request.RequestUri.PathAndQuery, controllerContext.Request.Method.ToString(), info);
+            var info = walker.WalkRoute(
+                controllerContext.Request.RequestUri.PathAndQuery,
+                controllerContext.Request.Method.ToString(),
+                new RouteData());
 
             var internalSelector = GetInternalSelector(controllerContext.ControllerDescriptor);
 
-            if (info.ActionNameSpecified)
+            if (info.Environment.ContainsKey(Constants.ActionNamePropertyKey))
             {
-                return internalSelector.SelectAction(controllerContext, ((IDictionary<string, object>)info.Parameters).Select(o => o.Key), info.ActionName);
+                var actionName = info.Environment[Constants.ActionNamePropertyKey].ToString();
+                return internalSelector.SelectAction(controllerContext, ((IDictionary<string, object>)info.Parameters).Select(o => o.Key), actionName);
             }
 
             return internalSelector.SelectAction(controllerContext, ((IDictionary<string, object>)info.Parameters).Select(o => o.Key));

@@ -1,10 +1,12 @@
-﻿namespace Superscribe.Models
+﻿namespace Superscribe.WebApi.Models
 {
+    using Superscribe.Models;
+
     public class ControllerNode : GraphNode
     {
         public ControllerNode()
         {
-            this.ActionFunction = (data, segment) => data.ControllerName = !string.IsNullOrEmpty(this.ControllerName)
+            this.ActionFunction = (data, segment) => data.Environment[Constants.ControllerNamePropertyKey] = !string.IsNullOrEmpty(this.ControllerName)
                         ? this.ControllerName
                         : segment;
         }

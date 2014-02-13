@@ -4,6 +4,8 @@
     using System.Net.Http;
     using System.Web.Http;
 
+    using Superscribe.Engine;
+
     public class ModuleController : ApiController
     {
         public HttpResponseMessage Process()
@@ -18,9 +20,11 @@
                                      User = this.User
                                  };
 
-            var walker = SuperscribeConfig.Walker<ModuleRouteData>();
-            
-            walker.WalkRoute(this.Request.RequestUri.PathAndQuery, this.Request.Method.ToString(), webApiInfo);
+            var walker = this.Request.GetDependencyScope().GetService(typeof(IRouteWalker)) as IRouteWalker;
+            var info = walker.WalkRoute(
+                this.Request.RequestUri.PathAndQuery,
+                this.Request.Method.ToString(),
+                new RouteData());
 
             if (walker.ExtraneousMatch)
             {

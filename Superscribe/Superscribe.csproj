@@ -36,27 +36,32 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cache\CacheEntry.cs" />
+    <Compile Include="Cache\RouteCache.cs" />
+    <Compile Include="Engine\IModuleRouteData.cs" />
+    <Compile Include="Engine\IRouteData.cs" />
+    <Compile Include="Engine\IRouteEngine.cs" />
+    <Compile Include="Engine\IRouteWalker.cs" />
+    <Compile Include="Engine\RouteData.cs" />
     <Compile Include="MethodSet.cs" />
-    <Compile Include="Models\ActionNode.cs" />
     <Compile Include="Models\ConstantNode.cs" />
-    <Compile Include="Models\ControllerNode.cs" />
     <Compile Include="Models\FinalFunction.cs" />
     <Compile Include="Models\FinalFunctionList.cs" />
     <Compile Include="Models\ExclusiveFinalFuture.cs" />
-    <Compile Include="Models\IRouteData.cs" />
     <Compile Include="Models\NodeFuture.cs" />
     <Compile Include="Models\ParamNode.cs" />
     <Compile Include="Models\RouteGlue.cs" />
     <Compile Include="Models\ShorthandStates.cs" />
     <Compile Include="Models\GraphNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Engine\RouteEngineFactory.cs" />
     <Compile Include="SuperscribeModule.cs" />
+    <Compile Include="SuperscribeOptions.cs" />
     <Compile Include="Utils\DynamicDictionary.cs" />
     <Compile Include="Utils\StringRouteParser.cs" />
     <Compile Include="Utils\SuperList.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="Define.cs" />
-    <Compile Include="Utils\RouteWalker.cs" />
+    <Compile Include="Engine\RouteEngine.cs" />
+    <Compile Include="Engine\RouteWalker.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

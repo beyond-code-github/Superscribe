@@ -2,9 +2,9 @@
 {
     using System.Collections.Generic;
 
-    public class SuperscribeOwinConfig
+    public class SuperscribeOwinOptions : SuperscribeOptions
     {
-        public SuperscribeOwinConfig()
+        public SuperscribeOwinOptions()
         {
             this.MediaTypeHandlers = new Dictionary<string, MediaTypeHandler>();
             this.ScanForModules = true;

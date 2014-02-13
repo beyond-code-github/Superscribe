@@ -8,6 +8,8 @@
     using System.Web.Http;
     using System.Web.Http.Controllers;
 
+    using Superscribe.Engine;
+    using Superscribe.WebApi.Engine;
     using Superscribe.WebApi.Internals;
 
     public class SuperscribeActionInvoker : IHttpActionInvoker
@@ -22,23 +24,22 @@
             var actionDescriptor = actionContext.ActionDescriptor;
             var controllerContext = actionContext.ControllerContext;
 
-            var webApiInfo = new WebApiRouteData
-                                 {
-                                     Request = controllerContext.Request
-                                 };
+            var walker = actionContext.Request.GetDependencyScope().GetService(typeof(IRouteWalker)) as IRouteWalker;
 
-            var walker = SuperscribeConfig.Walker<WebApiRouteData>();
-            walker.WalkRoute(controllerContext.Request.RequestUri.PathAndQuery, controllerContext.Request.Method.ToString(), webApiInfo);
+            var routedata = walker.WalkRoute(
+                controllerContext.Request.RequestUri.PathAndQuery,
+                controllerContext.Request.Method.ToString(),
+                new RouteData());
 
             foreach (var param in actionContext.ActionArguments)
             {
-                if (!webApiInfo.Parameters.ContainsKey(param.Key))
+                if (!routedata.Parameters.ContainsKey(param.Key))
                 {
-                    webApiInfo.Parameters.Add(param.Key, param.Value);
+                    routedata.Parameters.Add(param.Key, param.Value);
                 }
             }
 
-            var arguments = webApiInfo.Parameters;
+            var arguments = routedata.Parameters;
 
             return TaskHelpers.RunSynchronously(() =>
             {

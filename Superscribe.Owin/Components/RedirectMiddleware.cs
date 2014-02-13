@@ -1,9 +1,9 @@
-﻿namespace Superscribe.Owin
+﻿namespace Superscribe.Owin.Components
 {
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    
+
     public class RedirectMiddleware
     {
         private readonly Func<IDictionary<string, object>, Task> next;

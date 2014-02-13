@@ -1,21 +1,31 @@
 ﻿namespace Superscribe
 {
-    using Superscribe.Models;
+    using Superscribe.Engine;
+
+    public class SuperscribeModule : SuperscribeModule<IModuleRouteData>
+    {
+    }
 
     public class SuperscribeModule<T>
+        where T : IModuleRouteData
     {
         public SuperscribeModule()
         {
-            this.ʅ = new RouteGlue();
-
-            this.Get = new MethodSet<T>(o => Define.Get(o), "GET");
-            this.Put = new MethodSet<T>(o => Define.Put(o), "PUT");
-            this.Post = new MethodSet<T>(o => Define.Post(o), "POST");
-            this.Patch = new MethodSet<T>(o => Define.Patch(o), "PATCH");
-            this.Delete = new MethodSet<T>(o => Define.Delete(o), "DELETE");
+            this.Get = new MethodSet<T>("GET");
+            this.Put = new MethodSet<T>("PUT");
+            this.Post = new MethodSet<T>("POST");
+            this.Patch = new MethodSet<T>("PATCH");
+            this.Delete = new MethodSet<T>("DELETE");
         }
 
-        public RouteGlue ʅ { get; set; }
+        public void Initialise(IRouteEngine engine)
+        {
+            this.Get.Initialise(engine);
+            this.Put.Initialise(engine);
+            this.Post.Initialise(engine);
+            this.Patch.Initialise(engine);
+            this.Delete.Initialise(engine);
+        }
 
         public MethodSet<T> Get { get; private set; }
 

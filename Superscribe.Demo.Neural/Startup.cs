@@ -6,18 +6,21 @@
 
     using Superscribe.Demo.Neural.NeuralNetwork;
     using Superscribe.Owin;
+    using Superscribe.Owin.Engine;
     using Superscribe.Owin.Extensions;
 
     public class Startup
     {
         public void Configuration(IAppBuilder app)
         {
-            var config = new SuperscribeOwinConfig();
+            var config = new SuperscribeOwinOptions();
             config.MediaTypeHandlers.Add(
                 "application/json",
                 new MediaTypeHandler { Write = (env, o) => env.WriteResponse(JsonConvert.SerializeObject(o)) });
-            
-            app.UseSuperscribeRouter(config);
+
+            var engine = OwinRouteEngineFactory.Create(config);
+
+            app.UseSuperscribeRouter(engine);
         }
 
         private double ComputeResult(dynamic o, string segment)

@@ -1,8 +1,6 @@
-﻿namespace Superscribe
+﻿namespace Superscribe.WebApi
 {
-    using System;
-
-    using Superscribe.Models;
+    using Superscribe.WebApi.Models;
 
     /// <summary>
     /// Extension methods to aid when defining superscribe states that match url segments

@@ -2,15 +2,15 @@
 {
     using System.Net.Http;
 
-    using Superscribe.Models;
     using Superscribe.Utils;
+    using Superscribe.WebApi.Engine;
 
-    public class WebApiRouteData : IRouteData
+    public class WebApiRouteData : IWebApiRouteData
     {
         private string actionName;
 
         private string controllerName;
-
+        
         public WebApiRouteData()
         {
             this.Parameters = new DynamicDictionary();

@@ -12,6 +12,8 @@
     using Microsoft.Owin.Testing;
 
     using Superscribe.Owin;
+    using Superscribe.Owin.Components;
+    using Superscribe.Owin.Engine;
     using Superscribe.Owin.Extensions;
     using Superscribe.Owin.Pipelining;
 
@@ -94,12 +96,14 @@
 
         protected static HttpClient client;
 
+        protected static IOwinRouteEngine engine;
+
         protected Establish context = () =>
         {
             owinTestServer = TestServer.Create(
                 builder =>
                 {
-                    var config = new SuperscribeOwinConfig();
+                    var config = new SuperscribeOwinOptions();
                     config.MediaTypeHandlers.Add(
                         "text/html",
                         new MediaTypeHandler
@@ -111,19 +115,18 @@
                             Write = (env, o) => env.WriteResponse(o.ToString())
                         });
                     
-                    builder.Use(typeof(OwinRouter), builder, config);
+                    engine = OwinRouteEngineFactory.Create(config);
+                    builder.Use(typeof(OwinRouter), builder, engine);
                 });
 
             client = owinTestServer.HttpClient;
             client.DefaultRequestHeaders.Add("accept", "text/html");
-
-            Define.Reset();
         };
     }
 
     public class When_building_a_pipeline_with_a_single_element_given_one_middleware : PipelineTests
     {
-        private Establish context = () => Define.Route(ʅ => ʅ / "Hello" * Pipeline.Action<FirstComponent>());
+        private Establish context = () => engine.Route("Hello" * Pipeline.Action<FirstComponent>());
 
         private Because of = () => responseMessage = client.GetAsync("http://localhost/Hello").Result;
 
@@ -134,7 +137,7 @@
     
     public class When_building_a_pipeline_with_a_single_element_given_two_middleware : PipelineTests
     {
-        private Establish context = () => Define.Route(ʅ => ʅ / "Hello" * Pipeline.Action<FirstComponent>()
+        private Establish context = () => engine.Route("Hello" * Pipeline.Action<FirstComponent>()
                                                                     * Pipeline.Action<SecondComponent>());
 
         private Because of = () => responseMessage = client.GetAsync("http://localhost/Hello").Result;
@@ -146,8 +149,8 @@
 
     public class When_building_a_pipeline_with_a_two_elements_given_two_funcs : PipelineTests
     {
-        private Establish context = () => Define.Route(ʅ => ʅ / "Hello" * Pipeline.Action<FirstComponent>()
-                                                                / "World" * Pipeline.Action<SecondComponent>());
+        private Establish context = () => engine.Route("Hello" * Pipeline.Action<FirstComponent>()
+                                                       / "World" * Pipeline.Action<SecondComponent>());
 
         private Because of = () => responseMessage = client.GetAsync("http://localhost/Hello/World").Result;
 
@@ -158,7 +161,7 @@
 
     public abstract class When_building_a_pipeline_with_options : PipelineTests
     {
-        private Establish context = () => Define.Route(ʅ => ʅ / "Hello" * Pipeline.Action<FirstComponent>() / (
+        private Establish context = () => engine.Route(ʅ => ʅ / "Hello" * Pipeline.Action<FirstComponent>() / (
                                                               ʅ / "Foo" * Pipeline.Action<SecondComponent>()
                                                             | ʅ / "Bar" * Pipeline.Action<ThirdComponent>()));
     }
@@ -183,7 +186,7 @@
 
     public class When_building_a_pipeline_with_middleware_that_takes_parameters : PipelineTests
     {
-        private Establish context = () => Define.Route(ʅ => ʅ / "Pad" * Pipeline.Action<PadResponse>("h1") / (
+        private Establish context = () => engine.Route(ʅ => ʅ / "Pad" * Pipeline.Action<PadResponse>("h1") / (
                                                                  ʅ / "Response" * Pipeline.Action<FirstComponent>()));
 
         private Because of = () => responseMessage = client.GetAsync("http://localhost/Pad/Response").Result;

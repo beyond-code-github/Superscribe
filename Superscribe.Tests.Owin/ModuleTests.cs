@@ -11,6 +11,7 @@
     using Newtonsoft.Json;
 
     using Superscribe.Owin;
+    using Superscribe.Owin.Engine;
     using Superscribe.Owin.Extensions;
     
     public class Module : SuperscribeOwinModule
@@ -30,12 +31,11 @@
         protected static HttpClient client;
 
         protected Establish context = () =>
-        {
-            Define.Reset();
-            owinTestServer = TestServer.Create(
+            {
+                owinTestServer = TestServer.Create(
                 builder =>
                 {
-                    var config = new SuperscribeOwinConfig();
+                    var config = new SuperscribeOwinOptions();
                     config.MediaTypeHandlers.Add(
                         "text/html",
                         new MediaTypeHandler
@@ -59,8 +59,10 @@
                         }
                     });
 
-                    builder.UseSuperscribeRouter(config)
-                        .UseSuperscribeHandler(config);
+                    var engine = OwinRouteEngineFactory.Create(config);
+            
+                    builder.UseSuperscribeRouter(engine)
+                        .UseSuperscribeHandler(engine);
                 });
 
             client = owinTestServer.HttpClient;

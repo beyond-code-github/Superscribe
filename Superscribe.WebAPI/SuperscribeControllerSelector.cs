@@ -8,17 +8,18 @@
     using System.Web.Http.Controllers;
     using System.Web.Http.Dispatcher;
 
+    using Superscribe.Engine;
+
     public class SuperscribeControllerSelector : IHttpControllerSelector
     {
         public HttpControllerDescriptor SelectController(HttpRequestMessage request)
         {
-            var webApiInfo = new WebApiRouteData
-            {
-                Request = request
-            };
+            var walker = request.GetDependencyScope().GetService(typeof(IRouteWalker)) as IRouteWalker;
 
-            var walker = SuperscribeConfig.Walker<WebApiRouteData>();
-            walker.WalkRoute(request.RequestUri.PathAndQuery, request.Method.ToString(), webApiInfo);
+            var info = walker.WalkRoute(
+                request.RequestUri.PathAndQuery,
+                request.Method.ToString(),
+                new RouteData());
 
             // We should have consumed all of the route by now, if we haven't then throw a 404
             if (walker.ExtraneousMatch)
@@ -41,13 +42,14 @@
                             request.RequestUri)));
             }
 
-            if (webApiInfo.ControllerNameSpecified)
+            if (info.Environment.ContainsKey(Constants.ControllerNamePropertyKey))
             {
-                var controllerType = SuperscribeConfig.ControllerTypeCache.GetControllerTypes(webApiInfo.ControllerName).FirstOrDefault();
+                var controllerName = info.Environment[Constants.ControllerNamePropertyKey].ToString();
+                var controllerType = SuperscribeConfig.ControllerTypeCache.GetControllerTypes(controllerName).FirstOrDefault();
                 if (controllerType != null)
                 {
                     return new HttpControllerDescriptor(
-                        SuperscribeConfig.HttpConfiguration, webApiInfo.ControllerName, controllerType);
+                        SuperscribeConfig.HttpConfiguration, controllerName, controllerType);
                 }
             }
 

@@ -10,7 +10,9 @@
 
     using Microsoft.Owin.Testing;
 
+    using Superscribe.Engine;
     using Superscribe.Owin;
+    using Superscribe.Owin.Engine;
     using Superscribe.Owin.Extensions;
     using Superscribe.Owin.Pipelining;
 
@@ -24,7 +26,6 @@
 
         protected Establish context = () =>
         {
-            Define.Reset();
             owinTestServer = TestServer.Create(
                 builder =>
                 {
@@ -35,10 +36,11 @@
                         defaults: new { controller = "Hello" }
                     );
 
-                    builder.UseSuperscribeRouter(new SuperscribeOwinConfig());
+                    var engine = OwinRouteEngineFactory.Create(new SuperscribeOwinOptions());
+                    builder.UseSuperscribeRouter(engine);
 
                     // Set up a route that will respond only to even numbers using the fluent api
-                    Define.Route(ʅ => ʅ / "api" / (
+                    engine.Route(ʅ => ʅ / "api" / (
                           ʅ / "webapi" * Pipeline.Action(o => o.UseWebApi(httpconfig))
                         | ʅ / "nancy" * Pipeline.Action(o => o.UseNancy())));
                 });

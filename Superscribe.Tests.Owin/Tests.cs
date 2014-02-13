@@ -11,7 +11,10 @@
 
     using Microsoft.Owin.Testing;
 
+    using Superscribe.Engine;
     using Superscribe.Owin;
+    using Superscribe.Owin.Components;
+    using Superscribe.Owin.Engine;
     using Superscribe.Owin.Extensions;
 
     public class TestMiddleware
@@ -41,12 +44,14 @@
 
         protected static HttpClient client;
 
+        protected static IOwinRouteEngine engine;
+
         protected Establish context = () =>
             {
                 owinTestServer = TestServer.Create(
                     builder =>
                     {
-                        var config = new SuperscribeOwinConfig();
+                        var config = new SuperscribeOwinOptions();
                         config.MediaTypeHandlers.Add(
                             "text/html",
                             new MediaTypeHandler
@@ -58,12 +63,13 @@
                                 Write = (env, o) => env.WriteResponse(o.ToString())
                             });
 
-                        Define.Route("/", o => "Hello World");
+                        engine = OwinRouteEngineFactory.Create(config);
+                        engine.Route("/", o => "Hello World");
 
                         builder.Use(typeof(TestMiddleware), "before")
-                            .Use(typeof(OwinRouter), builder, config)
+                            .Use(typeof(OwinRouter), builder, engine)
                             .Use(typeof(TestMiddleware), "after")
-                            .Use(typeof(OwinHandler), config);
+                            .Use(typeof(OwinHandler), engine);
                     });
 
                 client = owinTestServer.HttpClient;

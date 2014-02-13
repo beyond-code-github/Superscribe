@@ -1,13 +1,13 @@
-﻿namespace Superscribe.Utils
+﻿namespace Superscribe.Engine
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Security.Policy;
 
+    using Superscribe.Cache;
     using Superscribe.Models;
 
-    public class RouteWalker<T> where T : IRouteData
+    public class RouteWalker : IRouteWalker
     {
         private readonly GraphNode baseNode;
 
@@ -22,14 +22,26 @@
 
         public bool ParamConversionError { get; private set; }
 
+        public string Route { get; set; }
+
         public string Method { get; set; }
 
         public Queue<string> RemainingSegments { get; private set; }
 
-        public void WalkRoute(string route, string method, T info)
+        public RouteData WalkRoute(string route, string method, RouteData info)
         {
             string querystring = null;
             this.Method = method;
+            this.Route = route;
+
+            CacheEntry<RouteData> cacheEntry;
+            if (RouteCache.TryGet(method + "-" + route, out cacheEntry))
+            {
+                var cachedInfo = cacheEntry.Info;
+                info.Response = cacheEntry.OnComplete(cachedInfo);
+
+                return info;
+            }
 
             var parts = route.Split('?');
             if (parts.Length > 0)
@@ -57,6 +69,8 @@
 
             this.RemainingSegments = new Queue<string>(route.Split('/'));
             this.WalkRoute(info, this.baseNode);
+
+            return info;
         }
 
         public string PeekNextSegment()
@@ -69,7 +83,7 @@
             return string.Empty;
         }
 
-        public void WalkRoute(T info, GraphNode match)
+        public void WalkRoute(RouteData info, GraphNode match)
         {
             FinalFunction onComplete = null;
             while (match != null)
@@ -124,12 +138,12 @@
 
             if (onComplete != null)
             {
-                //o => function.Function(o)
+                RouteCache.Store(this.Method + "-" + this.Route, new CacheEntry<RouteData> { Info = info, OnComplete = onComplete.Function });
                 info.Response = onComplete.Function(info);
             }
         }
 
-        private GraphNode FindNextMatch(T info, string segment, IEnumerable<GraphNode> states)
+        private GraphNode FindNextMatch(RouteData info, string segment, IEnumerable<GraphNode> states)
         {
             return !string.IsNullOrEmpty(segment) ?
                 states.FirstOrDefault(o => o.ActivationFunction(info, segment) && (!o.AllowedMethods.Any() || o.AllowedMethods.Contains(this.Method)))

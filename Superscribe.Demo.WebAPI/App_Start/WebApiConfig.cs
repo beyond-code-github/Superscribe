@@ -2,6 +2,7 @@
 {
     using System.Web.Http;
 
+    using Superscribe.Engine;
     using Superscribe.Models;
     using Superscribe.WebApi;
 
@@ -10,8 +11,9 @@
         public static void Register(HttpConfiguration config)
         {
             SuperscribeConfig.Register(config);
+            var engine = RouteEngineFactory.Create();
 
-            Define.Route(() => "api" / "values".Controller() / (
+            engine.Route(() => "api" / "values".Controller() / (
                   -(Int)"id"
                 | ~"(first|last)".Action()
                 | +("foruser" / (Int)"userId")));

@@ -9,17 +9,21 @@
 
     using Newtonsoft.Json;
 
+    using Superscribe.Owin.Engine;
+
     public class Startup
     {
         public void Configuration(IAppBuilder app)
         {
-            var config = new SuperscribeOwinConfig();
+            var config = new SuperscribeOwinOptions();
             SetupMediaTypes(config);
 
-            app.UseSuperscribeRouter(config).UseSuperscribeHandler(config);
+            var engine = OwinRouteEngineFactory.Create(config);
+
+            app.UseSuperscribeRouter(engine).UseSuperscribeHandler(engine);
         }
 
-        private static void SetupMediaTypes(SuperscribeOwinConfig config)
+        private static void SetupMediaTypes(SuperscribeOwinOptions config)
         {
             config.MediaTypeHandlers.Add(
                 "application/json",

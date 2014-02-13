@@ -1,4 +1,4 @@
-﻿namespace Superscribe.Owin
+﻿namespace Superscribe.Owin.Components
 {
     using System;
     using System.Collections.Generic;
@@ -7,8 +7,9 @@
 
     using global::Owin;
 
+    using Superscribe.Owin.Engine;
     using Superscribe.Owin.Extensions;
-    using Superscribe.Utils;
+    using Superscribe.Owin.Pipelining;
 
     public class OwinRouter
     {
@@ -16,13 +17,13 @@
 
         private readonly IAppBuilder builder;
 
-        private readonly SuperscribeOwinConfig config;
+        private readonly IOwinRouteEngine engine;
 
-        public OwinRouter(Func<IDictionary<string, object>, Task> next, IAppBuilder builder, SuperscribeOwinConfig config)
+        public OwinRouter(Func<IDictionary<string, object>, Task> next, IAppBuilder builder, IOwinRouteEngine engine)
         {
             this.next = next;
             this.builder = builder;
-            this.config = config;
+            this.engine = engine;
         }
 
         public async Task Invoke(IDictionary<string, object> environment)
@@ -30,10 +31,10 @@
             var path = environment["owin.RequestPath"].ToString();
             var method = environment["owin.RequestMethod"].ToString();
 
-            var routeData = new OwinRouteData { Environment = environment, Config = config };
+            var routeData = new OwinRouteData { Environment = environment, Config = engine.Config };
             environment["superscribe.RouteData"] = routeData;
 
-            var walker = new RouteWalker<OwinRouteData>(Define.Base);
+            var walker = this.engine.Walker();
             walker.WalkRoute(path, method, routeData);
             
             if (walker.IncompleteMatch)
@@ -52,9 +53,9 @@
 
             environment["route.Parameters"] = routeData.Parameters;
 
-            if (routeData.Pipeline.Any())
+            if (routeData.Pipeline.Any<Middleware>())
             {
-                IAppBuilder branch = builder.New();
+                IAppBuilder branch = this.builder.New();
                 foreach (var middleware in routeData.Pipeline)
                 {
                     var func = middleware.Obj as Func<IAppBuilder, IAppBuilder>;
@@ -75,7 +76,8 @@
             }
             else
             {
-                await this.next(environment);    
+                environment[Constants.SuperscribeRouteWalkerEnvironmentKey] = walker;
+                await this.next(environment);
             }
         }
     }

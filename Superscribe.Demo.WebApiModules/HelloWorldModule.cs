@@ -2,7 +2,6 @@
 {
     using Superscribe.Demo.WebApiModules.Services;
     using Superscribe.Models;
-    using Superscribe.WebApi.Modules;
 
     public class MessageWrapper
     {

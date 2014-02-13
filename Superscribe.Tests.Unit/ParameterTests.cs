@@ -2,22 +2,22 @@
 {
     using Machine.Specifications;
 
+    using Superscribe.Engine;
     using Superscribe.Models;
-    using Superscribe.Testing;
-    using Superscribe.Utils;
 
     public abstract class ParameterTests
     {
         protected static RouteData routeData;
 
-        protected static RouteWalker<RouteData> subject;
+        protected static IRouteEngine subject;
+
+        protected static IRouteWalker walker;
 
         private Establish context = () =>
         {
             routeData = new RouteData();
-            Define.Reset();
-
-            subject = new RouteWalker<RouteData>(Define.Base);
+            subject = RouteEngineFactory.Create();
+            walker = subject.Walker();
         };
 
         protected static object Hello(dynamic o)
@@ -43,54 +43,54 @@
 
     public class When_capturing_a_string_parameter : ParameterTests
     {
-        private Establish context = () => Define.Route(root => root / "Hello" / (String)"Name" * Hello);
+        private Establish context = () => subject.Route(root => root / "Hello" / (String)"Name" * Hello);
 
-        private Because of = () => subject.WalkRoute("/Hello/Pete", "GET", routeData);
+        private Because of = () => walker.WalkRoute("/Hello/Pete", "GET", routeData);
 
         private It should_execute_the_final_function = () => routeData.Response.ShouldEqual("Hello Pete");
     }
 
     public class When_there_is_an_absent_optional_string_parameter_at_the_end_of_a_route : ParameterTests
     {
-        private Establish context = () => Define.Route(root => root / "Hello" * HelloUnknown / -(String)"Name" * Hello);
+        private Establish context = () => subject.Route(root => root / "Hello" * HelloUnknown / -(String)"Name" * Hello);
 
-        private Because of = () => subject.WalkRoute("/Hello", "GET", routeData);
+        private Because of = () => walker.WalkRoute("/Hello", "GET", routeData);
 
         private It should_execute_the_final_function_not_the_optional_part = () => routeData.Response.ShouldEqual("Hello Unknown Person");
     }
 
     public class When_there_is_an_absent_optional_string_parameter_at_the_end_of_a_route_invoked_with_a_trailing_slash : ParameterTests
     {
-        private Establish context = () => Define.Route(root => root / "Hello" * HelloUnknown / -(String)"Name" * Hello);
+        private Establish context = () => subject.Route(root => root / "Hello" * HelloUnknown / -(String)"Name" * Hello);
 
-        private Because of = () => subject.WalkRoute("/Hello/", "GET", routeData);
+        private Because of = () => walker.WalkRoute("/Hello/", "GET", routeData);
 
         private It should_execute_the_final_function_not_the_optional_part = () => routeData.Response.ShouldEqual("Hello Unknown Person");
     }
 
     public class When_capturing_a_boolean_parameter_true : ParameterTests
     {
-        private Establish context = () => Define.Route(root => root / "Happy" / (Bool)"Happy" * CommentOnMood);
+        private Establish context = () => subject.Route(root => root / "Happy" / (Bool)"Happy" * CommentOnMood);
 
-        private Because of = () => subject.WalkRoute("/Happy/true", "GET", routeData);
+        private Because of = () => walker.WalkRoute("/Happy/true", "GET", routeData);
 
         private It should_execute_the_final_function = () => routeData.Response.ShouldEqual("Me too!");
     }
 
     public class When_capturing_a_boolean_parameter_false : ParameterTests
     {
-        private Establish context = () => Define.Route(root => root / "Happy" / (Bool)"Happy" * CommentOnMood);
+        private Establish context = () => subject.Route(root => root / "Happy" / (Bool)"Happy" * CommentOnMood);
 
-        private Because of = () => subject.WalkRoute("/Happy/false", "GET", routeData);
+        private Because of = () => walker.WalkRoute("/Happy/false", "GET", routeData);
 
         private It should_execute_the_final_function = () => routeData.Response.ShouldEqual("Why so sad?");
     }
 
     public class When_capturing_an_int_parameter : ParameterTests
     {
-        private Establish context = () => Define.Route(root => root / "Confirm" / (Int)"Age" * CheckAge);
+        private Establish context = () => subject.Route(root => root / "Confirm" / (Int)"Age" * CheckAge);
 
-        private Because of = () => subject.WalkRoute("/Confirm/18", "GET", routeData);
+        private Because of = () => walker.WalkRoute("/Confirm/18", "GET", routeData);
 
         private It should_execute_the_final_function = () => routeData.Response.ShouldEqual("Access granted");
     }
@@ -99,16 +99,16 @@
     //{
     //    private Establish context = () => ʃ.Route(root => root / "Confirm" / (ʃInt)"Age" * CheckAge);
 
-    //    private Because of = () => subject.WalkRoute("/Confirm/18000000000", "GET", routeData);
+    //    private Because of = () => walker.WalkRoute("/Confirm/18000000000", "GET", routeData);
 
     //    private It should_throw_an_error = () => routeData.ParamConversionError.ShouldEqual(true);
     //}
 
     public class When_capturing_a_long_parameter : ParameterTests
     {
-        private Establish context = () => Define.Route(root => root / "Confirm" / (Long)"Age" * CheckAge);
+        private Establish context = () => subject.Route(root => root / "Confirm" / (Long)"Age" * CheckAge);
 
-        private Because of = () => subject.WalkRoute("/Confirm/18000000000", "GET", routeData);
+        private Because of = () => walker.WalkRoute("/Confirm/18000000000", "GET", routeData);
 
         private It should_execute_the_final_function = () => routeData.Response.ShouldEqual("Access granted");
     }

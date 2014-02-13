@@ -46,16 +46,26 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.30506.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.4.0.30506.0\lib\net40\System.Web.Http.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="Dependencies\SuperscribeDependencyAdapter.cs" />
+    <Compile Include="Dependencies\SuperscribeDependencyScopeAdapter.cs" />
+    <Compile Include="Engine\IWebApiRouteDataResolver.cs" />
+    <Compile Include="Engine\IWebApiRouteData.cs" />
+    <Compile Include="Engine\WebApiRouteDataAdapter.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Models\ActionNode.cs" />
+    <Compile Include="Models\ControllerNode.cs" />
     <Compile Include="Modules\ModuleController.cs" />
     <Compile Include="Modules\ModuleRouteData.cs" />
-    <Compile Include="Modules\SuperscribeModule.cs" />
     <Compile Include="Modules\SuperscribeModuleActionInvoker.cs" />
     <Compile Include="Modules\SuperscribeModuleActionSelector.cs" />
     <Compile Include="Modules\SuperscribeModuleControllerSelector.cs" />
@@ -78,6 +88,7 @@
       <Name>Superscribe</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

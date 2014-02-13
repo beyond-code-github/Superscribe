@@ -1,5 +1,6 @@
 ﻿namespace Superscribe.WebApi.Modules
 {
+    using System.Collections.Generic;
     using System.Net.Http;
     using System.Net.Http.Formatting;
     using System.Security.Principal;
@@ -8,10 +9,10 @@
     using System.Web.Http.ModelBinding;
     using System.Web.Http.Routing;
 
-    using Superscribe.Models;
+    using Superscribe.Engine;
     using Superscribe.Utils;
-
-    public class ModuleRouteData : IRouteData
+    
+    public class ModuleRouteData : IModuleRouteData
     {
         public ModuleRouteData()
         {
@@ -19,6 +20,8 @@
         }
 
         public dynamic Parameters { get; set; }
+
+        public IDictionary<string, object> Environment { get; set; }
 
         public object Response { get; set; }
 

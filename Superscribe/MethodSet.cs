@@ -1,18 +1,32 @@
 ﻿namespace Superscribe
 {
     using System;
+    using System.Collections.Generic;
 
+    using Superscribe.Engine;
     using Superscribe.Models;
 
     public class MethodSet<T>
+        where T: IModuleRouteData
     {
-        private readonly Action<Func<GraphNode>> binding;
-
         private readonly string method;
 
-        public MethodSet(Action<Func<GraphNode>> binding, string method)
+        private IRouteEngine engine;
+
+        private readonly List<Func<GraphNode>> bindings = new List<Func<GraphNode>>();
+
+        public void Initialise(IRouteEngine routeEngine)
         {
-            this.binding = binding;
+            this.engine = routeEngine;
+
+            foreach (var binding in bindings)
+            {
+                this.ApplyBinding(binding);    
+            }
+        }
+
+        public MethodSet(string method)
+        {
             this.method = method;
         }
 
@@ -22,12 +36,12 @@
             {
                 if (s == "/")
                 {
-                    Define.Base.FinalFunctions.Add(new FinalFunction(this.method, f => value(f)));
+                    engine.Base.FinalFunctions.Add(new FinalFunction(this.method, f => value(f)));
                 }
                 else
                 {
                     var node = new ConstantNode(s);
-                    this.binding(() => node * (f => value(f)));    
+                    this.bindings.Add(() => node * (f => value(f)));
                 }
             }
         }
@@ -37,8 +51,15 @@
             set
             {
                 s = s * (f => value(f));
-                this.binding(() => s.Base());
+                this.bindings.Add(() => s.Base());
             }
+        }
+
+        private void ApplyBinding(Func<GraphNode> o)
+        {
+            var leaf = o();
+            leaf.AddAllowedMethod(this.method);
+            this.engine.Base.Zip(leaf.Base());
         }
     }
 }

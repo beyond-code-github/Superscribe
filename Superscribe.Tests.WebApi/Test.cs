@@ -18,7 +18,7 @@
         {
             var config = new HttpConfiguration();
             SuperscribeTestConfig.Register(config);
-
+            
             browser = new Browser(config);
         };
     }

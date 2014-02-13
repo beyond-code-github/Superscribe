@@ -4,28 +4,22 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Superscribe.Models;
+    using Superscribe.Engine;
     using Superscribe.Owin.Extensions;
     using Superscribe.Owin.Pipelining;
     using Superscribe.Utils;
 
-    public class OwinRouteData : IRouteData
+    public class OwinRouteData : RouteData, IModuleRouteData
     {
         public OwinRouteData()
         {
             this.Parameters = new DynamicDictionary();
             this.Pipeline = new List<Middleware>();
         }
-
-        public dynamic Parameters { get; set; }
-
-        public object Response { get; set; }
-
+        
         public int StatusCode { get; set; }
         
-        public SuperscribeOwinConfig Config { get; set; }
-
-        public IDictionary<string, object> Environment { get; set; }
+        public SuperscribeOwinOptions Config { get; set; }
 
         public List<Middleware> Pipeline { get; set; }
 

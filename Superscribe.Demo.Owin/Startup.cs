@@ -7,13 +7,14 @@
     using global::Owin;
 
     using Superscribe.Owin;
+    using Superscribe.Owin.Engine;
     using Superscribe.Owin.Extensions;
 
     public class Startup
     {
         public void Configuration(IAppBuilder app)
         {
-            var config = new SuperscribeOwinConfig();
+            var config = new SuperscribeOwinOptions();
 
             config.MediaTypeHandlers.Add(
                 "application/json",
@@ -39,7 +40,8 @@
                         Write = (env, o) => env.WriteResponse(o.ToString())
                     });
 
-            app.UseSuperscribeHandler(config);
+            var engine = OwinRouteEngineFactory.Create(config);
+            app.UseSuperscribeHandler(engine);
         }
     }
 }

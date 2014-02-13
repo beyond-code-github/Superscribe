@@ -8,21 +8,23 @@
 
     using Owin;
 
+    using Superscribe.Owin.Engine;
     using Superscribe.Owin.Extensions;
 
     public class Startup
     {
         public void Configuration(IAppBuilder app)
         {
-            var config = new SuperscribeOwinConfig();
-            SetupMediaTypes(config);
+            var options = new SuperscribeOwinOptions();
+            SetupMediaTypes(options);
 
-            Define.Route("/", o => "Hello World");
+            var define = OwinRouteEngineFactory.Create(options);
+            define.Route("/", o => "Hello World");
 
-            app.UseSuperscribeRouter(config).UseSuperscribeHandler(config);
+            app.UseSuperscribeRouter(define).UseSuperscribeHandler(define);
         }
 
-        private static void SetupMediaTypes(SuperscribeOwinConfig config)
+        private static void SetupMediaTypes(SuperscribeOwinOptions config)
         {
             config.MediaTypeHandlers.Add(
                 "application/json",
