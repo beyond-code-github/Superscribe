@@ -12,9 +12,6 @@
         {
             var webApiInfo = new ModuleRouteData
                                  {
-                                     Configuration = this.Configuration,
-                                     ControllerContext = this.ControllerContext,
-                                     ModelState = this.ModelState,
                                      Request = this.Request,
                                      Url = this.Url,
                                      User = this.User

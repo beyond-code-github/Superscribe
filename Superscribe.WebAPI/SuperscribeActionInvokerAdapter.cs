@@ -12,8 +12,15 @@
     using Superscribe.WebApi.Engine;
     using Superscribe.WebApi.Internals;
 
-    public class SuperscribeActionInvoker : IHttpActionInvoker
+    public class SuperscribeActionInvokerAdapter : IHttpActionInvoker
     {
+        private IHttpActionInvoker baseInvoker;
+
+        public SuperscribeActionInvokerAdapter(IHttpActionInvoker baseInvoker)
+        {
+            this.baseInvoker = baseInvoker;
+        }
+
         public Task<HttpResponseMessage> InvokeActionAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
         {
             if (actionContext == null)

@@ -22,6 +22,8 @@
 
         public bool ParamConversionError { get; private set; }
 
+        public bool FinalFunctionExecuted { get; private set; }
+
         public string Route { get; set; }
 
         public string Method { get; set; }
@@ -37,8 +39,10 @@
             CacheEntry<RouteData> cacheEntry;
             if (RouteCache.TryGet(method + "-" + route, out cacheEntry))
             {
-                var cachedInfo = cacheEntry.Info;
-                info.Response = cacheEntry.OnComplete(cachedInfo);
+                info = cacheEntry.Info;
+                info.Response = cacheEntry.OnComplete(info);
+
+                FinalFunctionExecuted = true;
 
                 return info;
             }
@@ -140,6 +144,7 @@
             {
                 RouteCache.Store(this.Method + "-" + this.Route, new CacheEntry<RouteData> { Info = info, OnComplete = onComplete.Function });
                 info.Response = onComplete.Function(info);
+                FinalFunctionExecuted = true;
             }
         }
 

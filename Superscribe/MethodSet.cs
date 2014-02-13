@@ -15,9 +15,16 @@
 
         private readonly List<Func<GraphNode>> bindings = new List<Func<GraphNode>>();
 
+        private readonly List<FinalFunction> baseFinals = new List<FinalFunction>();
+
         public void Initialise(IRouteEngine routeEngine)
         {
             this.engine = routeEngine;
+
+            foreach (var final in this.baseFinals)
+            {
+                engine.Base.FinalFunctions.Add(final);
+            }
 
             foreach (var binding in bindings)
             {
@@ -36,7 +43,8 @@
             {
                 if (s == "/")
                 {
-                    engine.Base.FinalFunctions.Add(new FinalFunction(this.method, f => value(f)));
+                    this.baseFinals.Add(new ExclusiveFinalFunction(this.method, f => value(f)));
+                    
                 }
                 else
                 {

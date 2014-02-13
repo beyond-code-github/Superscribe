@@ -17,11 +17,11 @@
             var config = new SuperscribeOwinOptions();
             var engine = OwinRouteEngineFactory.Create(config);
 
-            engine.Route(o => "Values".Controller());
-            
             var httpconfig = new HttpConfiguration();
-            SuperscribeConfig.Register(httpconfig);
-            
+            SuperscribeConfig.Register(httpconfig, engine);
+
+            engine.Route(o => "Values".Controller());      
+
             app.UseSuperscribeRouter(engine)
                 .UseWebApiWithSuperscribe(httpconfig, engine);
         }

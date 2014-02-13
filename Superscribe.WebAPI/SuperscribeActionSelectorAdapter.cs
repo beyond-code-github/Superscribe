@@ -10,12 +10,19 @@
     using Superscribe.Engine;
     using Superscribe.WebApi.Internals;
 
-    public class SuperscribeActionSelector : IHttpActionSelector
+    public class SuperscribeActionSelectorAdapter : IHttpActionSelector
     {
         private ActionSelectorCacheItem fastCache;
 
         private readonly object cacheKey = new object();
-        
+
+        private readonly IHttpActionSelector baseActionSelector;
+
+        public SuperscribeActionSelectorAdapter(IHttpActionSelector actionSelector)
+        {
+            this.baseActionSelector = actionSelector;
+        }
+
         public HttpActionDescriptor SelectAction(HttpControllerContext controllerContext)
         {
             var walker = controllerContext.Request.GetDependencyScope().GetService(typeof(IRouteWalker)) as IRouteWalker;
@@ -24,6 +31,11 @@
                 controllerContext.Request.RequestUri.PathAndQuery,
                 controllerContext.Request.Method.ToString(),
                 new RouteData());
+
+            if (walker.ExtraneousMatch || walker.IncompleteMatch)
+            {
+                return this.baseActionSelector.SelectAction(controllerContext);
+            }
 
             var internalSelector = GetInternalSelector(controllerContext.ControllerDescriptor);
 

@@ -10,8 +10,17 @@
         {
             config.EnableSystemDiagnosticsTracing();
             config.Formatters.Remove(config.Formatters.XmlFormatter);
+            
+            config.MapHttpAttributeRoutes();
 
-            SuperscribeConfig.RegisterModules(config);
+            config.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                routeTemplate: "api/{controller}/{id}",
+                defaults: new { controller = "values", id = RouteParameter.Optional });
+
+            var engine = SuperscribeConfig.RegisterModules(config);
+
+            engine.Route("values".Controller());
         }
     }
 }
