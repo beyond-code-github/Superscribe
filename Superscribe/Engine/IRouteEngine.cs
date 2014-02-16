@@ -33,13 +33,23 @@
 
         GraphNode Get(Func<RouteGlue, GraphNode> config);
 
+        void Get(GraphNode config);
+
         GraphNode Post(Func<RouteGlue, GraphNode> config);
+
+        void Post(GraphNode config);
 
         GraphNode Put(Func<RouteGlue, GraphNode> config);
 
+        void Put(GraphNode config);
+        
         GraphNode Patch(Func<RouteGlue, GraphNode> config);
 
+        void Patch(GraphNode config);
+
         GraphNode Delete(Func<RouteGlue, GraphNode> config);
+
+        void Delete(GraphNode config);
 
         IRouteWalker Walker();
         

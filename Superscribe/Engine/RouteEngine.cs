@@ -27,6 +27,11 @@
             }
         }
 
+        public void Delete(GraphNode config)
+        {
+            throw new NotImplementedException();
+        }
+
         public IRouteWalker Walker()
         {
             return routeWalkerFactory(this.Base);
@@ -111,6 +116,12 @@
             return leaf;
         }
 
+        public void Get(GraphNode leaf)
+        {
+            leaf.AddAllowedMethod("GET");
+            this.Base.Zip(leaf.Base());
+        }
+
         public GraphNode Post(Func<RouteGlue, GraphNode> config)
         {
             var leaf = config(new RouteGlue("POST"));
@@ -118,6 +129,12 @@
             this.Base.Zip(leaf.Base());
 
             return leaf;
+        }
+
+        public void Post(GraphNode leaf)
+        {
+            leaf.AddAllowedMethod("POST");
+            this.Base.Zip(leaf.Base());
         }
 
         public GraphNode Put(Func<RouteGlue, GraphNode> config)
@@ -129,6 +146,11 @@
             return leaf;
         }
 
+        public void Put(GraphNode config)
+        {
+            throw new NotImplementedException();
+        }
+
         public GraphNode Patch(Func<RouteGlue, GraphNode> config)
         {
             var leaf = config(new RouteGlue("PATCH"));
@@ -136,6 +158,11 @@
             this.Base.Zip(leaf.Base());
 
             return leaf;
+        }
+
+        public void Patch(GraphNode config)
+        {
+            throw new NotImplementedException();
         }
 
         public GraphNode Delete(Func<RouteGlue, GraphNode> config)
