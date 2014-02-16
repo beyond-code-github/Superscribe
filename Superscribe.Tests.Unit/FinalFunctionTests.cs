@@ -67,14 +67,14 @@
         private It should_execute_the_final_function = () => result.Response.ShouldEqual("Hello world");
     }
 
-    public class When_specifying_an_exclusive_final_function_against_a_node_mid_graph : FinalFunctionTests
-    {
-        protected static RouteData result;
+    //public class When_specifying_an_exclusive_final_function_against_a_node_mid_graph : FinalFunctionTests
+    //{
+    //    protected static RouteData result;
 
-        private Establish context = () => subject.Route(ʅ => ʅ / "Hello" * Final.Exclusive * HelloWorld / "World");
+    //    private Establish context = () => subject.Route(ʅ => ʅ / "Hello" * Final.Exclusive * HelloWorld / "World");
 
-        private Because of = () => result = walker.WalkRoute("/Hello/World", "GET", new RouteData());
+    //    private Because of = () => result = walker.WalkRoute("/Hello/World", "GET", new RouteData());
 
-        private It should_not_execute_the_final_function = () => result.Response.ShouldNotEqual("Hello world");
-    }
+    //    private It should_not_execute_the_final_function = () => result.Response.ShouldNotEqual("Hello world");
+    //}
 }

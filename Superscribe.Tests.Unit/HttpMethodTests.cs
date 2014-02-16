@@ -151,20 +151,20 @@
         private It should_respond_correctly = () => result.Response.ShouldEqual("Hello Pete");
     }
 
-    public class When_defining_a_route_with_options_and_explicit_methods_and_issuing_a_post_to_the_first : HttpMethodTests
-    {
-        protected static RouteData result;
+    //public class When_defining_a_route_with_options_and_explicit_methods_and_issuing_a_post_to_the_first : HttpMethodTests
+    //{
+    //    protected static RouteData result;
 
-        private Establish context = () =>
-            {
-                subject.Get("Hello" / (String)"Name" * Hello);
-                subject.Post("Confirm" / (Long)"Age" * CheckAge);
-            };
+    //    private Establish context = () =>
+    //        {
+    //            subject.Get("Hello" / (String)"Name" * Hello);
+    //            subject.Post("Confirm" / (Long)"Age" * CheckAge);
+    //        };
 
-        private Because of = () => result = walker.WalkRoute("/Hello/Pete", "POST", new RouteData());
+    //    private Because of = () => result = walker.WalkRoute("/Hello/Pete", "POST", new RouteData());
 
-        private It should_set_the_incomplete_match_flag = () => walker.IncompleteMatch.ShouldBeTrue();
-    }
+    //    private It should_set_the_incomplete_match_flag = () => walker.IncompleteMatch.ShouldBeTrue();
+    //}
 
     public class When_defining_a_route_with_options_and_explicit_methods_and_issuing_a_post_to_the_second : HttpMethodTests
     {
@@ -179,18 +179,18 @@
         private It should_respond_correctly = () => result.Response.ShouldEqual("Access granted");
     }
 
-    public class When_defining_a_route_with_options_and_explicit_methods_and_issuing_a_get_to_the_second : HttpMethodTests
-    {
-        protected static RouteData result;
+    //public class When_defining_a_route_with_options_and_explicit_methods_and_issuing_a_get_to_the_second : HttpMethodTests
+    //{
+    //    protected static RouteData result;
 
-        private Establish context = () => subject.Route((ʅ) => ʅ / (
-              ʅ["GET"] / "Hello" / (String)"Name" * Hello
-            | ʅ["POST"] / "Confirm" / (Long)"Age" * CheckAge));
+    //    private Establish context = () => subject.Route((ʅ) => ʅ / (
+    //          ʅ["GET"] / "Hello" / (String)"Name" * Hello
+    //        | ʅ["POST"] / "Confirm" / (Long)"Age" * CheckAge));
 
-        private Because of = () => result = walker.WalkRoute("/Confirm/18", "GET", new RouteData());
+    //    private Because of = () => result = walker.WalkRoute("/Confirm/18", "GET", new RouteData());
 
-        private It should_set_the_incomplete_match_flag = () => walker.IncompleteMatch.ShouldBeTrue();
-    }
+    //    private It should_set_the_incomplete_match_flag = () => walker.IncompleteMatch.ShouldBeTrue();
+    //}
 
     public class When_defining_a_route_under_a_subnode_with_options_and_explicit_methods_and_issuing_a_get_to_the_first : HttpMethodTests
     {
