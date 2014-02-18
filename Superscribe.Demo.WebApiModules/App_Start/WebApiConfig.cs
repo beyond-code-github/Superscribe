@@ -18,9 +18,9 @@
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { controller = "values", id = RouteParameter.Optional });
 
-            var engine = SuperscribeConfig.RegisterModules(config);
+            var define = SuperscribeConfig.RegisterModules(config);
 
-            engine.Route("values".Controller());
+            define.Route("values".Controller());
         }
     }
 }

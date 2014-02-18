@@ -33,15 +33,10 @@
                             }
                     });
 
-            config.MediaTypeHandlers.Add(
-                "text/html",
-                new MediaTypeHandler
-                    {
-                        Write = (env, o) => env.WriteResponse(o.ToString())
-                    });
-
             var engine = OwinRouteEngineFactory.Create(config);
-            app.UseSuperscribeHandler(engine);
+            
+            app.UseSuperscribeRouter(engine)
+                .UseSuperscribeHandler(engine);
         }
     }
 }

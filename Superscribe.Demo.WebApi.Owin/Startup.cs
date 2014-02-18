@@ -4,7 +4,6 @@
 
     using global::Owin;
 
-    using Superscribe.Owin;
     using Superscribe.Owin.Engine;
     using Superscribe.Owin.Extensions;
     using Superscribe.WebApi;
@@ -14,8 +13,7 @@
     {
         public void Configuration(IAppBuilder app)
         {
-            var config = new SuperscribeOwinOptions();
-            var engine = OwinRouteEngineFactory.Create(config);
+            var engine = OwinRouteEngineFactory.Create();
 
             var httpconfig = new HttpConfiguration();
             SuperscribeConfig.Register(httpconfig, engine);

@@ -1,6 +1,5 @@
 ﻿namespace Superscribe.WebApi.Owin.Extensions
 {
-    using System;
     using System.Net.Http;
     using System.Web.Http.Dependencies;
 

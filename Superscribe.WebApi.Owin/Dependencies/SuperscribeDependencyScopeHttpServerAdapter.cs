@@ -22,7 +22,6 @@
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            // Note: no need to call request.RegisterForDispose as AutofacMiddleware will dispose the ILifetimeScope instance.
             var existingScope = this.Configuration.DependencyResolver.BeginScope();
             var dependencyScope = request.GetSuperscribeDependencyScope(existingScope);
 
