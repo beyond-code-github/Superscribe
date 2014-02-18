@@ -11,9 +11,12 @@
     {
         private readonly GraphNode baseNode;
 
-        public RouteWalker(GraphNode baseNode)
+        private readonly IRouteCache routeCache;
+
+        public RouteWalker(GraphNode baseNode, IRouteCache routeCache)
         {
             this.baseNode = baseNode;
+            this.routeCache = routeCache;
         }
 
         public bool ExtraneousMatch { get; private set; }
@@ -37,7 +40,7 @@
             this.Route = route;
 
             CacheEntry<RouteData> cacheEntry;
-            if (RouteCache.TryGet(method + "-" + route, out cacheEntry))
+            if (routeCache.TryGet(method + "-" + route, out cacheEntry))
             {
                 info = cacheEntry.Info;
                 info.Response = cacheEntry.OnComplete(info);
@@ -142,7 +145,7 @@
 
             if (onComplete != null)
             {
-                RouteCache.Store(this.Method + "-" + this.Route, new CacheEntry<RouteData> { Info = info, OnComplete = onComplete.Function });
+                routeCache.Store(this.Method + "-" + this.Route, new CacheEntry<RouteData> { Info = info, OnComplete = onComplete.Function });
                 info.Response = onComplete.Function(info);
                 FinalFunctionExecuted = true;
             }

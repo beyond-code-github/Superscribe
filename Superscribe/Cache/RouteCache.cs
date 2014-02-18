@@ -1,13 +1,19 @@
 ﻿namespace Superscribe.Cache
 {
-    using System;
     using System.Collections.Concurrent;
 
-    public static class RouteCache
+    public interface IRouteCache
     {
-        public static ConcurrentDictionary<string, object> Cache = new ConcurrentDictionary<string, object>();
+        bool TryGet<T>(string url, out CacheEntry<T> entry);
+
+        void Store<T>(string url, CacheEntry<T> handler);
+    }
+
+    public class RouteCache : IRouteCache
+    {
+        public ConcurrentDictionary<string, object> Cache = new ConcurrentDictionary<string, object>();
         
-        public static bool TryGet<T>(string url, out CacheEntry<T> entry)
+        public bool TryGet<T>(string url, out CacheEntry<T> entry)
         {
             object result;
 
@@ -21,9 +27,9 @@
             return false;
         }
         
-        public static void Store<T>(string url, CacheEntry<T> handler)
+        public void Store<T>(string url, CacheEntry<T> handler)
         {
-            Cache.TryAdd(url, handler);
+            this.Cache.TryAdd(url, handler);
         }
     }
 }

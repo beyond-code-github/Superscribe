@@ -72,7 +72,7 @@
 
     public class When_scanning_for_modules : ModuleTests
     {
-        private Because of = () => responseMessage = client.GetAsync("http://localhost/Hello").Result;
+        private Because of = () => responseMessage = client.GetAsync("http://localhost/Hello").Await();
 
         private It should_wire_up_get_handlers =
             () => responseMessage.Content.ReadAsStringAsync().Result.ShouldEqual("Hello World");
@@ -80,7 +80,7 @@
 
     public class When_hitting_a_route_that_is_incomplete: ModuleTests
     {
-        private Because of = () => responseMessage = client.GetAsync("http://localhost/NotDefined").Result;
+        private Because of = () => responseMessage = client.GetAsync("http://localhost/NotDefined").Await();
 
         private It should_return_a_404 =
             () => responseMessage.StatusCode.ShouldEqual(HttpStatusCode.NotFound);
@@ -88,7 +88,7 @@
 
     public class When_hitting_an_extraneous_route : ModuleTests
     {
-        private Because of = () => responseMessage = client.GetAsync("http://localhost/Hello/More").Result;
+        private Because of = () => responseMessage = client.GetAsync("http://localhost/Hello/More").Await();
 
         private It should_return_a_404 =
             () => responseMessage.StatusCode.ShouldEqual(HttpStatusCode.NotFound);
@@ -105,7 +105,7 @@
 
     public class When_getting_products : JsonTests
     {
-        private Because of = () => responseMessage = client.GetAsync("http://localhost/Products").Result;
+        private Because of = () => responseMessage = client.GetAsync("http://localhost/Products").Await();
 
         private It should_return_a_200 =
             () => responseMessage.StatusCode.ShouldEqual(HttpStatusCode.OK);
@@ -113,7 +113,7 @@
 
     public class When_getting_products_by_id : JsonTests
     {
-        private Because of = () => responseMessage = client.GetAsync("http://localhost/Products/1").Result;
+        private Because of = () => responseMessage = client.GetAsync("http://localhost/Products/1").Await();
 
         private It should_return_a_200 =
             () => responseMessage.StatusCode.ShouldEqual(HttpStatusCode.OK);
@@ -121,7 +121,7 @@
 
     public class When_getting_products_by_category : JsonTests
     {
-        private Because of = () => responseMessage = client.GetAsync("http://localhost/Products/Fashion").Result;
+        private Because of = () => responseMessage = client.GetAsync("http://localhost/Products/Fashion").Await();
 
         private It should_return_a_200 =
             () => responseMessage.StatusCode.ShouldEqual(HttpStatusCode.OK);
@@ -140,7 +140,7 @@
                 content.Headers.ContentType.MediaType = "application/json";
             };
 
-        private Because of = () => responseMessage = client.PostAsync("http://localhost/Products", content).Result;
+        private Because of = () => responseMessage = client.PostAsync("http://localhost/Products", content).Await();
 
         private It should_return_a_201 =
             () => responseMessage.StatusCode.ShouldEqual(HttpStatusCode.Created);

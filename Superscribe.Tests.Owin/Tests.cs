@@ -77,7 +77,7 @@
             };
 
         private Because of = () =>
-                responseMessage = client.GetAsync("http://localhost/").Result;
+                responseMessage = client.GetAsync("http://localhost/").Await();
 
         private It should_add_the_before_header =
             () => responseMessage.Headers.FirstOrDefault(o => o.Key == "before").Value.ShouldContain("before");

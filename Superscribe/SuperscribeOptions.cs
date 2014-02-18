@@ -2,6 +2,7 @@
 {
     using System;
 
+    using Superscribe.Cache;
     using Superscribe.Engine;
     using Superscribe.Models;
     using Superscribe.Utils;
@@ -11,8 +12,11 @@
         public SuperscribeOptions()
         {
             this.StringRouteParser = new StringRouteParser();
-            this.RouteWalkerFactory = baseNode => new RouteWalker(baseNode);
+            this.RouteCache = new RouteCache();
+            this.RouteWalkerFactory = baseNode => new RouteWalker(baseNode, this.RouteCache);
         }
+
+        public IRouteCache RouteCache { get; set; }
 
         public IStringRouteParser StringRouteParser { get; set; }
 
