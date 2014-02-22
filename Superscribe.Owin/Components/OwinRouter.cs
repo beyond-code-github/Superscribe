@@ -52,8 +52,10 @@
             }
 
             environment["route.Parameters"] = routeData.Parameters;
+            environment[Constants.SuperscribeRouteWalkerEnvironmentKey] = walker;
+            environment[Constants.SuperscribeRouteDataProviderEnvironmentKey] = new OwinRouteDataProvider(data);
 
-            if (routeData.Pipeline.Any<Middleware>())
+            if (routeData.Pipeline.Any())
             {
                 IAppBuilder branch = this.builder.New();
                 foreach (var middleware in routeData.Pipeline)
@@ -76,9 +78,6 @@
             }
             else
             {
-                environment[Constants.SuperscribeRouteWalkerEnvironmentKey] = walker;
-                environment[Constants.SuperscribeRouteDataProviderEnvironmentKey] = new OwinRouteDataProvider(data);
-
                 await this.next(environment);
             }
         }
