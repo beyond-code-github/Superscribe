@@ -2,15 +2,20 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
+
+    using global::Owin;
 
     using Superscribe.Models;
     using Superscribe.Utils;
 
-    public class OwinNode
+    public class OwinNode : IAppBuilder
     {
         public GraphNode Node { get; set; }
 
         public List<Middleware> Middleware { get; set; }
+
+        public IDictionary<string, object> Properties { get; private set; }
 
         /// <summary>
         /// Base constructor for superscribe states
@@ -19,6 +24,24 @@
         {
             this.Node = node;
             this.Middleware = new List<Middleware>();
+            this.Properties = new Dictionary<string, object>();
+
+            var existingAction = node.ActionFunction;
+            node.ActionFunction = (o, s) =>
+            {
+                if (existingAction != null)
+                {
+                    existingAction(o, s);
+                }
+
+                var routeData = o as OwinRouteData;
+                Debug.Assert(routeData != null, "routeData != null");
+
+                foreach (var middleware in this.Middleware)
+                {
+                    routeData.Pipeline.Add(middleware);
+                }
+            };
         }
 
         public static implicit operator GraphNode(OwinNode owinNode)
@@ -95,6 +118,21 @@
             var list = new SuperList { node };
             list.AddRange(others);
             return list;
+        }
+
+        public IAppBuilder Use(object middleware, params object[] args)
+        {
+            return this * new OwinNodeFuture(middleware, args);
+        }
+
+        public object Build(Type returnType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IAppBuilder New()
+        {
+            throw new NotImplementedException();
         }
     }
 }

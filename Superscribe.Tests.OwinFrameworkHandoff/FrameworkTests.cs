@@ -36,13 +36,12 @@
                         defaults: new { controller = "Hello" }
                     );
 
-                    var engine = OwinRouteEngineFactory.Create(new SuperscribeOwinOptions());
-                    builder.UseSuperscribeRouter(engine);
+                    var define = OwinRouteEngineFactory.Create();
 
-                    // Set up a route that will respond only to even numbers using the fluent api
-                    engine.Route(ʅ => ʅ / "api" / (
-                          ʅ / "webapi" * Pipeline.Action(o => o.UseWebApi(httpconfig))
-                        | ʅ / "nancy" * Pipeline.Action(o => o.UseNancy())));
+                    define.Pipeline(r => r / "api" / "webapi").UseWebApi(httpconfig);
+                    define.Pipeline(r => r / "api" / "nancy").UseNancy();
+
+                    builder.UseSuperscribeRouter(define);
                 });
 
             client = owinTestServer.HttpClient;
