@@ -27,19 +27,19 @@
         /// <returns>The last state in the chain</returns>
         GraphNode Route(Func<RouteGlue, GraphNode> config);
 
-        GraphNode Route(Func<RouteGlue, GraphNode> config, Func<object, object> func);
+        GraphNode Route(Func<RouteGlue, GraphNode> config, Func<dynamic, object> func);
 
         GraphNode Route(Func<RouteGlue, SuperList> config);
 
-        GraphNode Route(Func<RouteGlue, Func<object, object>> config);
+        GraphNode Route(Func<RouteGlue, Func<dynamic, object>> config);
 
         GraphNode Route(GraphNode config);
 
         GraphNode Route(string routeTemplate);
 
-        GraphNode Route(string routeTemplate, Func<object, object> func);
+        GraphNode Route(string routeTemplate, Func<dynamic, object> func);
 
-        GraphNode Route(GraphNode config, Func<object, object> func);
+        GraphNode Route(GraphNode config, Func<dynamic, object> func);
 
         GraphNode Get(Func<RouteGlue, GraphNode> config);
 

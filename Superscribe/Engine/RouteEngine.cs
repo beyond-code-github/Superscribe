@@ -61,7 +61,7 @@
             return leaf;
         }
 
-        public GraphNode Route(Func<RouteGlue, GraphNode> config, Func<object, object> func)
+        public GraphNode Route(Func<RouteGlue, GraphNode> config, Func<dynamic, object> func)
         {
             var leaf = config(new RouteGlue());
             leaf.FinalFunctions.Add(new FinalFunction { Function = func });
