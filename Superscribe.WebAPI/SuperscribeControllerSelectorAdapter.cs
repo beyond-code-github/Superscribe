@@ -6,8 +6,6 @@
     using System.Web.Http.Controllers;
     using System.Web.Http.Dispatcher;
 
-    using Superscribe.Engine;
-
     public class SuperscribeControllerSelectorAdapter : IHttpControllerSelector
     {
         private readonly IHttpControllerSelector baseSelector;
@@ -19,15 +17,11 @@
 
         public HttpControllerDescriptor SelectController(HttpRequestMessage request)
         {
-            var walker = request.GetDependencyScope().GetService(typeof(IRouteWalker)) as IRouteWalker;
-
-            var info = walker.WalkRoute(
-                request.RequestUri.PathAndQuery,
-                request.Method.ToString(),
-                new RouteData());
+            var provider = request.GetRouteDataProvider();
+            var info = provider.GetData(request);
 
             // We should have consumed all of the route by now, if we haven't then throw a 404
-            if (!walker.ExtraneousMatch && !walker.IncompleteMatch)
+            if (!info.ExtraneousMatch && !info.IncompleteMatch)
             {
                 if (info.Environment.ContainsKey(Constants.ControllerNamePropertyKey))
                 {

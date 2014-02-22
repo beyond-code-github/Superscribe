@@ -5,6 +5,7 @@
 
     using Superscribe.Engine;
     using Superscribe.Owin;
+    using Superscribe.WebApi.Dependencies;
     using Superscribe.WebApi.Owin.Dependencies;
 
     public static class RequestExtensions
@@ -12,7 +13,9 @@
         public static IDependencyScope GetSuperscribeDependencyScope(this HttpRequestMessage request, IDependencyScope existingScope)
         {
             var routeWalker = request.GetOwinContext().Environment[Constants.SuperscribeRouteWalkerEnvironmentKey] as IRouteWalker;
-            return new SuperscribeDependencyScopeAdapter(existingScope, routeWalker);
+            var routeDataProvider = request.GetOwinContext().Environment[Constants.SuperscribeRouteDataProviderEnvironmentKey] as IRouteDataProvider;
+
+            return new SuperscribeDependencyScopeAdapter(existingScope, routeWalker, routeDataProvider);
         }
     }
 }

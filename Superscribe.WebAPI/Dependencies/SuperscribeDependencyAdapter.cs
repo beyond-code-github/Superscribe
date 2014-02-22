@@ -5,7 +5,7 @@
     using System.Web.Http.Dependencies;
 
     using Superscribe.Engine;
-    using Superscribe.WebApi.Owin.Dependencies;
+    using Superscribe.WebApi.Engine;
 
     public class SuperscribeDependencyAdapter : IDependencyResolver
     {
@@ -37,7 +37,8 @@
         public IDependencyScope BeginScope()
         {
             var originalScope = this.baseDependencyResolver.BeginScope();
-            var scope = new SuperscribeDependencyScopeAdapter(originalScope, this.routeEngine.Walker());
+            var walker = this.routeEngine.Walker();
+            var scope = new SuperscribeDependencyScopeAdapter(originalScope, walker, new LazyRouteDataProvider(walker));
             return scope;
         }
     }

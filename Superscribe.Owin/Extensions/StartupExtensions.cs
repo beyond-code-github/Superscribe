@@ -5,7 +5,6 @@
 
     using global::Owin;
 
-    using Superscribe.Engine;
     using Superscribe.Owin.Components;
     using Superscribe.Owin.Engine;
 
@@ -39,7 +38,6 @@
 
         private static IAppBuilder SuperscribeRouter(IAppBuilder builder, IOwinRouteEngine engine)
         {
-            builder.Properties[Constants.SuperscribeRouteResolverPropertyKey] = (Func<IRouteWalker>)(() => engine.Walker());
             return builder.Use(typeof(OwinRouter), builder, engine);
         }
     }

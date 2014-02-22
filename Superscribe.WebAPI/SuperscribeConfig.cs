@@ -9,7 +9,6 @@
     using Superscribe.Engine;
     using Superscribe.WebApi.Dependencies;
     using Superscribe.WebApi.Internals;
-    using Superscribe.WebApi.Modules;
 
     /// <summary>
     /// Superscribe configuration for Web API

@@ -31,12 +31,8 @@
             var actionDescriptor = actionContext.ActionDescriptor;
             var controllerContext = actionContext.ControllerContext;
 
-            var walker = actionContext.Request.GetDependencyScope().GetService(typeof(IRouteWalker)) as IRouteWalker;
-
-            var routedata = walker.WalkRoute(
-                controllerContext.Request.RequestUri.PathAndQuery,
-                controllerContext.Request.Method.ToString(),
-                new RouteData());
+            var provider = actionContext.Request.GetRouteDataProvider();
+            var routedata = provider.GetData(actionContext.Request);
 
             foreach (var param in actionContext.ActionArguments)
             {

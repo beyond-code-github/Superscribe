@@ -40,8 +40,10 @@
     <Compile Include="Cache\RouteCache.cs" />
     <Compile Include="Engine\IModuleRouteData.cs" />
     <Compile Include="Engine\IRouteData.cs" />
+    <Compile Include="Engine\IRouteDataProvider.cs" />
     <Compile Include="Engine\IRouteEngine.cs" />
     <Compile Include="Engine\IRouteWalker.cs" />
+    <Compile Include="Engine\LazyRouteDataProvider.cs" />
     <Compile Include="Engine\RouteData.cs" />
     <Compile Include="MethodSet.cs" />
     <Compile Include="Models\ConstantNode.cs" />

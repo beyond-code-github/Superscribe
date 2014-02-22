@@ -1,5 +1,9 @@
 ﻿namespace Superscribe.WebApi
 {
+    using System.Net.Http;
+
+    using Superscribe.Engine;
+    using Superscribe.WebApi.Engine;
     using Superscribe.WebApi.Models;
 
     /// <summary>
@@ -37,6 +41,17 @@
         public static ActionNode Action(this string pattern, string actionName)
         {
             return new ActionNode { Template = pattern, ActionName = actionName };
+        }
+
+        public static IRouteWalker GetRouteWalker(this HttpRequestMessage request)
+        {
+            return request.GetDependencyScope().GetService(typeof(IRouteWalker)) as IRouteWalker;
+        }
+
+        public static IWebApiRouteDataProvider GetRouteDataProvider(this HttpRequestMessage request)
+        {
+            return request.GetDependencyScope().GetService(typeof(IWebApiRouteDataProvider)) as IWebApiRouteDataProvider;
+
         }
     }
 }

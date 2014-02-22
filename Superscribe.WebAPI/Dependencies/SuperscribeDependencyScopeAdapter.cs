@@ -1,5 +1,4 @@
-﻿
-namespace Superscribe.WebApi.Owin.Dependencies
+﻿namespace Superscribe.WebApi.Dependencies
 {
     using System;
     using System.Collections.Generic;
@@ -7,6 +6,7 @@ namespace Superscribe.WebApi.Owin.Dependencies
     using System.Web.Http.Dependencies;
 
     using Superscribe.Engine;
+    using Superscribe.WebApi.Engine;
 
     public class SuperscribeDependencyScopeAdapter : IDependencyScope
     {
@@ -16,18 +16,22 @@ namespace Superscribe.WebApi.Owin.Dependencies
 
         private readonly IRouteWalker routeWalker;
 
+        private readonly IWebApiRouteDataProvider routeDataProvider;
+
         [SecuritySafeCritical]
         ~SuperscribeDependencyScopeAdapter()
         {
-            Dispose(false);
+            this.Dispose(false);
         }
-        
+
         public SuperscribeDependencyScopeAdapter(
             IDependencyScope requestContainer,
-            IRouteWalker routeWalker)
+            IRouteWalker routeWalker,
+            IRouteDataProvider routeDataProvider)
         {
-            _requestContainer = requestContainer;
+            this._requestContainer = requestContainer;
             this.routeWalker = routeWalker;
+            this.routeDataProvider = new WebApiRouteDataProviderAdapter(routeDataProvider);
         }
 
         [SecuritySafeCritical]
@@ -38,35 +42,40 @@ namespace Superscribe.WebApi.Owin.Dependencies
                 return this.routeWalker;
             }
 
-            return _requestContainer.GetService(serviceType);
+            if (serviceType == typeof(IWebApiRouteDataProvider))
+            {
+                return this.routeDataProvider;
+            }
+
+            return this._requestContainer.GetService(serviceType);
         }
 
         [SecuritySafeCritical]
         public IEnumerable<object> GetServices(Type serviceType)
         {
             return
-                _requestContainer.GetService(typeof(IEnumerable<>).MakeGenericType(serviceType)) as IEnumerable<object>;
+                this._requestContainer.GetService(typeof(IEnumerable<>).MakeGenericType(serviceType)) as IEnumerable<object>;
         }
 
         [SecuritySafeCritical]
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }
 
         private void Dispose(bool disposing)
         {
-            if (!_disposed)
+            if (!this._disposed)
             {
                 if (disposing)
                 {
-                    if (_requestContainer != null && _requestContainer is IDisposable)
+                    if (this._requestContainer != null && this._requestContainer is IDisposable)
                     {
-                        (_requestContainer as IDisposable).Dispose();
+                        (this._requestContainer as IDisposable).Dispose();
                     }
                 }
-                _disposed = true;
+                this._disposed = true;
             }
         }
     }

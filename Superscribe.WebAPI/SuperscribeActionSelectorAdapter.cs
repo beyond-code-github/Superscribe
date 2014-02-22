@@ -3,11 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net.Http;
     using System.Threading;
     using System.Web.Http.Controllers;
 
-    using Superscribe.Engine;
     using Superscribe.WebApi.Internals;
 
     public class SuperscribeActionSelectorAdapter : IHttpActionSelector
@@ -25,14 +23,10 @@
 
         public HttpActionDescriptor SelectAction(HttpControllerContext controllerContext)
         {
-            var walker = controllerContext.Request.GetDependencyScope().GetService(typeof(IRouteWalker)) as IRouteWalker;
+            var provider = controllerContext.Request.GetRouteDataProvider();
+            var info = provider.GetData(controllerContext.Request);
 
-            var info = walker.WalkRoute(
-                controllerContext.Request.RequestUri.PathAndQuery,
-                controllerContext.Request.Method.ToString(),
-                new RouteData());
-
-            if (walker.ExtraneousMatch || walker.IncompleteMatch)
+            if (info.ExtraneousMatch || info.IncompleteMatch)
             {
                 return this.baseActionSelector.SelectAction(controllerContext);
             }

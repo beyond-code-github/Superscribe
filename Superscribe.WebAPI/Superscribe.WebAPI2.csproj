@@ -54,7 +54,9 @@
     <Compile Include="Dependencies\SuperscribeDependencyAdapter.cs" />
     <Compile Include="Dependencies\SuperscribeDependencyScopeAdapter.cs" />
     <Compile Include="Engine\IWebApiRouteData.cs" />
+    <Compile Include="Engine\IWebApiRouteDataProvider.cs" />
     <Compile Include="Engine\WebApiRouteDataAdapter.cs" />
+    <Compile Include="Engine\WebApiRouteDataProviderAdapter.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Models\ActionNode.cs" />
     <Compile Include="Models\ControllerNode.cs" />
