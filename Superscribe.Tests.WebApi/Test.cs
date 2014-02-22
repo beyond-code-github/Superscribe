@@ -23,6 +23,19 @@
         };
     }
 
+    public class When_routing_using_the_any_matchers : RouteTestsBase
+    {
+        private Because of = () => response = browser.Get(
+            "/Any/BlogPosts/Get/1",
+            (with) =>
+            {
+                with.Header("Accept", "application/json");
+                with.HttpRequest();
+            });
+
+        private It should_be_case_insensitive = () => response.StatusCode.ShouldEqual(HttpStatusCode.OK);
+    }
+
     public class When_routing_any_url : RouteTestsBase
     {
         private Because of = () => response = browser.Get(

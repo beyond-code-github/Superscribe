@@ -16,6 +16,8 @@
 
             config.DependencyResolver = new SuperscribeDependencyAdapter(config.DependencyResolver, engine);
 
+            engine.Route("Any" / Any.Controller / Any.Action / (Int)"siteId");
+
             var forms = engine.Route(r => r / "api" / (Long)"parentId" / "Forms".Controller());
             var blog = engine.Route(r => r / "sites" / (Int)"siteId" / "blog");
             var portfolio = engine.Route(r => r / "sites" / (Int)"siteId" / "portfolio");
