@@ -41,6 +41,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\packages\Microsoft.Owin.2.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.2.1.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -72,11 +79,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Superscribe.Owin\Superscribe.Owin.csproj">
-      <Project>{D3C05E1D-4C04-4942-A14F-BE6C8D39A8EF}</Project>
+      <Project>{d3c05e1d-4c04-4942-a14f-be6c8d39a8ef}</Project>
       <Name>Superscribe.Owin</Name>
     </ProjectReference>
     <ProjectReference Include="..\Superscribe\Superscribe.csproj">
-      <Project>{0882D762-CA4D-48A5-956E-2121DECE000E}</Project>
+      <Project>{0882d762-ca4d-48a5-956e-2121dece000e}</Project>
       <Name>Superscribe</Name>
     </ProjectReference>
   </ItemGroup>
@@ -91,19 +98,16 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>49262</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:59109/</IISUrl>
+          <IISUrl>http://localhost:49262/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>True</UseCustomServer>
+          <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
           </CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
-          <servers defaultServer="OwinHost">
-            <server name="OwinHost" exePath="{solutiondir}\packages\OwinHost.2.1.0\tools\OwinHost.exe" cmdArgs="-u {url}" url="http://localhost:12345/" workingDir="{projectdir}" />
-          </servers>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>
