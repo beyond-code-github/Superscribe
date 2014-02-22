@@ -36,14 +36,6 @@
                 builder =>
                 {
                     var config = new SuperscribeOwinOptions();
-                    config.MediaTypeHandlers.Add(
-                        "text/html",
-                        new MediaTypeHandler
-                        {
-                            Read = (env, o) => { using (var reader = new StreamReader(env.GetRequestBody())) return reader.ReadToEnd(); },
-                            Write = (env, o) => env.WriteResponse(o.ToString())
-                        });
-
                     config.MediaTypeHandlers.Add("application/json", new MediaTypeHandler
                     {
                         Write = (env, o) => env.WriteResponse(JsonConvert.SerializeObject(o)),

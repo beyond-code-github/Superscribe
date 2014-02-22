@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
@@ -11,7 +10,6 @@
 
     using Microsoft.Owin.Testing;
 
-    using Superscribe.Owin;
     using Superscribe.Owin.Components;
     using Superscribe.Owin.Engine;
     using Superscribe.Owin.Extensions;
@@ -103,19 +101,7 @@
             owinTestServer = TestServer.Create(
                 builder =>
                 {
-                    var config = new SuperscribeOwinOptions();
-                    config.MediaTypeHandlers.Add(
-                        "text/html",
-                        new MediaTypeHandler
-                        {
-                            Read = (env, o) =>
-                            {
-                                using (var reader = new StreamReader(env.GetRequestBody())) return reader.ReadToEnd();
-                            },
-                            Write = (env, o) => env.WriteResponse(o.ToString())
-                        });
-                    
-                    engine = OwinRouteEngineFactory.Create(config);
+                    engine = OwinRouteEngineFactory.Create();
                     builder.Use(typeof(OwinRouter), builder, engine);
                 });
 
