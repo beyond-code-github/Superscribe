@@ -163,7 +163,7 @@
 
         private Because of = () => result = walker.WalkRoute("/Hello/Pete", "POST", new RouteData());
 
-        private It should_set_the_incomplete_match_flag = () => walker.IncompleteMatch.ShouldBeTrue();
+        private It should_set_the_incomplete_match_flag = () => result.IncompleteMatch.ShouldBeTrue();
     }
 
     public class When_defining_a_route_with_options_and_explicit_methods_and_issuing_a_post_to_the_second : HttpMethodTests
@@ -189,7 +189,7 @@
 
         private Because of = () => result = walker.WalkRoute("/Confirm/18", "GET", new RouteData());
 
-        private It should_set_the_incomplete_match_flag = () => walker.IncompleteMatch.ShouldBeTrue();
+        private It should_set_the_incomplete_match_flag = () => result.IncompleteMatch.ShouldBeTrue();
     }
 
     public class When_defining_a_route_under_a_subnode_with_options_and_explicit_methods_and_issuing_a_get_to_the_first : HttpMethodTests

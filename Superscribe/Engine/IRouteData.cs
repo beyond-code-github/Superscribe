@@ -9,5 +9,11 @@
         IDictionary<string, object> Environment { get; set; }
         
         object Response { get; set; }
+
+        bool IncompleteMatch { get; set; }
+
+        bool ExtraneousMatch { get; set; }
+
+        bool FinalFunctionExecuted { get; set; }
     }
 }

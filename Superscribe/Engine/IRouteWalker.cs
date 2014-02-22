@@ -4,10 +4,6 @@ namespace Superscribe.Engine
 
     public interface IRouteWalker
     {
-        bool ExtraneousMatch { get; }
-
-        bool IncompleteMatch { get; }
-
         bool ParamConversionError { get; }
 
         string Route { get; set; }
@@ -15,9 +11,7 @@ namespace Superscribe.Engine
         string Method { get; set; }
 
         Queue<string> RemainingSegments { get; }
-
-        bool FinalFunctionExecuted { get; }
-
+        
         RouteData WalkRoute(string route, string method, RouteData info);
     }
 }

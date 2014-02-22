@@ -41,6 +41,6 @@
 
         private Because of = () => result = walker.WalkRoute("/Hello/World", "GET", new RouteData());
 
-        private It should_set_the_incomplete_match_flag = () => walker.IncompleteMatch.ShouldBeTrue();
+        private It should_set_the_incomplete_match_flag = () => result.IncompleteMatch.ShouldBeTrue();
     }
 }

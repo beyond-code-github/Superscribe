@@ -30,21 +30,21 @@
         {
             var path = environment["owin.RequestPath"].ToString();
             var method = environment["owin.RequestMethod"].ToString();
-
+            
             var routeData = new OwinRouteData { Environment = environment, Config = engine.Config };
             environment["superscribe.RouteData"] = routeData;
 
             var walker = this.engine.Walker();
-            walker.WalkRoute(path, method, routeData);
-            
-            if (walker.IncompleteMatch)
+            var data = walker.WalkRoute(path, method, routeData);
+
+            if (data.IncompleteMatch)
             {
                 environment.SetResponseStatusCode(404);
                 environment.WriteResponse("404 - Route was incomplete");
                 return;
             }
 
-            if (walker.ExtraneousMatch)
+            if (data.ExtraneousMatch)
             {
                 environment.SetResponseStatusCode(404);
                 environment.WriteResponse("404 - Route match failed");
@@ -77,6 +77,8 @@
             else
             {
                 environment[Constants.SuperscribeRouteWalkerEnvironmentKey] = walker;
+                environment[Constants.SuperscribeRouteDataProviderEnvironmentKey] = new OwinRouteDataProvider(data);
+
                 await this.next(environment);
             }
         }

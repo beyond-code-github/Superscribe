@@ -19,13 +19,7 @@
             this.routeCache = routeCache;
         }
 
-        public bool ExtraneousMatch { get; private set; }
-
-        public bool IncompleteMatch { get; private set; }
-
         public bool ParamConversionError { get; private set; }
-
-        public bool FinalFunctionExecuted { get; private set; }
 
         public string Route { get; set; }
 
@@ -45,7 +39,7 @@
                 info = cacheEntry.Info;
                 info.Response = cacheEntry.OnComplete(info);
 
-                FinalFunctionExecuted = true;
+                info.FinalFunctionExecuted = true;
 
                 return info;
             }
@@ -130,7 +124,7 @@
                     && match.Edges.Any()
                     && match.Edges.All(o => !(o.IsOptional)))
                 {
-                    this.IncompleteMatch = true;
+                    info.IncompleteMatch = true;
                     return;
                 }
 
@@ -139,7 +133,7 @@
 
             if (this.RemainingSegments.Any(o => !string.IsNullOrEmpty(o)))
             {
-                this.ExtraneousMatch = true;
+                info.ExtraneousMatch = true;
                 return;
             }
 
@@ -147,7 +141,7 @@
             {
                 routeCache.Store(this.Method + "-" + this.Route, new CacheEntry<RouteData> { Info = info, OnComplete = onComplete.Function });
                 info.Response = onComplete.Function(info);
-                FinalFunctionExecuted = true;
+                info.FinalFunctionExecuted = true;
             }
         }
 

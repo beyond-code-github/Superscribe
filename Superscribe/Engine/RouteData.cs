@@ -12,6 +12,12 @@
         
         public object Response { get; set; }
 
+        public bool IncompleteMatch { get; set; }
+
+        public bool ExtraneousMatch { get; set; }
+
+        public bool FinalFunctionExecuted { get; set; }
+
         public RouteData()
         {
             this.Environment = new Dictionary<string, object>();
