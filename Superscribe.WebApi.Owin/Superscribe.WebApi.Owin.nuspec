@@ -11,7 +11,8 @@
     <dependencies>
 	  <dependency id="Superscribe" version="(0.3.1,0.4.0)" />	
     <dependency id="Superscribe.Owin" version="(0.3.1,0.4.0)" /> 
-	  <dependency id="Microsoft.AspNet.WebApi.Core" version="5.0.0" />
+    <dependency id="Microsoft.Owin" version="2.1.0" />
+	  <dependency id="Microsoft.AspNet.WebApi.Owin" version="5.1.1" />
     <dependency id="Microsoft.Net.Http" version="2.2.18" />
     </dependencies>
     <copyright>Pete Smith 2013</copyright>
