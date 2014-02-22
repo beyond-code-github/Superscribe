@@ -56,7 +56,6 @@
     <Compile Include="Extensions\ConnegHelpers.cs" />
     <Compile Include="MediaTypeHandler.cs" />
     <Compile Include="OwinRouteData.cs" />
-    <Compile Include="Pipelining\Pipeline.cs" />
     <Compile Include="Pipelining\OwinNode.cs" />
     <Compile Include="Pipelining\OwinNodeFuture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

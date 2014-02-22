@@ -52,21 +52,14 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionFunctionTests.cs" />
     <Compile Include="ActivationFunctionTests.cs" />
     <Compile Include="FinalFunctionTests.cs" />
     <Compile Include="HttpMethodTests.cs" />
-    <Compile Include="MatchingTests.cs" />
-    <Compile Include="NonConsumingStateTests.cs" />
     <Compile Include="ParameterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringRouteParserTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Superscribe.Testing\Superscribe.Testing.csproj">
-      <Project>{48D44F6B-7745-4517-B95A-AFAA86AAF835}</Project>
-      <Name>Superscribe.Testing</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Superscribe\Superscribe.csproj">
       <Project>{0882D762-CA4D-48A5-956E-2121DECE000E}</Project>
       <Name>Superscribe</Name>

@@ -27,7 +27,7 @@
     {
         protected static RouteData result;
 
-        private Establish context = () => subject.Route(ʅ => HelloWorld);
+        private Establish context = () => subject.Route("/", HelloWorld);
         
         private Because of = () => result = walker.WalkRoute("/", "GET", new RouteData());
 
@@ -38,7 +38,7 @@
     {
         protected static RouteData result;
 
-        private Establish context = () => subject.Route(ʅ => ʅ / "Hello" / "World" * HelloWorld);
+        private Establish context = () => subject.Route("Hello/World", HelloWorld);
 
         private Because of = () => result = walker.WalkRoute("/Hello/World", "GET", new RouteData());
 
@@ -49,7 +49,7 @@
     {
         protected static RouteData result;
 
-        private Establish context = () => subject.Route(ʅ => ʅ / "Hello" * HelloWorld / "World");
+        private Establish context = () => subject.Route(r => r / "Hello" * HelloWorld / "World");
 
         private Because of = () => result = walker.WalkRoute("/Hello/World", "GET", new RouteData());
 
@@ -60,7 +60,7 @@
     {
         protected static RouteData result;
 
-        private Establish context = () => subject.Route(ʅ => ʅ / "Hello" / "World" * Final.Exclusive * HelloWorld);
+        private Establish context = () => subject.Route(r => r / "Hello" / "World", HelloWorld);
 
         private Because of = () => result = walker.WalkRoute("/Hello/World", "GET", new RouteData());
 
@@ -71,7 +71,7 @@
     {
         protected static RouteData result;
 
-        private Establish context = () => subject.Route(ʅ => ʅ / "Hello" * Final.Exclusive * HelloWorld / "World");
+        private Establish context = () => subject.Route(r => r / "Hello" * Final.Exclusive * HelloWorld / "World");
 
         private Because of = () => result = walker.WalkRoute("/Hello/World", "GET", new RouteData());
 

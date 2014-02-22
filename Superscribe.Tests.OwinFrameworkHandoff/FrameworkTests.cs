@@ -38,8 +38,8 @@
 
                     var define = OwinRouteEngineFactory.Create();
 
-                    define.Pipeline(r => r / "api" / "webapi").UseWebApi(httpconfig);
-                    define.Pipeline(r => r / "api" / "nancy").UseNancy();
+                    define.Pipeline("api/webapi").UseWebApi(httpconfig);
+                    define.Pipeline("api/nancy").UseNancy();
 
                     builder.UseSuperscribeRouter(define);
                 });

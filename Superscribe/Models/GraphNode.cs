@@ -107,7 +107,6 @@
 
         public GraphNode Zip(GraphNode nextNode)
         {
-            nextNode.Parent = this;
             foreach (var existingNode in this.Edges)
             {
                 if (existingNode.Equals(nextNode))
@@ -131,25 +130,13 @@
             this.Edges.Enqueue(nextNode);
             return nextNode;
         }
-
-        private GraphNode Query(GraphNode queryNode)
-        {
-            this.QueryString.Enqueue(queryNode);
-            return queryNode;
-        }
-
+        
         public GraphNode Optional()
         {
             this.IsOptional = true;
             return this;
         }
-
-        public virtual GraphNode ʃ(Action<dynamic, string> command)
-        {
-            this.ActionFunction = command;
-            return this;
-        }
-
+        
         private GraphNode MatchAsRegex()
         {
             this.Pattern = new Regex(this.Template);
@@ -236,17 +223,7 @@
         {
             return new NodeFuture { Parent = node, ActivationFunction = activation };
         }
-
-        /// <summary>
-        /// Shorthand for .Slash between a state and a Querystring transition
-        /// </summary>
-        /// <param name="node">State</param>
-        /// <param name="other">Querystring transition</param>
-        public static GraphNode operator &(GraphNode node, GraphNode other)
-        {
-            return node.Query(other);
-        }
-
+        
         /// <summary>
         /// Shorthand for creating a transition list from two alternatives
         /// </summary>

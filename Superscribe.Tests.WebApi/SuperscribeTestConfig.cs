@@ -16,21 +16,23 @@
 
             config.DependencyResolver = new SuperscribeDependencyAdapter(config.DependencyResolver, engine);
 
-            engine.Route(ʅ => ʅ / "api" / (Long)"parentId" /
-                        "Forms".Controller() / (
-                            ʅ / "VisibleFor".Action() / (String)"appDataId"
-                          | ʅ / -(Long)"id"));
+            var forms = engine.Route(r => r / "api" / (Long)"parentId" / "Forms".Controller());
+            var blog = engine.Route(r => r / "sites" / (Int)"siteId" / "blog");
+            var portfolio = engine.Route(r => r / "sites" / (Int)"siteId" / "portfolio");
 
-            engine.Route(ʅ => ʅ / "sites" / (Int)"siteId" / (
-                ʅ / "blog" / (
-                      ʅ / "tags".Controller("blogtags")
-                    | ʅ / "posts".Controller("blogposts") / (
-                          ʅ / -(Int)"postId" / -"media".Controller("blogpostmedia") / -(Int)"id"
-                        | ʅ / "archives".Controller("blogpostarchives") / -(Int)"year" / (Int)"month"))
-                | ʅ / "portfolio" / (
-                      ʅ / "projects".Controller("portfolioprojects") / -(Int)"projectId" / -"media".Controller("portfolioprojectmedia") / -(Int)"id"
-                    | ʅ / "tags".Controller("portfoliotags")
-                    | ʅ / "categories".Controller("portfoliocategories") / -(Int)"id")));
+            var blogposts = engine.Route(blog / "posts".Controller("blogposts"));
+
+            engine.Route(forms / "VisibleFor".Action() / (String)"appDataId");
+            engine.Route(forms / -(Long)"id");
+            
+            engine.Route(blog / "tags".Controller("blogtags"));
+            
+            engine.Route(blogposts / -(Int)"postId" / -"media".Controller("blogpostmedia") / -(Int)"id");
+            engine.Route(blogposts / "archives".Controller("blogpostarchives") / -(Int)"year" / (Int)"month");
+
+            engine.Route(portfolio / "projects".Controller("portfolioprojects") / -(Int)"projectId" / -"media".Controller("portfolioprojectmedia") / -(Int)"id");
+            engine.Route(portfolio / "tags".Controller("portfoliotags"));
+            engine.Route(portfolio / "categories".Controller("portfoliocategories") / -(Int)"id");
         }
     }
 }

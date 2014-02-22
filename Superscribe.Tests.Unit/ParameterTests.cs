@@ -42,7 +42,7 @@
     {
         protected static RouteData result;
 
-        private Establish context = () => subject.Route(root => root / "Hello" / (String)"Name" * Hello);
+        private Establish context = () => subject.Route(r => r / "Hello" / (String)"Name", Hello);
 
         private Because of = () => result = walker.WalkRoute("/Hello/Pete", "GET", new RouteData());
 
@@ -53,7 +53,7 @@
     {
         protected static RouteData result;
 
-        private Establish context = () => subject.Route(root => root / "Hello" * HelloUnknown / -(String)"Name" * Hello);
+        private Establish context = () => subject.Route(r => r / "Hello" * HelloUnknown / -(String)"Name", Hello);
 
         private Because of = () => result = walker.WalkRoute("/Hello", "GET", new RouteData());
 
@@ -64,7 +64,7 @@
     {
         protected static RouteData result;
 
-        private Establish context = () => subject.Route(root => root / "Hello" * HelloUnknown / -(String)"Name" * Hello);
+        private Establish context = () => subject.Route(r => r / "Hello" * HelloUnknown / -(String)"Name", Hello);
 
         private Because of = () => result = walker.WalkRoute("/Hello/", "GET", new RouteData());
 
@@ -75,7 +75,7 @@
     {
         protected static RouteData result;
 
-        private Establish context = () => subject.Route(root => root / "Happy" / (Bool)"Happy" * CommentOnMood);
+        private Establish context = () => subject.Route(r => r / "Happy" / (Bool)"Happy", CommentOnMood);
 
         private Because of = () => result = walker.WalkRoute("/Happy/true", "GET", new RouteData());
 
@@ -86,7 +86,7 @@
     {
         protected static RouteData result;
 
-        private Establish context = () => subject.Route(root => root / "Happy" / (Bool)"Happy" * CommentOnMood);
+        private Establish context = () => subject.Route(r => r / "Happy" / (Bool)"Happy", CommentOnMood);
 
         private Because of = () => result = walker.WalkRoute("/Happy/false", "GET", new RouteData());
 
@@ -97,27 +97,27 @@
     {
         protected static RouteData result;
 
-        private Establish context = () => subject.Route(root => root / "Confirm" / (Int)"Age" * CheckAge);
+        private Establish context = () => subject.Route(r => r / "Confirm" / (Int)"Age", CheckAge);
 
-        private Because of = () => result = result = walker.WalkRoute("/Confirm/18", "GET", new RouteData());
+        private Because of = () => result = walker.WalkRoute("/Confirm/18", "GET", new RouteData());
 
         private It should_execute_the_final_function = () => result.Response.ShouldEqual("Access granted");
     }
 
     //public class When_capturing_an_int_parameter_that_is_too_long : ParameterTests
     //{
-    //    private Establish context = () => ʃ.Route(root => root / "Confirm" / (ʃInt)"Age" * CheckAge);
+    //    private Establish context = () => subject.Route(r => r / "Confirm" / (Int)"Age" * CheckAge);
 
     //    private Because of = () => result = walker.WalkRoute("/Confirm/18000000000", "GET", routeData);
 
-    //    private It should_throw_an_error = () => routeData.ParamConversionError.ShouldEqual(true);
+    //    private It should_throw_an_error = () => result.ParamConversionError.ShouldEqual(true);
     //}
 
     public class When_capturing_a_long_parameter : ParameterTests
     {
         protected static RouteData result;
 
-        private Establish context = () => subject.Route(root => root / "Confirm" / (Long)"Age" * CheckAge);
+        private Establish context = () => subject.Route(r => r / "Confirm" / (Long)"Age", CheckAge);
 
         private Because of = () => result = walker.WalkRoute("/Confirm/18000000000", "GET", new RouteData());
 

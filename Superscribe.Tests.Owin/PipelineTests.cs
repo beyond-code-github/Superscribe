@@ -6,6 +6,8 @@
     using System.Net.Http;
     using System.Threading.Tasks;
 
+    using global::Owin;
+
     using Machine.Specifications;
 
     using Microsoft.Owin.Testing;
@@ -112,7 +114,7 @@
 
     public class When_building_a_pipeline_with_a_single_element_given_one_middleware : PipelineTests
     {
-        private Establish context = () => engine.Route("Hello" * Pipeline.Action<FirstComponent>());
+        private Establish context = () => engine.Pipeline("Hello").Use<FirstComponent>();
 
         private Because of = () => responseMessage = client.GetAsync("http://localhost/Hello").Result;
 
@@ -120,11 +122,10 @@
 
         private It should_return_200 = () => responseMessage.StatusCode.ShouldEqual(HttpStatusCode.OK);
     }
-    
+
     public class When_building_a_pipeline_with_a_single_element_given_two_middleware : PipelineTests
     {
-        private Establish context = () => engine.Route("Hello" * Pipeline.Action<FirstComponent>()
-                                                                    * Pipeline.Action<SecondComponent>());
+        private Establish context = () => engine.Pipeline("Hello").Use<FirstComponent>().Use<SecondComponent>();
 
         private Because of = () => responseMessage = client.GetAsync("http://localhost/Hello").Result;
 
@@ -135,8 +136,11 @@
 
     public class When_building_a_pipeline_with_a_two_elements_given_two_funcs : PipelineTests
     {
-        private Establish context = () => engine.Route("Hello" * Pipeline.Action<FirstComponent>()
-                                                       / "World" * Pipeline.Action<SecondComponent>());
+        private Establish context = () =>
+        {
+            engine.Pipeline("Hello").Use<FirstComponent>();
+            engine.Pipeline("Hello/World").Use<SecondComponent>();
+        };
 
         private Because of = () => responseMessage = client.GetAsync("http://localhost/Hello/World").Result;
 
@@ -147,9 +151,12 @@
 
     public abstract class When_building_a_pipeline_with_options : PipelineTests
     {
-        private Establish context = () => engine.Route(ʅ => ʅ / "Hello" * Pipeline.Action<FirstComponent>() / (
-                                                              ʅ / "Foo" * Pipeline.Action<SecondComponent>()
-                                                            | ʅ / "Bar" * Pipeline.Action<ThirdComponent>()));
+        private Establish context = () =>
+            {
+                engine.Pipeline("Hello").Use<FirstComponent>();
+                engine.Pipeline("Hello/Foo").Use<SecondComponent>();
+                engine.Pipeline("Hello/Bar").Use<ThirdComponent>();
+            };
     }
 
     public class When_building_a_pipeline_with_options_invoking_the_first : When_building_a_pipeline_with_options
@@ -172,8 +179,11 @@
 
     public class When_building_a_pipeline_with_middleware_that_takes_parameters : PipelineTests
     {
-        private Establish context = () => engine.Route(ʅ => ʅ / "Pad" * Pipeline.Action<PadResponse>("h1") / (
-                                                                 ʅ / "Response" * Pipeline.Action<FirstComponent>()));
+        private Establish context = () =>
+            {
+                engine.Pipeline("Pad").Use<PadResponse>("h1");
+                engine.Pipeline("Pad/Response").Use<FirstComponent>();
+            };
 
         private Because of = () => responseMessage = client.GetAsync("http://localhost/Pad/Response").Result;
 

@@ -26,7 +26,7 @@
     {
         protected static RouteData result;
 
-        private Establish context = () => subject.Route(ʅ => ʅ / "Hello" / ((o, s) => true) * "World" * HelloWorld);
+        private Establish context = () => subject.Route(r => r / "Hello" / ((o, s) => true) * "World" * HelloWorld);
 
         private Because of = () => result = walker.WalkRoute("/Hello/World", "GET", new RouteData());
 
@@ -37,7 +37,7 @@
     {
         protected static RouteData result;
 
-        private Establish context = () => subject.Route(ʅ => ʅ / "Hello" / ((o, s) => false) * "World" * HelloWorld);
+        private Establish context = () => subject.Route(r => r / "Hello" / ((o, s) => false) * "World" * HelloWorld);
 
         private Because of = () => result = walker.WalkRoute("/Hello/World", "GET", new RouteData());
 

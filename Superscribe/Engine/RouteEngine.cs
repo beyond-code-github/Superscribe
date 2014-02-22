@@ -26,76 +26,10 @@
                 return this.@base;
             }
         }
-
-        public GraphNode Delete(GraphNode config)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public IRouteWalker Walker()
         {
             return routeWalkerFactory(this.Base);
-        }
-
-        /// <summary>
-        /// Define a partial route or attach a route to Superscribe's Base State
-        /// </summary>
-        /// <param name="config">Route configuration function</param>
-        /// <returns>The last state in the chain</returns>
-        public GraphNode Route(Func<GraphNode> config)
-        {
-            var leaf = config();
-            this.Base.Zip(leaf.Base());
-            return leaf;
-        }
-
-        /// <summary>
-        /// Define a partial route or attach a route to Superscribe's Base State
-        /// </summary>
-        /// <param name="config">Route configuration function</param>
-        /// <returns>The last state in the chain</returns>
-        public GraphNode Route(Func<RouteGlue, GraphNode> config)
-        {
-            var leaf = config(new RouteGlue());
-            this.Base.Zip(leaf.Base());
-            return leaf;
-        }
-
-        public GraphNode Route(Func<RouteGlue, GraphNode> config, Func<dynamic, object> func)
-        {
-            var leaf = config(new RouteGlue());
-            leaf.FinalFunctions.Add(new FinalFunction { Function = func });
-
-            this.Base.Zip(leaf.Base());
-            return leaf;
-        }
-
-        public GraphNode Route(Func<RouteGlue, SuperList> config)
-        {
-            var list = config(new RouteGlue());
-            foreach (var node in list)
-            {
-                this.Base.Zip(node.Base());    
-            }
-            
-            return this.Base;
-        }
-
-        public GraphNode Route(Func<RouteGlue, Func<dynamic, object>> config)
-        {
-            var final = config(new RouteGlue());
-            this.Base.FinalFunctions.Add(new FinalFunction { Function = final });
-            return this.Base;
-        }
-
-        public GraphNode Route(GraphNode config)
-        {
-            if (config != null)
-            {
-                this.Base.Zip(config.Base());
-            }
-
-            return config;
         }
 
         public GraphNode Route(string routeTemplate)
@@ -126,6 +60,12 @@
             return node;
         }
 
+        public GraphNode Route(GraphNode config)
+        {
+            this.Base.Zip(config.Base());
+            return config;
+        }
+
         public GraphNode Route(GraphNode config, Func<dynamic, object> func)
         {
             config.FinalFunctions.Add(new FinalFunction { Function = func });
@@ -134,80 +74,233 @@
             return config;
         }
 
-        public GraphNode Get(Func<RouteGlue, GraphNode> config)
+        public GraphNode Route(Func<RouteGlue, GraphNode> config)
         {
-            var leaf = config(new RouteGlue("GET"));
-            leaf.AddAllowedMethod("GET");
+            var leaf = config(new RouteGlue());
+            this.Base.Zip(leaf.Base());
+            return leaf;
+        }
+
+        public GraphNode Route(Func<RouteGlue, GraphNode> config, Func<dynamic, object> func)
+        {
+            var leaf = config(new RouteGlue());
+            leaf.FinalFunctions.Add(new FinalFunction { Function = func });
             this.Base.Zip(leaf.Base());
 
             return leaf;
+        }
+
+        public GraphNode Get(string routeTemplate)
+        {
+            return this.MethodNode(routeTemplate, "GET");
+        }
+
+        public GraphNode Get(string routeTemplate, Func<dynamic, object> func)
+        {
+            return this.MethodNode(routeTemplate, func, "GET");
         }
 
         public GraphNode Get(GraphNode leaf)
         {
-            leaf.AddAllowedMethod("GET");
-            this.Base.Zip(leaf.Base());
-
-            return leaf;
+            return this.MethodNode(leaf, "GET");
         }
 
-        public GraphNode Post(Func<RouteGlue, GraphNode> config)
+        public GraphNode Get(GraphNode leaf, Func<dynamic, object> func)
         {
-            var leaf = config(new RouteGlue("POST"));
-            leaf.AddAllowedMethod("POST");
-            this.Base.Zip(leaf.Base());
+            return this.MethodNode(leaf, func, "GET");
+        }
 
-            return leaf;
+        public GraphNode Get(Func<RouteGlue, GraphNode> config)
+        {
+            return this.MethodNode(config, "GET");
+        }
+
+        public GraphNode Get(Func<RouteGlue, GraphNode> config, Func<dynamic, object> func)
+        {
+            return this.MethodNode(config, func, "GET");
+        }
+
+        public GraphNode Post(string routeTemplate)
+        {
+            return this.MethodNode(routeTemplate, "POST");
+        }
+
+        public GraphNode Post(string routeTemplate, Func<dynamic, object> func)
+        {
+            return this.MethodNode(routeTemplate, func, "POST");
         }
 
         public GraphNode Post(GraphNode leaf)
         {
-            leaf.AddAllowedMethod("POST");
-            this.Base.Zip(leaf.Base());
-
-            return leaf;
+            return this.MethodNode(leaf, "POST");
         }
 
-        public GraphNode Put(Func<RouteGlue, GraphNode> config)
+        public GraphNode Post(GraphNode leaf, Func<dynamic, object> func)
         {
-            var leaf = config(new RouteGlue("PUT"));
-            leaf.AddAllowedMethod("PUT");
-            this.Base.Zip(leaf.Base());
-
-            return leaf;
+            return this.MethodNode(leaf, func, "POST");
         }
 
-        public GraphNode Put(GraphNode leaf)
+        public GraphNode Post(Func<RouteGlue, GraphNode> config)
         {
-            leaf.AddAllowedMethod("PUT");
-            this.Base.Zip(leaf.Base());
-
-            return leaf;
+            return this.MethodNode(config, "POST");
         }
 
-        public GraphNode Patch(Func<RouteGlue, GraphNode> config)
+        public GraphNode Post(Func<RouteGlue, GraphNode> config, Func<dynamic, object> func)
         {
-            var leaf = config(new RouteGlue("PATCH"));
-            leaf.AddAllowedMethod("PATCH");
-            this.Base.Zip(leaf.Base());
+            return this.MethodNode(config, func, "POST");
+        }
 
-            return leaf;
+        public GraphNode Patch(string routeTemplate)
+        {
+            return this.MethodNode(routeTemplate, "PATCH");
+        }
+
+        public GraphNode Patch(string routeTemplate, Func<dynamic, object> func)
+        {
+            return this.MethodNode(routeTemplate, func, "PATCH");
         }
 
         public GraphNode Patch(GraphNode leaf)
         {
-            leaf.AddAllowedMethod("PATCH");
-            this.Base.Zip(leaf.Base());
+            return this.MethodNode(leaf, "PATCH");
+        }
 
-            return leaf;
+        public GraphNode Patch(GraphNode leaf, Func<dynamic, object> func)
+        {
+            return this.MethodNode(leaf, func, "PATCH");
+        }
+
+        public GraphNode Patch(Func<RouteGlue, GraphNode> config)
+        {
+            return this.MethodNode(config, "PATCH");
+        }
+
+        public GraphNode Patch(Func<RouteGlue, GraphNode> config, Func<dynamic, object> func)
+        {
+            return this.MethodNode(config, func, "PATCH");
+        }
+
+        public GraphNode Put(string routeTemplate)
+        {
+            return this.MethodNode(routeTemplate, "PUT");
+        }
+
+        public GraphNode Put(string routeTemplate, Func<dynamic, object> func)
+        {
+            return this.MethodNode(routeTemplate, func, "PUT");
+        }
+
+        public GraphNode Put(GraphNode leaf)
+        {
+            return this.MethodNode(leaf, "PUT");
+        }
+
+        public GraphNode Put(GraphNode leaf, Func<dynamic, object> func)
+        {
+            return this.MethodNode(leaf, func, "PUT");
+        }
+
+        public GraphNode Put(Func<RouteGlue, GraphNode> config)
+        {
+            return this.MethodNode(config, "PUT");
+        }
+
+        public GraphNode Put(Func<RouteGlue, GraphNode> config, Func<dynamic, object> func)
+        {
+            return this.MethodNode(config, func, "PUT");
+        }
+
+        public GraphNode Delete(string routeTemplate)
+        {
+            return this.MethodNode(routeTemplate, "DELETE");
+        }
+
+        public GraphNode Delete(string routeTemplate, Func<dynamic, object> func)
+        {
+            return this.MethodNode(routeTemplate, func, "DELETE");
+        }
+
+        public GraphNode Delete(GraphNode leaf)
+        {
+            return this.MethodNode(leaf, "DELETE");
+        }
+
+        public GraphNode Delete(GraphNode leaf, Func<dynamic, object> func)
+        {
+            return this.MethodNode(leaf, func, "DELETE");
         }
 
         public GraphNode Delete(Func<RouteGlue, GraphNode> config)
         {
-            var leaf = config(new RouteGlue("DELETE"));
-            leaf.AddAllowedMethod("DELETE");
-            this.Base.Zip(leaf.Base());
+            return this.MethodNode(config, "DELETE");
+        }
 
+        public GraphNode Delete(Func<RouteGlue, GraphNode> config, Func<dynamic, object> func)
+        {
+            return this.MethodNode(config, func, "DELETE");
+        }
+        
+        private GraphNode MethodNode(string routeTemplate, string method)
+        {
+            var node = this.stringRouteParser.MapToGraph(routeTemplate);
+            if (node != null)
+            {
+                node.AddAllowedMethod(method);
+                this.Base.Zip(node.Base());
+                return node;
+            }
+
+            return null;
+        }
+
+        private GraphNode MethodNode(string routeTemplate, Func<dynamic, object> func, string method)
+        {
+            var finalNode = this.Base;
+            var node = this.stringRouteParser.MapToGraph(routeTemplate);
+
+            if (node != null)
+            {
+                node.AddAllowedMethod(method);
+                this.Base.Zip(node.Base());
+                finalNode = node;
+            }
+
+            finalNode.FinalFunctions.Add(new FinalFunction { Function = func });
+            return node;
+        }
+
+        private GraphNode MethodNode(GraphNode leaf, string method)
+        {
+            leaf.AddAllowedMethod(method);
+            this.Base.Zip(leaf.Base());
+            return leaf;
+        }
+
+        private GraphNode MethodNode(GraphNode leaf, Func<dynamic, object> func, string method)
+        {
+            leaf.AddAllowedMethod(method);
+            leaf.FinalFunctions.Add(new FinalFunction { Function = func });
+
+            this.Base.Zip(leaf.Base());
+            return leaf;
+        }
+
+        private GraphNode MethodNode(Func<RouteGlue, GraphNode> config, string method)
+        {
+            var leaf = config(new RouteGlue());
+            leaf.AddAllowedMethod(method);
+
+            this.Base.Zip(leaf.Base());
+            return leaf;
+        }
+
+        private GraphNode MethodNode(Func<RouteGlue, GraphNode> config, Func<dynamic, object> func, string method)
+        {
+            var leaf = config(new RouteGlue());
+            leaf.AddAllowedMethod(method);
+            leaf.FinalFunctions.Add(new FinalFunction { Function = func });
+
+            this.Base.Zip(leaf.Base());
             return leaf;
         }
     }

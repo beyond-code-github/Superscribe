@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe", "Superscribe\Superscribe.csproj", "{0882D762-CA4D-48A5-956E-2121DECE000E}"
 EndProject
@@ -15,8 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E5858B
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.WebAPI2", "Superscribe.WebAPI\Superscribe.WebAPI2.csproj", "{2295D548-7A8F-4EC0-8FAB-2CAC81763AAD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.Testing", "Superscribe.Testing\Superscribe.Testing.csproj", "{48D44F6B-7745-4517-B95A-AFAA86AAF835}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superscribe.Tests.WebApi2", "Superscribe.Tests.WebApi\Superscribe.Tests.WebApi2.csproj", "{C57AA546-3EDD-4DD8-A4B8-375FB4470F33}"
 EndProject
@@ -34,10 +32,6 @@ Global
 		{2295D548-7A8F-4EC0-8FAB-2CAC81763AAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2295D548-7A8F-4EC0-8FAB-2CAC81763AAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2295D548-7A8F-4EC0-8FAB-2CAC81763AAD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{48D44F6B-7745-4517-B95A-AFAA86AAF835}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{48D44F6B-7745-4517-B95A-AFAA86AAF835}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{48D44F6B-7745-4517-B95A-AFAA86AAF835}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{48D44F6B-7745-4517-B95A-AFAA86AAF835}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C57AA546-3EDD-4DD8-A4B8-375FB4470F33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C57AA546-3EDD-4DD8-A4B8-375FB4470F33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C57AA546-3EDD-4DD8-A4B8-375FB4470F33}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -47,7 +41,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{48D44F6B-7745-4517-B95A-AFAA86AAF835} = {CFBFB689-2965-4344-BE13-F73C3466E9C2}
 		{C57AA546-3EDD-4DD8-A4B8-375FB4470F33} = {CFBFB689-2965-4344-BE13-F73C3466E9C2}
 	EndGlobalSection
 EndGlobal
