@@ -1,67 +1,47 @@
 ﻿namespace Superscribe.WebApi
 {
     using System.Net.Http;
+    using System.Net.Http.Formatting;
+    using System.Security.Principal;
+    using System.Web.Http.Routing;
 
+    using Superscribe.Engine;
     using Superscribe.Utils;
-    using Superscribe.WebApi.Engine;
 
-    public class WebApiRouteData : IWebApiRouteData
+    public class WebApiRouteData : RouteData, IModuleRouteData
     {
-        private string actionName;
-
-        private string controllerName;
-        
         public WebApiRouteData()
         {
             this.Parameters = new DynamicDictionary();
         }
-        
-        public dynamic Parameters { get; set; }
-
-        public bool ActionNameSpecified { get; private set; }
-
-        public string ActionName
-        {
-            get
-            {
-                return this.actionName;
-            }
-            set
-            {
-                this.ActionNameSpecified = true;
-                this.actionName = value;
-            }
-        }
-
-        public bool ControllerNameSpecified { get; private set; }
-
-        public string ControllerName
-        {
-            get
-            {
-                return this.controllerName;
-            }
-            set
-            {
-                this.ControllerNameSpecified = true;
-                this.controllerName = value;
-            }
-        }
-
-        public object Response { get; set; }
-
-        public bool ParamConversionError { get; set; }
 
         public HttpRequestMessage Request { get; set; }
 
+        public UrlHelper Url { get; set; }
+
+        public IPrincipal User { get; set; }
+
         public T Bind<T>() where T : class
         {
-            throw new System.NotImplementedException();
+            var configuraton = this.Request.GetConfiguration();
+            var conneg = (IContentNegotiator)configuraton.Services.GetService(typeof(IContentNegotiator));
+            var formatter = conneg.Negotiate(
+                typeof(T),
+                this.Request,
+                configuraton.Formatters);
+
+            var stream = this.Request.Content.ReadAsStreamAsync().Result;
+
+            return formatter.Formatter.ReadFromStreamAsync(
+                typeof(T),
+                stream,
+                this.Request.Content,
+                null).Result as T;
         }
 
         public T Require<T>() where T : class
         {
-            throw new System.NotImplementedException();
+            return this.Request.GetConfiguration().DependencyResolver.GetService(typeof(T)) as T;
         }
     }
 }

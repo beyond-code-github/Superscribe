@@ -54,16 +54,11 @@
     <Compile Include="Dependencies\SuperscribeDependencyAdapter.cs" />
     <Compile Include="Dependencies\SuperscribeDependencyScopeAdapter.cs" />
     <Compile Include="Engine\IWebApiRouteData.cs" />
-    <Compile Include="Engine\IWebApiRouteDataResolver.cs" />
     <Compile Include="Engine\WebApiRouteDataAdapter.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Models\ActionNode.cs" />
     <Compile Include="Models\ControllerNode.cs" />
-    <Compile Include="Modules\ModuleController.cs" />
-    <Compile Include="Modules\ModuleRouteData.cs" />
-    <Compile Include="Modules\SuperscribeModuleActionInvoker.cs" />
-    <Compile Include="Modules\SuperscribeModuleActionSelector.cs" />
-    <Compile Include="Modules\SuperscribeModuleControllerSelector.cs" />
+    <Compile Include="WebApiRouteData.cs" />
     <Compile Include="Internals\ActionSelectorCacheItem.cs" />
     <Compile Include="Internals\HttpControllerTypeCache.cs" />
     <Compile Include="Internals\HttpParameterBindingExtensions.cs" />
@@ -76,7 +71,6 @@
     <Compile Include="SuperscribeConfig.cs" />
     <Compile Include="SuperscribeControllerSelectorAdapter.cs" />
     <Compile Include="SuperscribeHandler.cs" />
-    <Compile Include="WebApiRouteData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Superscribe\Superscribe.csproj">
