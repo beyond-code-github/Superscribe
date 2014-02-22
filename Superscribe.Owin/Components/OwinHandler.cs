@@ -23,6 +23,20 @@
             var routeData = environment["superscribe.RouteData"] as OwinRouteData;
             Debug.Assert(routeData != null, "routeData != null");
 
+            if (routeData.IncompleteMatch)
+            {
+                environment.SetResponseStatusCode(404);
+                environment.WriteResponse("404 - Route was incomplete");
+                return;
+            }
+
+            if (routeData.ExtraneousMatch)
+            {
+                environment.SetResponseStatusCode(404);
+                environment.WriteResponse("404 - Route match failed");
+                return;
+            }
+
             // Set status code
             if (routeData.StatusCode > 0)
             {

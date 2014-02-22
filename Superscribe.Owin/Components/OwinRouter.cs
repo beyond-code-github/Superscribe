@@ -36,21 +36,6 @@
             var data = walker.WalkRoute(path, method, routeData);
 
             environment["superscribe.RouteData"] = data;
-
-            if (data.IncompleteMatch)
-            {
-                environment.SetResponseStatusCode(404);
-                environment.WriteResponse("404 - Route was incomplete");
-                return;
-            }
-
-            if (data.ExtraneousMatch)
-            {
-                environment.SetResponseStatusCode(404);
-                environment.WriteResponse("404 - Route match failed");
-                return;
-            }
-
             environment["route.Parameters"] = routeData.Parameters;
             environment[Constants.SuperscribeRouteWalkerEnvironmentKey] = walker;
             environment[Constants.SuperscribeRouteDataProviderEnvironmentKey] = new OwinRouteDataProvider(data);
