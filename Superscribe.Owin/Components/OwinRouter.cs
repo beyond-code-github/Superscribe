@@ -32,10 +32,10 @@
             var method = environment["owin.RequestMethod"].ToString();
             
             var routeData = new OwinRouteData { Environment = environment, Config = engine.Config };
-            environment["superscribe.RouteData"] = routeData;
-
             var walker = this.engine.Walker();
             var data = walker.WalkRoute(path, method, routeData);
+
+            environment["superscribe.RouteData"] = data;
 
             if (data.IncompleteMatch)
             {
