@@ -17,6 +17,6 @@
     <copyright>Pete Smith 2013</copyright>
   </metadata>
   <files>
-    <file src="bin\net45\Release\Superscribe.WebApi.Owin.dll" target="lib\net45\Superscribe.WebApi.Owin.dll" />
+    <file src="bin\Release\Superscribe.WebApi.Owin.dll" target="lib\net45\Superscribe.WebApi.Owin.dll" />
   </files>
 </package>
