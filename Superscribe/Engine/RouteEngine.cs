@@ -9,9 +9,9 @@
     {
         private readonly GraphNode @base = new GraphNode();
 
-        private readonly IStringRouteParser stringRouteParser;
+        protected readonly IStringRouteParser stringRouteParser;
 
-        private readonly Func<GraphNode, IRouteWalker> routeWalkerFactory;
+        protected readonly Func<GraphNode, IRouteWalker> routeWalkerFactory;
 
         public RouteEngine(IStringRouteParser stringRouteParser, Func<GraphNode, IRouteWalker> routeWalkerFactory)
         {
@@ -27,7 +27,7 @@
             }
         }
 
-        public void Delete(GraphNode config)
+        public GraphNode Delete(GraphNode config)
         {
             throw new NotImplementedException();
         }
@@ -61,6 +61,15 @@
             return leaf;
         }
 
+        public GraphNode Route(Func<RouteGlue, GraphNode> config, Func<object, object> func)
+        {
+            var leaf = config(new RouteGlue());
+            leaf.FinalFunctions.Add(new FinalFunction { Function = func });
+
+            this.Base.Zip(leaf.Base());
+            return leaf;
+        }
+
         public GraphNode Route(Func<RouteGlue, SuperList> config)
         {
             var list = config(new RouteGlue());
@@ -79,15 +88,29 @@
             return this.Base;
         }
 
-        public void Route(GraphNode config)
+        public GraphNode Route(GraphNode config)
         {
             if (config != null)
             {
                 this.Base.Zip(config.Base());
             }
+
+            return config;
         }
 
-        public void Route(string config, Func<dynamic, object> func)
+        public GraphNode Route(string routeTemplate)
+        {
+            var node = this.stringRouteParser.MapToGraph(routeTemplate);
+            if (node != null)
+            {
+                this.Base.Zip(node.Base());
+                return node;
+            }
+
+            return null;
+        }
+
+        public GraphNode Route(string config, Func<dynamic, object> func)
         {
             var finalNode = this.Base;
             var node = this.stringRouteParser.MapToGraph(config);
@@ -99,12 +122,16 @@
             }
 
             finalNode.FinalFunctions.Add(new FinalFunction { Function = func });
+
+            return node;
         }
-        
-        public void Route(GraphNode config, Func<dynamic, object> func)
+
+        public GraphNode Route(GraphNode config, Func<dynamic, object> func)
         {
             config.FinalFunctions.Add(new FinalFunction { Function = func });
             this.Base.Zip(config.Base());
+
+            return config;
         }
 
         public GraphNode Get(Func<RouteGlue, GraphNode> config)
@@ -116,10 +143,12 @@
             return leaf;
         }
 
-        public void Get(GraphNode leaf)
+        public GraphNode Get(GraphNode leaf)
         {
             leaf.AddAllowedMethod("GET");
             this.Base.Zip(leaf.Base());
+
+            return leaf;
         }
 
         public GraphNode Post(Func<RouteGlue, GraphNode> config)
@@ -131,10 +160,12 @@
             return leaf;
         }
 
-        public void Post(GraphNode leaf)
+        public GraphNode Post(GraphNode leaf)
         {
             leaf.AddAllowedMethod("POST");
             this.Base.Zip(leaf.Base());
+
+            return leaf;
         }
 
         public GraphNode Put(Func<RouteGlue, GraphNode> config)
@@ -146,9 +177,12 @@
             return leaf;
         }
 
-        public void Put(GraphNode config)
+        public GraphNode Put(GraphNode leaf)
         {
-            throw new NotImplementedException();
+            leaf.AddAllowedMethod("PUT");
+            this.Base.Zip(leaf.Base());
+
+            return leaf;
         }
 
         public GraphNode Patch(Func<RouteGlue, GraphNode> config)
@@ -160,9 +194,12 @@
             return leaf;
         }
 
-        public void Patch(GraphNode config)
+        public GraphNode Patch(GraphNode leaf)
         {
-            throw new NotImplementedException();
+            leaf.AddAllowedMethod("PATCH");
+            this.Base.Zip(leaf.Base());
+
+            return leaf;
         }
 
         public GraphNode Delete(Func<RouteGlue, GraphNode> config)

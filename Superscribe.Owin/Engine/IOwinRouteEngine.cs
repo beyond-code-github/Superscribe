@@ -15,5 +15,7 @@
         OwinNode Pipeline(Func<RouteGlue, GraphNode> config, Func<IAppBuilder, IAppBuilder> func, params object[] args);
 
         OwinNode Pipeline(Func<RouteGlue, GraphNode> config);
+
+        OwinNode Pipeline(string routeTemplate);
     }
 }

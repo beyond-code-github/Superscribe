@@ -33,5 +33,18 @@
 
             return new OwinNode(leaf);
         }
+
+        public OwinNode Pipeline(string routeTemplate)
+        {
+            var node = this.stringRouteParser.MapToGraph(routeTemplate);
+
+            if (node != null)
+            {
+                this.Base.Zip(node.Base());
+                return new OwinNode(node);
+            }
+            
+            return null;
+        }
     }
 }
