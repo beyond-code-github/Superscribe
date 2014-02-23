@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Any.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Dependencies\SuperscribeDependencyAdapter.cs" />
     <Compile Include="Dependencies\SuperscribeDependencyScopeAdapter.cs" />
