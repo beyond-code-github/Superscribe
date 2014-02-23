@@ -12,8 +12,9 @@ title:  Features
     	<li class="active"> <a href="#webapi" data-toggle="tab">Replacement Asp.Net Web API routing<small>Replace existing routes with syntax thats much more concise and easy to manage</small><i class="icon-angle-right"></i></a> </li>
     	<li> <a href="#testing" data-toggle="tab">Easy unit testing<small>Invoke the superscribe routing engine in isolation from the rest of your app</small><i class="icon-angle-right"></i></a> </li>     	
       	<li> <a href="#modules" data-toggle="tab">Bring Nancy style modules to Web API<small>All the benefits of the code-centric approach combined with graph based routing</small><i class="icon-angle-right"></i></a> </li>   
-      	<li> <a href="#owin" data-toggle="tab">OWIN routing as middleware<small>Let your routing choose which middleware to include</small><i class="icon-angle-right"></i></a> </li>
-    </ul>    
+      	<li> <a href="#owinrouter" data-toggle="tab">OWIN routing as middleware<small>Let your routing choose which middleware to include</small><i class="icon-angle-right"></i></a> </li>
+      	<li> <a href="#owinhandler" data-toggle="tab">Handle requests directly in OWIN<small>Implement lean endpoints with no need for a web framework</small><i class="icon-angle-right"></i></a> </li>
+    </ul>
 	<div class="tab-content col-md-8">
       <div class="tab-pane active col-sm-12 col-md-12" id="webapi">
       	<h3>Simplify your Asp.Net Web API Routes</h3>
@@ -38,29 +39,29 @@ title:  Features
 		</pre>
 		<h3 class="title visible-phone">Traditional Web API:</h3>
 		<pre class="prettyprint lang-cs">
+	 
+	config.Routes.MapHttpRoute(
+		name: "PortfolioTagsRoute",
+		routeTemplate: "sites/{siteId}/portfolio/tags",
+		defaults: new { controller = "portfoliotags" }
+	);
+	 
+	config.Routes.MapHttpRoute(
+		name: "PortfolioProjectsRoute",
+		routeTemplate: "sites/{siteId}/portfolio/projects/{id}",
+		defaults: new { controller = "portfolioprojects", id = RouteParameter.Optional }
+	);
 
 	config.Routes.MapHttpRoute(
-		name: name + "ProjectMediaRoute",
-		routeTemplate: "sites/{siteId}/" + name + "/projects/{projectId}/media/{id}",
-		defaults: new { controller = name + "projectmedia", id = RouteParameter.Optional }
+		name: "PortfolioProjectMediaRoute",
+		routeTemplate: "sites/{siteId}/portfolio/projects/{projectId}/media/{id}",
+		defaults: new { controller = "portfolioprojectmedia", id = RouteParameter.Optional }
 	);
 	 
 	config.Routes.MapHttpRoute(
-		name: name + "TagsRoute",
-		routeTemplate: "sites/{siteId}/" + name + "/tags",
-		defaults: new { controller = name + "tags" }
-	);
-	 
-	config.Routes.MapHttpRoute(
-		name: name + "ProjectsRoute",
-		routeTemplate: "sites/{siteId}/" + name + "/projects/{id}",
-		defaults: new { controller = name + "projects", id = RouteParameter.Optional }
-	);
-	 
-	config.Routes.MapHttpRoute(
-		name: name + "CategoriesRoute",
-		routeTemplate: "sites/{siteId}/" + name + "/categories/{id}",
-		defaults: new { controller = name + "categories", id = RouteParameter.Optional }
+		name: "PortfolioCategoriesRoute",
+		routeTemplate: "sites/{siteId}/portfolio/categories/{id}",
+		defaults: new { controller = "portfoliocategories", id = RouteParameter.Optional }
 	);
 	 
 	config.Routes.MapHttpRoute(
@@ -96,16 +97,23 @@ title:  Features
 		<h3 class="title visible-phone">Superscribe:</h3>
         <pre class="prettyprint lang-cs">
 
-    ʃ.Route(ʅ => ʅ / "sites" / (ʃInt)"siteId" / (
-	    ʅ / "blog" / (
-	        ʅ / "tags".Controller("blogtags")
-	      | ʅ / "posts".Controller("blogposts") / (
-	            ʅ / -(ʃInt)"postId" / -"media".Controller("blogpostmedia") / -(ʃInt)"id"
-	          | ʅ / "archives".Controller("blogpostarchives") / -(ʃInt)"year" / (ʃInt)"month"))
-	  | ʅ / "portfolio" / (
-	        ʅ / "projects".Controller("portfolioprojects") / -(ʃInt)"projectId" / -"media".Controller("portfolioprojectmedia") / -(ʃInt)"id"
-	      | ʅ / "tags".Controller("portfoliotags")
-	      | ʅ / "categories".Controller("portfoliocategories") / -(ʃInt)"id")));
+    var blog        = engine.Route(r => r / "sites" / (Int)"siteId" / "blog");
+    var portfolio   = engine.Route(r => r / "sites" / (Int)"siteId" / "portfolio");
+    var blogposts   = engine.Route(blog / "posts".Controller("blogposts"));
+
+    engine.Route(portfolio / "tags".Controller("portfoliotags"));
+    engine.Route(portfolio / "categories".Controller("portfoliocategories") / -(Int)"id");
+    engine.Route(portfolio / "projects".Controller("portfolioprojects") 
+        / -(Int)"projectId" / -"media".Controller("portfolioprojectmedia") / -(Int)"id");
+
+    engine.Route(blog / "tags".Controller("blogtags"));
+
+    engine.Route(blogposts / -(Int)"postId" / -"media".Controller("blogpostmedia") 
+        / -(Int)"id");
+
+    engine.Route(blogposts / "archives".Controller("blogpostarchives") / -(Int)"year" 
+        / (Int)"month");
+
 		</pre>
 	  </div>
 	  <div class="tab-pane col-sm-12 col-md-12" id="testing">
@@ -116,42 +124,34 @@ title:  Features
     [TestClass]
     public class SuperscribeUnitTests
     {
-        private RouteWalker&lt;RouteData&gt; routeWalker;
+        private IRouteEngine define;
             
         [TestInitialize]
         public void Setup()
         {
-            routeWalker = new RouteWalker&lt;RouteData&gt;(ʃ.Base);
+            define = RouteEngineFactory.Create();
 
-            ʃ.Route(ʅ => 
-                ʅ / "Hello" / (
-                    ʅ / "World"         * (o => "Hello World!")
-                  | ʅ / (ʃString)"Name" * (o => "Hello " + o.Parameters.Name)));
-        }
-
-        [TestCleanup]
-        public void Cleanup()
-        {
-            ʃ.Reset();
+            define.Route(r => r / "Hello" / "World", o => "Hello World!");
+            define.Route(r => r / "Hello" / (String)"Name", o => "Hello " + o.Parameters.Name);
         }
         
         [TestMethod]
         public void Test_Hello_World_Get()
         {
-            var routeData = new RouteData();
-            routeWalker.WalkRoute("/Hello/World", "GET", routeData);
+            var routeWalker = define.Walker();
+            var data = routeWalker.WalkRoute("/Hello/World", "Get", new RouteData());
 
-            Assert.AreEqual("Hello World!", routeData.Response);
+            Assert.AreEqual("Hello World!", data.Response);
         }
 
         [TestMethod]
         public void Test_Hello_Name_Get()
         {
-            var routeData = new RouteData();
-            routeWalker.WalkRoute("/Hello/Kathryn", "GET", routeData);
+            var routeWalker = define.Walker();
+            var data = routeWalker.WalkRoute("/Hello/Kathryn", "Get", new RouteData());
 
-            Assert.AreEqual("Kathryn", routeData.Parameters.Name);
-            Assert.AreEqual("Hello Kathryn", routeData.Response);
+            Assert.AreEqual("Kathryn", data.Parameters.Name);
+            Assert.AreEqual("Hello Kathryn", data.Response);
         }
     }
 		</pre>
@@ -177,18 +177,18 @@ title:  Features
     {
         public HelloWorldModule()
         {
-            this.Get["/"] = ʅ => "Hello World!";
+            this.Get["/"] = o => "Hello World!";
 
-        	this.Get["Hello" / (ʃString)"Name"] = 
-          		ʅ => string.Format("Hello {0}", ʅ.Parameters.Name);
+        	this.Get["Hello" / (String)"Name"] = 
+          		o => string.Format("Hello {0}", o.Parameters.Name);
         }
     }
 		</pre>
 	  </div>	
-      <div class="tab-pane col-sm-12 col-md-12" id="owin">
+      <div class="tab-pane col-sm-12 col-md-12" id="owinrouter">
         <h3>Combine your routing and OWIN pipelines</h3>
         <p>
-        	With the Superscribe.Owin package, your routing routing pipeline and your OWIN pipeline become one. Superscribe provides two OWIN middlewares... <em>SuperscribeRouter</em> for middleware routing and branching, and <em>SuperscribeHandler</em> to allow you to respond to requests in a really streamlined way.
+        	With the Superscribe.Owin package, your routing routing pipeline and your OWIN pipeline become one. Superscribe provides <em>SuperscribeRouter</em> for middleware routing and branching.
         </p>
         <h3 class="title">SuperscribeRouter</h3>
         <pre class="prettyprint lang-cs">
@@ -197,45 +197,41 @@ title:  Features
     {
         public void Configuration(IAppBuilder app)
         {
-			// Web Api config
 			var httpconfig = new HttpConfiguration();
-			httpconfig.Routes.MapHttpRoute(
-			    name: "DefaultApi",
-			    routeTemplate: "api/webapi/",
-			    defaults: new { controller = "Hello" }
-			);
+            httpconfig.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                routeTemplate: "api/webapi/",
+                defaults: new { controller = "Hello" }
+            );
 
-			app.UseSuperscribeRouter(new SuperscribeOwinConfig());
+            var define = OwinRouteEngineFactory.Create();
 
-			// Set up a route that will respond to both Web Api and Nancy 
-			ʃ.Route(ʅ => ʅ / "api" / (
-			      ʅ / "webapi" * Pipeline.Action(o => o.UseWebApi(httpconfig))
-			    | ʅ / "nancy" * Pipeline.Action(o => o.UseNancy())));
+            // Set up a route that will forward requests to either web api or nancy
+            define.Pipeline("api/webapi").UseWebApi(httpconfig);
+            define.Pipeline("api/nancy").UseNancy();
+            
+            app.UseSuperscribeRouter(define);
 		}
 	}
-		</pre>
+		</pre></div>	
+      <div class="tab-pane col-sm-12 col-md-12" id="owinhandler">
+        <h3>Handle requests directly in OWIN</h3>
+        <p>
+        	For those situations when simplicity and raw speed are key, <em>Superscribe Handler</em> allows you to respond to requests without the need for a bulky web framework.
+        </p>
 		<h3 class="title">SuperscribeHandler</h3>
         <pre class="prettyprint lang-cs">
-
-	public class Module : SuperscribeOwinModule
-    {
-        public Module()
-        {
-            this.Get["Hello"] = o => "Hello World";
-        }
-    }
 
     public class Startup
     {
         public void Configuration(IAppBuilder app)
         {
-        	// Define serialization for text/html
-			var config = new SuperscribeOwinConfig();
-		    config.MediaTypeHandlers.Add("text/html", new MediaTypeHandler 
-		    	{ Write = (env, o) => env.WriteResponse(o.ToString())});
-
-		    builder.UseSuperscribeRouter(config)
-		        .UseSuperscribeHandler(config);
+        	var define = OwinRouteEngineFactory.Create();
+            
+            define.Route("Hello/World", o => "Hello World");
+            
+            app.UseSuperscribeRouter(define)
+                .UseSuperscribeHandler(define);
 		}
 	}
 		</pre>

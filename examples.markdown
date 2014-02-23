@@ -26,10 +26,16 @@ title:  Examples
 			</li>
 			<li>
 				<a href="#webapimultiplecollections" data-toggle="tab">
-					Web Api Multiple Collections Per Controller<small>Shows how to route multiple collection resources to the same controller (Web Api)</small>
+					Multiple Collections Per Controller<small>Shows how to route multiple collection resources to the same controller (Web Api)</small>
 					<i class="icon-angle-right"></i>
 				</a>
 			</li>
+            <li>
+                <a href="#alongsidetraditionalrouting" data-toggle="tab">
+                    Combine with other Routing<small>Using Superscribe routes and modules alongside traditional/attribue routing (Web Api)</small>
+                    <i class="icon-angle-right"></i>
+                </a>
+            </li>
 			<li>
 				<a href="#owinframeworkhandover" data-toggle="tab">
 					Handing control to frameworks<small>Shows how to perform routing and then pass control over to web frameworks accordingly (Owin)</small>
@@ -50,7 +56,7 @@ title:  Examples
 			</li>
 			<li>
 				<a href="#owinparameters" data-toggle="tab">
-					Passing Parameters to other Middleware<small>Shows how to pass parameters captured during routing to other middleware (Owin)</small>
+					Using Parameters in other Middleware<small>Shows how to use parameters captured during routing in other middleware (Owin)</small>
 					<i class="icon-angle-right"></i>
 				</a>
 			</li>
@@ -94,24 +100,20 @@ title:  Examples
     {
         public void Configuration(IAppBuilder app)
         {
-            var config = new SuperscribeOwinConfig();
-            config.MediaTypeHandlers.Add(
-                "text/html",
-                new MediaTypeHandler
-                    {
-                        Write = (env, o) => env.WriteResponse(o.ToString())
-                    });
-
-            app.UseSuperscribeRouter(config)
-                .UseSuperscribeHandler(config);
-
+            var define = OwinRouteEngineFactory.Create();
+        
             // Set up a route that will respond only to even numbers using the fluent api
+            var products = new ConstantNode("Products");
+            var evenNumber = new EvenNumberNode("id");
 
-            var helloRoute = new ConstantNode("Products").Slash(new EvenNumberNode("id"));
+            var helloRoute = products.Slash(evenNumber);
             helloRoute.FinalFunctions.Add(
-            	new FinalFunction("GET", o => "Product id: " + o.Parameters.id));
+                new FinalFunction("GET", o => "Product id: " + o.Parameters.id));
 
-            ʃ.Base.Zip(helloRoute.Base());
+            define.Route(helloRoute);
+            
+            app.UseSuperscribeRouter(define)
+                .UseSuperscribeHandler(define);
         }
     }
 			</pre>
@@ -123,105 +125,37 @@ title:  Examples
 	[TestClass]
     public class SuperscribeUnitTests
     {
-        private RouteWalker&lt;RouteData&gt; routeWalker;
+        private IRouteEngine define;
             
         [TestInitialize]
         public void Setup()
         {
-            routeWalker = new RouteWalker&lt;RouteData&gt;(ʃ.Base);
+            define = RouteEngineFactory.Create();
 
-            ʃ.Route(ʅ => 
-                ʅ / "Hello" / (
-                    ʅ / "World"         * (o => "Hello World!")
-                  | ʅ / (ʃString)"Name" * (o => "Hello " + o.Parameters.Name)));
-        }
-
-        [TestCleanup]
-        public void Cleanup()
-        {
-            ʃ.Reset();
+            define.Route(r => r / "Hello" / "World", o => "Hello World!");
+            define.Route(r => r / "Hello" / (String)"Name", o => "Hello " + o.Parameters.Name);
         }
         
         [TestMethod]
         public void Test_Hello_World_Get()
         {
-            var routeData = new RouteData();
-            routeWalker.WalkRoute("/Hello/World", "Get", routeData);
+            var routeWalker = define.Walker();
+            var data = routeWalker.WalkRoute("/Hello/World", "Get", new RouteData());
 
-            Assert.AreEqual("Hello World!", routeData.Response);
+            Assert.AreEqual("Hello World!", data.Response);
         }
 
         [TestMethod]
         public void Test_Hello_Name_Get()
         {
-            var routeData = new RouteData();
-            routeWalker.WalkRoute("/Hello/Kathryn", "Get", routeData);
+            var routeWalker = define.Walker();
+            var data = routeWalker.WalkRoute("/Hello/Kathryn", "Get", new RouteData());
 
-            Assert.AreEqual("Kathryn", routeData.Parameters.Name);
-            Assert.AreEqual("Hello Kathryn", routeData.Response);
+            Assert.AreEqual("Kathryn", data.Parameters.Name);
+            Assert.AreEqual("Hello Kathryn", data.Response);
         }
     }
 				</pre>
-				<pre class="prettyprint">
-
-	public class RouteData : IRouteData
-    {
-        private string actionName;
-
-        private string controllerName;
-
-        public RouteData()
-        {
-            this.Parameters = new DynamicDictionary();
-        }
-        
-        public dynamic Parameters { get; set; }
-
-        public bool ActionNameSpecified { get; private set; }
-
-        public string ActionName
-        {
-            get
-            {
-                return this.actionName;
-            }
-            set
-            {
-                this.ActionNameSpecified = true;
-                this.actionName = value;
-            }
-        }
-
-        public bool ControllerNameSpecified { get; private set; }
-
-        public string ControllerName
-        {
-            get
-            {
-                return this.controllerName;
-            }
-            set
-            {
-                this.ControllerNameSpecified = true;
-                this.controllerName = value;
-            }
-        }
-
-        public object Response { get; set; }
-
-        public bool ParamConversionError { get; set; }
-        
-        public T Bind&lt;T&gt;() where T : class
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public T Require&lt;T&gt;() where T : class
-        {
-            throw new System.NotImplementedException();
-        }
-    }
-	  			</pre>
 		  	</div>
 		  	<div class="tab-pane col-sm-12 col-md-12" id="webapimultiplecollections">
 	  			<h3>Multiple collection resources per controller in Asp.Net Web Api</h3>
@@ -233,16 +167,15 @@ title:  Examples
         {
             config.Formatters.Remove(config.Formatters.XmlFormatter);
 
-            SuperscribeConfig.Register(config);
+            var define = SuperscribeConfig.Register(config);
 
-            ʃ.Route(ʅ => "api" / "Blogs".Controller() / -(ʃInt)"blogid" / (
-                ʅ["GET"] / (
-                      ʅ / "Posts".Action("GetBlogPosts")
-                    | ʅ / "Tags".Action("GetBlogTags"))
-                | ʅ["POST"] / (
-                      ʅ / "Posts".Action("PostBlogPost") 
-                    | ʅ / "Tags".Action("PostBlogTag"))));
-            
+            var blogs = define.Route(r => r / "api" / "Blogs".Controller() / -(Int)"blogid");
+
+            define.Get(blogs / "Posts".Action("GetBlogPosts"));
+            define.Get(blogs / "Tags".Action("GetBlogTags"));
+
+            define.Post(blogs / "Posts".Action("PostBlogPost"));
+            define.Post(blogs / "Tags".Action("PostBlogTag"));
         }
     }
 				</pre>
@@ -287,7 +220,74 @@ title:  Examples
     }
     			</pre>
 		  	</div>
-			<div class="tab-pane col-sm-12 col-md-12" id="owinframeworkhandover">
+			<div class="tab-pane col-sm-12 col-md-12" id="alongsidetraditionalrouting">
+                <h3>Using Superscribe routes and modules alongside traditional/attribue routing in Asp.Net Web Api</h3>
+                <pre class="prettyprint">
+
+    public class ValuesController : ApiController
+    {
+        public IEnumerable<string> Get()
+        {
+            return new string[] { "value1", "value2" };
+        }
+
+        public string Get(int id)
+        {
+            return "value";
+        }
+    }
+                </pre>
+                <pre class="prettyprint">
+
+    public class MoviesController : ApiController
+    {
+        [Route("movies")]
+        public IEnumerable<string> Get()
+        {
+            return new[] { "The Matrix", "Lord of the Rings" };
+        }
+    }
+                </pre>
+                <pre class="prettyprint">
+
+    public class HelloWorldModule : SuperscribeModule
+    {
+        public HelloWorldModule()
+        {
+            this.Get["/"] = o => new { Message = "Hello World" };
+
+            this.Get["Hello" / (String)"Name"] = 
+                o => new { Message = "Hello, " + o.Parameters.Name };
+        }
+    }
+                </pre>                
+                <pre class="prettyprint">
+
+    public class Startup
+    {
+        public void Configuration(IAppBuilder app)
+        {
+            var define = OwinRouteEngineFactory.Create();
+            var httpconfig = new HttpConfiguration();
+
+            httpconfig.Formatters.Remove(httpconfig.Formatters.XmlFormatter);
+            httpconfig.MapHttpAttributeRoutes();
+            httpconfig.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                routeTemplate: "api/{controller}/{id}",
+                defaults: new { controller = "values", id = RouteParameter.Optional });
+
+            SuperscribeConfig.RegisterModules(httpconfig, define);
+
+            // Access values controller without falling back to web api routing
+            define.Route("values".Controller());
+            
+            app.UseSuperscribeRouter(define)
+                .UseWebApiWithSuperscribe(httpconfig, define);
+        }
+    }                                    
+                </pre>
+            </div><div class="tab-pane col-sm-12 col-md-12" id="owinframeworkhandover">
 	  			<h3>Handing control from Supersribe to web frameworks for handling requests</h3>	  			
 				<pre class="prettyprint">
 
@@ -323,12 +323,13 @@ title:  Examples
                 defaults: new { controller = "Hello" }
             );
 
-            app.UseSuperscribeRouter(new SuperscribeOwinConfig());
+            var define = OwinRouteEngineFactory.Create();
 
             // Set up a route that will forward requests to either web api or nancy
-            ʃ.Route(ʅ => ʅ / "api" / (
-                  ʅ / "webapi" * Pipeline.Action(o => o.UseWebApi(httpconfig))
-                | ʅ / "nancy" * Pipeline.Action(o => o.UseNancy())));
+            define.Pipeline("api/webapi").UseWebApi(httpconfig);
+            define.Pipeline("api/nancy").UseNancy();
+            
+            app.UseSuperscribeRouter(define);
         }
     }
 				</pre>
@@ -341,14 +342,12 @@ title:  Examples
     {
         public void Configuration(IAppBuilder app)
         {
-            var config = new SuperscribeOwinConfig();
-            config.MediaTypeHandlers.Add("text/html", new MediaTypeHandler 
-            	{ Write = (env, o) => env.WriteResponse(o.ToString()) });
-
-            app.UseSuperscribeRouter(config)
-                .UseSuperscribeHandler(config);
-
-            ʃ.Route(ʅ => ʅ / "Hello" / "World" * (o => "Hello World"));
+            var define = OwinRouteEngineFactory.Create();
+            
+            define.Route("Hello/World", o => "Hello World");
+            
+            app.UseSuperscribeRouter(define)
+                .UseSuperscribeHandler(define);
         }
     }
 				</pre>
@@ -385,10 +384,10 @@ title:  Examples
         {
             this.Get["Products"] = o => products;
 
-            this.Get["Products" / (ʃInt)"Id"] = o => 
+            this.Get["Products" / (Int)"Id"] = o => 
                 products.FirstOrDefault(p => o.Parameters.Id == p.Id);
 
-            this.Get["Products" / (ʃString)"Category"] = o => 
+            this.Get["Products" / (String)"Category"] = o => 
                 products.Where(p => o.Parameters.Category == p.Category);
 
             this.Post["Products"] = o =>
@@ -407,10 +406,9 @@ title:  Examples
     {
         public void Configuration(IAppBuilder app)
         {
-            var config = new SuperscribeOwinConfig();
-            config.MediaTypeHandlers.Add("text/html", new MediaTypeHandler 
-            	{ Write = (env, o) => env.WriteResponse(o.ToString()) });
-            config.MediaTypeHandlers.Add("application/json", new MediaTypeHandler {
+            var options = new SuperscribeOwinOptions();
+            options.MediaTypeHandlers.Add("application/json", new MediaTypeHandler
+            {
                    Write = (env, o) => env.WriteResponse(JsonConvert.SerializeObject(o)),
                    Read = (env, type) =>
                    {
@@ -424,14 +422,16 @@ title:  Examples
                    }
                });
 
-            app.UseSuperscribeRouter(config)
-                .UseSuperscribeHandler(config);
+            var engine = OwinRouteEngineFactory.Create(options);
+
+            app.UseSuperscribeRouter(engine)
+                .UseSuperscribeHandler(engine);
         }
     }
 				</pre>
 			</div>
 			<div class="tab-pane col-sm-12 col-md-12" id="owinparameters">
-	  			<h3>Passing parameters captured during routing to other Middleware</h3>	  							
+	  			<h3>Using parameters captured during routing in other Middleware</h3>	  							
 				<pre class="prettyprint">
 
 	public class AddName
@@ -461,16 +461,13 @@ title:  Examples
     {
         public void Configuration(IAppBuilder app)
         {
-            var config = new SuperscribeOwinConfig();
-            config.MediaTypeHandlers.Add(
-                "text/html",
-                new MediaTypeHandler { Write = (env, o) => env.WriteResponse(o.ToString()) });
+            var define = OwinRouteEngineFactory.Create();
 
-            app.UseSuperscribeRouter(config)
+            app.UseSuperscribeRouter(define)
                 .Use(typeof(AddName))
-                .UseSuperscribeHandler(config);
-
-            ʃ.Route(ʅ => ʅ / "Hello" / (ʃString)"Name" * (o => "Hello"));
+                .UseSuperscribeHandler(define);
+            
+            define.Route(r => r / "Hello" / (String)"Name", o => "Hello");
         }
     }
 				</pre>
@@ -505,21 +502,16 @@ title:  Examples
     {
         public void Configuration(IAppBuilder app)
         {
-            var config = new SuperscribeOwinConfig();
-            config.MediaTypeHandlers.Add(
-                "text/html",
-                new MediaTypeHandler { Write = (env, o) => env.WriteResponse(o.ToString()) });
+            var define = OwinRouteEngineFactory.Create();
+
+            define.Pipeline("Hello").Use(typeof(PadResponse), "h1");
+            define.Pipeline("Goodbye").Use(typeof(PadResponse), "marquee");
             
-            // Advanced superscribe pipelining example
+            define.Route("Hello/World", o => "Hello World");
+            define.Route("Goodbye/World", o => "Goodbye World");
 
-            app.UseSuperscribeRouter(config)
-              .UseSuperscribeHandler(config);
-
-            ʃ.Route(ʅ => ʅ / "Hello" * Pipeline.Action&lt;PadResponse&gt;("h1") 
-                                / "World" * (o => "Hello World"));
-
-            ʃ.Route(ʅ => ʅ / "Mad" * Pipeline.Action&lt;PadResponse&gt;("marquee") 
-                                / "World" * (o => "Hello World"));
+            app.UseSuperscribeRouter(define)
+              .UseSuperscribeHandler(define);            
         }
     }
 				</pre>
