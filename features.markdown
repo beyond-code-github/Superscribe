@@ -181,6 +181,12 @@ title:  Features
 
         	this.Get["Hello" / (String)"Name"] = 
           		o => string.Format("Hello {0}", o.Parameters.Name);
+
+            this.Post["Save"] = o =>
+            {
+                var wrapper = o.Bind&lt;MessageWrapper&gt;();
+                return new { Message = "You entered - " + wrapper.Message };
+            };
         }
     }
 		</pre>
