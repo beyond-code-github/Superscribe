@@ -111,6 +111,12 @@
             {
                 if (existingNode.Equals(nextNode))
                 {
+                    var existingAction = existingNode.actionFunction;
+                    if (existingAction == null)
+                    {
+                        existingNode.actionFunction = nextNode.ActionFunction;
+                    }
+
                     foreach (var nextEdge in nextNode.Edges)
                     {
                         existingNode.Zip(nextEdge);

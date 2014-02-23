@@ -40,8 +40,10 @@
 
             if (node != null)
             {
-                this.Base.Zip(node.Base());
-                return new OwinNode(node);
+                var owinNode = new OwinNode(node);
+                this.Base.Zip(owinNode.Node.Base());
+
+                return owinNode;
             }
             
             return null;
