@@ -19,9 +19,10 @@
             SuperscribeConfig.Register(httpconfig, engine);
 
             engine.Route(o => "Values".Controller());      
-
+            
             app.UseSuperscribeRouter(engine)
-                .UseWebApiWithSuperscribe(httpconfig, engine);
+                .UseWebApi(httpconfig)
+                .WithSuperscribe(httpconfig, engine);
         }
     }
 }
