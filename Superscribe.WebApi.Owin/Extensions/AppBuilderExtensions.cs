@@ -8,13 +8,14 @@
     using Superscribe.WebApi.Dependencies;
     using Superscribe.WebApi.Owin.Dependencies;
 
-    public static class AppBuilderExtensions
+    public static class ContextBuilderExtensions
     {
-        public static IAppBuilder UseWebApiWithSuperscribe(this IAppBuilder app, HttpConfiguration configuration, IRouteEngine engine)
+        public static IAppBuilder WithSuperscribe(this IAppBuilder builder, HttpConfiguration configuration, IRouteEngine engine)
         {
             configuration.DependencyResolver = new SuperscribeDependencyAdapter(configuration.DependencyResolver, engine);
-            HttpServer httpServer = new SuperscribeDependencyScopeHttpServerAdapter(configuration);
-            return app.UseWebApi(httpServer);
+            configuration.MessageHandlers.Insert(0, new SuperscribeDependencyScopeHandler());
+
+            return builder;
         }
     }
 }

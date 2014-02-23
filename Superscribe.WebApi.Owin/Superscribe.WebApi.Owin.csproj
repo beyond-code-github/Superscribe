@@ -56,7 +56,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dependencies\SuperscribeDependencyScopeHttpServerAdapter.cs" />
+    <Compile Include="Dependencies\SuperscribeDependencyScopeHandler.cs" />
     <Compile Include="Extensions\AppBuilderExtensions.cs" />
     <Compile Include="Extensions\RequestExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

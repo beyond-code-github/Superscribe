@@ -6,7 +6,6 @@
     using Superscribe.Engine;
     using Superscribe.Owin;
     using Superscribe.WebApi.Dependencies;
-    using Superscribe.WebApi.Owin.Dependencies;
 
     public static class RequestExtensions
     {
