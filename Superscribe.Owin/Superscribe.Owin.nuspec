@@ -9,7 +9,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Superscribe middleware routing and modules handler for OWIN</description>
     <dependencies>
-        <dependency id="Superscribe" version="0.4.0" />        
+        <dependency id="Superscribe" version="0.4.0.9" />        
         <dependency id="Owin" version="1.0.0" />
     </dependencies>
     <copyright>Pete Smith 2013</copyright>
