@@ -5,7 +5,6 @@
     using System.Web.Http.Dependencies;
 
     using Superscribe.Engine;
-    using Superscribe.WebApi.Engine;
 
     public class SuperscribeDependencyAdapter : IDependencyResolver
     {
