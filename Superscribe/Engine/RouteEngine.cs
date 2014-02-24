@@ -26,7 +26,7 @@
                 return this.@base;
             }
         }
-        
+
         public IRouteWalker Walker()
         {
             return routeWalkerFactory(this.Base);
@@ -55,7 +55,7 @@
                 finalNode = node;
             }
 
-            finalNode.FinalFunctions.Add(new FinalFunction { Function = func });
+            finalNode.FinalFunctions.Add(new ExclusiveFinalFunction { Function = func });
 
             return node;
         }
@@ -68,7 +68,7 @@
 
         public GraphNode Route(GraphNode config, Func<dynamic, object> func)
         {
-            config.FinalFunctions.Add(new FinalFunction { Function = func });
+            config.FinalFunctions.Add(new ExclusiveFinalFunction { Function = func });
             this.Base.Zip(config.Base());
 
             return config;
@@ -84,12 +84,12 @@
         public GraphNode Route(Func<RouteGlue, GraphNode> config, Func<dynamic, object> func)
         {
             var leaf = config(new RouteGlue());
-            leaf.FinalFunctions.Add(new FinalFunction { Function = func });
+            leaf.FinalFunctions.Add(new ExclusiveFinalFunction { Function = func });
             this.Base.Zip(leaf.Base());
 
             return leaf;
         }
-
+        
         public GraphNode Get(string routeTemplate)
         {
             return this.MethodNode(routeTemplate, "GET");
@@ -239,7 +239,7 @@
         {
             return this.MethodNode(config, func, "DELETE");
         }
-        
+
         private GraphNode MethodNode(string routeTemplate, string method)
         {
             var node = this.stringRouteParser.MapToGraph(routeTemplate);
@@ -265,7 +265,7 @@
                 finalNode = node;
             }
 
-            finalNode.FinalFunctions.Add(new FinalFunction { Function = func });
+            finalNode.FinalFunctions.Add(new ExclusiveFinalFunction { Function = func });
             return node;
         }
 
@@ -279,7 +279,7 @@
         private GraphNode MethodNode(GraphNode leaf, Func<dynamic, object> func, string method)
         {
             leaf.AddAllowedMethod(method);
-            leaf.FinalFunctions.Add(new FinalFunction { Function = func });
+            leaf.FinalFunctions.Add(new ExclusiveFinalFunction { Function = func });
 
             this.Base.Zip(leaf.Base());
             return leaf;
@@ -298,7 +298,7 @@
         {
             var leaf = config(new RouteGlue());
             leaf.AddAllowedMethod(method);
-            leaf.FinalFunctions.Add(new FinalFunction { Function = func });
+            leaf.FinalFunctions.Add(new ExclusiveFinalFunction { Function = func });
 
             this.Base.Zip(leaf.Base());
             return leaf;
