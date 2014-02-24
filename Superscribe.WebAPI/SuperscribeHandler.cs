@@ -5,14 +5,16 @@
     using System.Threading;
     using System.Threading.Tasks;
 
+    using Superscribe.Models;
+
     public class SuperscribeHandler : DelegatingHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var provider = request.GetRouteDataProvider();
             var info = provider.GetData(request);
-            
-            if (info.ExtraneousMatch || info.IncompleteMatch || !info.FinalFunctionExecuted)
+
+            if (info.ExtraneousMatch || info.IncompleteMatch || !info.FinalFunctionExecuted || info.Response is FinalFunction.ExecuteAndContinue)
             {
                 return base.SendAsync(request, cancellationToken);
             }

@@ -25,6 +25,10 @@ namespace Superscribe.Models
 
     public class FinalFunction
     {
+        public class ExecuteAndContinue
+        {
+        }
+
         public FinalFunction()
         {
         }
@@ -46,7 +50,7 @@ namespace Superscribe.Models
         public string Method { get; set; }
 
         public Func<dynamic, object> Function { get; set; }
-
+        
         public static FinalFunctionList operator |(FinalFunction function, FinalFunction other)
         {
             return new FinalFunctionList { function, other };
