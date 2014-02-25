@@ -24,8 +24,8 @@
 
             var blogposts   = engine.Route(blog / "posts".Controller("blogposts"));
 
-            engine.Route(forms / "VisibleFor".Action() / (String)"appDataId");
-            engine.Route(forms / -(Long)"id");
+            engine.Route(forms / "VisibleFor" / (String)"appDataId", To.Action("VisibleFor"));
+            engine.Route(forms / -(Long)"id", To.Action("GetById"));
             
             engine.Route(blog / "tags".Controller("blogtags"));
             
