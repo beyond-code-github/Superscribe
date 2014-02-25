@@ -120,9 +120,8 @@
 
                 var nextMatch = this.FindNextMatch(info, this.PeekNextSegment(), match.Edges);
                 if (nextMatch == null
-                    && !match.FinalFunctions.Any(o => string.IsNullOrEmpty(o.Method) || o.Method == this.Method)
-                    && match.Edges.Any()
-                    && match.Edges.All(o => !(o.IsOptional)))
+                    && (this.HasFinalsButNoneMatchTheCurrentMethod(match)
+                        || this.HasNoMatchingFinalButRemainingNonOptionalEdges(match)))
                 {
                     info.IncompleteMatch = true;
                     return;
@@ -148,8 +147,21 @@
         private GraphNode FindNextMatch(RouteData info, string segment, IEnumerable<GraphNode> states)
         {
             return !string.IsNullOrEmpty(segment) ?
-                states.FirstOrDefault(o => o.ActivationFunction(info, segment) && (!o.AllowedMethods.Any() || o.AllowedMethods.Contains(this.Method)))
+                states.FirstOrDefault(o => o.ActivationFunction(info, segment))
                 : null;
+        }
+
+        private bool HasFinalsButNoneMatchTheCurrentMethod(GraphNode match)
+        {
+            return match.FinalFunctions.Count > 0
+                   && !match.FinalFunctions.Any(o => string.IsNullOrEmpty(o.Method) || o.Method == this.Method);
+        }
+
+        private bool HasNoMatchingFinalButRemainingNonOptionalEdges(GraphNode match)
+        {
+            return !match.FinalFunctions.Any(o => string.IsNullOrEmpty(o.Method) || o.Method == this.Method)
+                   && match.Edges.Any() && match.Edges.All(
+                       o => !(o.IsOptional));
         }
     }
 }

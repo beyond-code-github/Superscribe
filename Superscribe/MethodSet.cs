@@ -49,7 +49,8 @@
                 else
                 {
                     var node = new ConstantNode(s);
-                    this.bindings.Add(() => node * (f => value(f)));
+                    node.FinalFunctions.Add(new ExclusiveFinalFunction(this.method, f => value(f)));
+                    this.bindings.Add(() => node);
                 }
             }
         }
@@ -66,7 +67,6 @@
         private void ApplyBinding(Func<GraphNode> o)
         {
             var leaf = o();
-            leaf.AddAllowedMethod(this.method);
             this.engine.Base.Zip(leaf.Base());
         }
     }

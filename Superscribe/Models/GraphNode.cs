@@ -22,7 +22,6 @@
         {
             this.Edges = new ConcurrentQueue<GraphNode>();
             this.QueryString = new ConcurrentQueue<GraphNode>();
-            this.AllowedMethods = new ConcurrentQueue<string>();
             this.FinalFunctions = new List<FinalFunction>();
 
             this.activationFunction = (routedata, segment) =>
@@ -99,8 +98,6 @@
             }
         }
 
-        public ConcurrentQueue<string> AllowedMethods { get; set; }
-
         #endregion
 
         #region Methods
@@ -115,6 +112,14 @@
                     if (existingAction == null)
                     {
                         existingNode.actionFunction = nextNode.ActionFunction;
+                    }
+
+                    foreach (var final in nextNode.FinalFunctions)
+                    {
+                        if (existingNode.FinalFunctions.All(o => o.Method != final.Method))
+                        {
+                            existingNode.FinalFunctions.Add(final);
+                        }
                     }
 
                     foreach (var nextEdge in nextNode.Edges)
@@ -136,13 +141,13 @@
             this.Edges.Enqueue(nextNode);
             return nextNode;
         }
-        
+
         public GraphNode Optional()
         {
             this.IsOptional = true;
             return this;
         }
-        
+
         private GraphNode MatchAsRegex()
         {
             this.Pattern = new Regex(this.Template);
@@ -155,14 +160,6 @@
         public GraphNode Base()
         {
             return this.Base(this, this.Parent);
-        }
-
-        public void AddAllowedMethod(string method)
-        {
-            if (!this.AllowedMethods.Contains(method))
-            {
-                this.AllowedMethods.Enqueue(method);    
-            }
         }
 
         /// <summary>
@@ -229,7 +226,7 @@
         {
             return new NodeFuture { Parent = node, ActivationFunction = activation };
         }
-        
+
         /// <summary>
         /// Shorthand for creating a transition list from two alternatives
         /// </summary>
@@ -305,14 +302,6 @@
         public static GraphNode operator *(GraphNode node, FinalFunctionList finals)
         {
             node.FinalFunctions.AddRange(finals);
-            foreach (var final in finals)
-            {
-                if (!string.IsNullOrEmpty(final.Method))
-                {
-                    node.AddAllowedMethod(final.Method);
-                }
-            }
-
             return node;
         }
 
@@ -348,14 +337,11 @@
             {
                 return false;
             }
-            
+
             var equal = string.Equals(
                 this.Pattern != null ? this.Pattern.ToString() : string.Empty,
                 other.Pattern != null ? other.Pattern.ToString() : string.Empty)
-                && string.Equals(this.Template, other.Template)
-                && this.AllowedMethods.SequenceEqual(other.AllowedMethods)
-                && (!other.FinalFunctions.Any()
-                    || this.FinalFunctions.Select(o => o.Method).SequenceEqual(other.FinalFunctions.Select(o => o.Method)));
+                        && string.Equals(this.Template, other.Template);
 
             return equal;
         }

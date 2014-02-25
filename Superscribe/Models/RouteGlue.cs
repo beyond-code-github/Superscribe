@@ -20,36 +20,17 @@
         public static GraphNode operator /(RouteGlue state, string other)
         {
             var node = new ConstantNode(other);
-            if (!string.IsNullOrEmpty(state.Method))
-            {
-                node.AddAllowedMethod(state.Method);    
-            }
-
             return node;
         }
 
         public static GraphNode operator /(RouteGlue state, GraphNode other)
         {
             var node = other.Base();
-            if (!string.IsNullOrEmpty(state.Method))
-            {
-                node.AddAllowedMethod(state.Method);
-            }
-
             return node;
         }
 
         public static SuperList operator /(RouteGlue state, SuperList others)
         {
-            foreach (var other in others)
-            {
-                var node = other.Base();
-                if (!string.IsNullOrEmpty(state.Method))
-                {
-                    node.AddAllowedMethod(state.Method);
-                }
-            }
-            
             return others;
         }
 
