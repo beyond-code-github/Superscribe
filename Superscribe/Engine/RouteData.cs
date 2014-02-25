@@ -18,6 +18,10 @@
 
         public bool FinalFunctionExecuted { get; set; }
 
+        public string Method { get; set; }
+
+        public string Url { get; set; }
+
         public RouteData()
         {
             this.Environment = new Dictionary<string, object>();

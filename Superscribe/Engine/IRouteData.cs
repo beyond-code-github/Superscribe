@@ -15,5 +15,9 @@
         bool ExtraneousMatch { get; set; }
 
         bool FinalFunctionExecuted { get; set; }
+
+        string Method { get; set; }
+
+        string Url { get; set; }
     }
 }

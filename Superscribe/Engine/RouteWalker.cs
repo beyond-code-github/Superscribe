@@ -30,8 +30,8 @@
         public RouteData WalkRoute(string route, string method, RouteData info)
         {
             string querystring = null;
-            this.Method = method;
-            this.Route = route;
+            this.Method = info.Method = method;
+            this.Route = info.Url = route;
 
             CacheEntry<RouteData> cacheEntry;
             if (routeCache.TryGet(method + "-" + route, out cacheEntry))
