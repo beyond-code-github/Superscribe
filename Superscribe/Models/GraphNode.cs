@@ -41,12 +41,7 @@
         /// The parent state
         /// </summary>
         public GraphNode Parent { get; set; }
-
-        /// <summary>
-        /// Boolean flag indicating if the transition into this state is optional
-        /// </summary>
-        public bool IsOptional { get; private set; }
-
+        
         /// <summary>
         /// Concurrent queue of available transitions from this state
         /// </summary>
@@ -141,13 +136,7 @@
             this.Edges.Enqueue(nextNode);
             return nextNode;
         }
-
-        public GraphNode Optional()
-        {
-            this.IsOptional = true;
-            return this;
-        }
-
+        
         private GraphNode MatchAsRegex()
         {
             this.Pattern = new Regex(this.Template);
@@ -272,17 +261,7 @@
         {
             return node.Base();
         }
-
-        /// <summary>
-        /// Shorthand for calling .Optional
-        /// </summary>
-        /// <param name="node">Transition to be made optional</param>
-        public static GraphNode operator -(GraphNode node)
-        {
-            node.Optional();
-            return node;
-        }
-
+        
         /// <summary>
         /// Shorthand for calling .MatchAsRegex
         /// </summary>

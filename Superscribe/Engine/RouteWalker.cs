@@ -121,12 +121,6 @@
                 var nextMatch = this.FindNextMatch(info, this.PeekNextSegment(), match.Edges);
                 if (nextMatch == null)
                 {
-                    if (this.HasNoMatchingFinalButRemainingNonOptionalEdges(match))
-                    {
-                        info.IncompleteMatch = true;
-                        return;
-                    }
-
                     if (this.HasFinalsButNoneMatchTheCurrentMethod(match))
                     {
                         info.NoMatchingFinalFunction = true;
@@ -162,13 +156,6 @@
         {
             return match.FinalFunctions.Count > 0
                    && !match.FinalFunctions.Any(o => string.IsNullOrEmpty(o.Method) || o.Method == this.Method);
-        }
-
-        private bool HasNoMatchingFinalButRemainingNonOptionalEdges(GraphNode match)
-        {
-            return !match.FinalFunctions.Any(o => string.IsNullOrEmpty(o.Method) || o.Method == this.Method)
-                   && match.Edges.Any() && match.Edges.All(
-                       o => !(o.IsOptional));
         }
     }
 }

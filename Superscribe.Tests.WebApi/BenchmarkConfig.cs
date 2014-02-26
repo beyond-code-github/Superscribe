@@ -29,14 +29,14 @@
             // sites/{siteId}/blog/posts/{postId}
             // sites/{siteId}/blog/posts/{postId}/media
             // sites/{siteId}/blog/posts/{postId}/media/{id}
-            engine.Route(o => blogposts / -(Int)"postId" / -"media".Controller("blogpostmedia") / -(Int)"id");
+            engine.Route(o => blogposts / (Int)"postId" / "media".Controller("blogpostmedia") / (Int)"id");
 
             // sites/{siteId}/blog/tags
             engine.Route(o => blog / "tags".Controller("blogtags"));
 
             // sites/{siteId}/blog/posts/archives
             // sites/{siteId}/blog/posts/archives/{year}/{month}
-            engine.Route(o => blogposts / "archives".Controller("blogpostarchives") / -(Int)"year" / (Int)"month");
+            engine.Route(o => blogposts / "archives".Controller("blogpostarchives") / (Int)"year" / (Int)"month");
 
             //for (var i = 0; i < 50; i++)
             //{
@@ -48,20 +48,20 @@
         {
             var baseroute = site / name;
 
-            var projectsroute = baseroute / "projects".Controller(name + "projects") / -(Int)"projectId";
+            var projectsroute = baseroute / "projects".Controller(name + "projects") / (Int)"projectId";
 
             // sites/{siteId}/portfolio/projects
             // sites/{siteId}/portfolio/projects/{projectId}
             // sites/{siteId}/portfolio/projects/{projectId}/media
             // sites/{siteId}/portfolio/projects/{projectId}/media/{id}
-            engine.Route(o => projectsroute / -"media".Controller(name + "projectmedia") / -(Int)"id");
+            engine.Route(o => projectsroute / "media".Controller(name + "projectmedia") / (Int)"id");
 
             // sites/{siteId}/portfolio/tags
             engine.Route(o => baseroute / "tags".Controller(name + "tags"));
 
             // sites/{siteId}/portfolio/categories
             // sites/{siteId}/portfolio/categories/{id}
-            engine.Route(o => baseroute / "categories".Controller(name + "categories") / -(Int)"id");
+            engine.Route(o => baseroute / "categories".Controller(name + "categories") / (Int)"id");
         }
     }
 }

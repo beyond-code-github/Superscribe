@@ -23,12 +23,12 @@
             var define = SuperscribeConfig.Register(config);
 
             // Forms
-            var forms = define.Route("api" / (Long)"parentId" / "Forms".Controller());
-            define.Get(forms / "VisibleFor" / (String)"appDataId", To.Action("VisibleFor"));
-            define.Get(forms / -(Long)"id", To.Action("GetById"));
-            define.Get(forms / -(Long)"id" / "Render", To.Action("RenderForm"));
-            define.Patch(forms / -(Long)"id", To.Action("Patch"));
-            define.Delete(forms / -(Long)"id", To.Action("Delete"));
+            var formsCollection = define.Route("api" / (Long)"parentId" / "Forms".Controller());
+            define.Get(formsCollection / "VisibleFor" / (String)"appDataId", To.Action("VisibleFor"));
+
+            var form = define.Route(formsCollection / (Long)"id");
+            define.Get(form, To.Action("GetById"));
+            define.Get(form / (GraphNode)"Render", To.Action("RenderForm"));
 
             browser = new Browser(config);
         };

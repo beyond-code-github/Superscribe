@@ -21,7 +21,7 @@
             var info = provider.GetData(request);
 
             // We should have consumed all of the route by now, if we haven't then throw a 404
-            if (!info.ExtraneousMatch && !info.IncompleteMatch)
+            if (!info.ExtraneousMatch)
             {
                 if (info.Environment.ContainsKey(Constants.ControllerNamePropertyKey))
                 {

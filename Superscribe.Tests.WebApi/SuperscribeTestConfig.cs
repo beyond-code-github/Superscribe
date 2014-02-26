@@ -25,21 +25,21 @@
             var blogposts   = engine.Route(blog / "posts".Controller("blogposts"));
 
             engine.Route(forms / "VisibleFor" / (String)"appDataId", To.Action("VisibleFor"));
-            engine.Route(forms / -(Long)"id", To.Action("GetById"));
+            engine.Route(forms / (Long)"id", To.Action("GetById"));
             
             engine.Route(blog / "tags".Controller("blogtags"));
             
-            engine.Route(blogposts / -(Int)"postId" / -"media".Controller("blogpostmedia") 
-                / -(Int)"id");
+            engine.Route(blogposts / (Int)"postId" / "media".Controller("blogpostmedia") 
+                / (Int)"id");
 
-            engine.Route(blogposts / "archives".Controller("blogpostarchives") / -(Int)"year" 
+            engine.Route(blogposts / "archives".Controller("blogpostarchives") / (Int)"year" 
                 / (Int)"month");
 
             engine.Route(portfolio / "projects".Controller("portfolioprojects") 
-                / -(Int)"projectId" / -"media".Controller("portfolioprojectmedia") / -(Int)"id");
+                / (Int)"projectId" / "media".Controller("portfolioprojectmedia") / (Int)"id");
 
             engine.Route(portfolio / "tags".Controller("portfoliotags"));
-            engine.Route(portfolio / "categories".Controller("portfoliocategories") / -(Int)"id");
+            engine.Route(portfolio / "categories".Controller("portfoliocategories") / (Int)"id");
         }
     }
 }

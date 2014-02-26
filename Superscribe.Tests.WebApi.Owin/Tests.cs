@@ -45,7 +45,7 @@
                     var config = new SuperscribeOwinOptions();
                     
                     engine = OwinRouteEngineFactory.Create(config);
-                    engine.Route(r => r / "api" / "Apps".Controller() / -(String)"appIdentifier", SwitchActionForApp);
+                    engine.Route(r => r / "api" / "Apps".Controller() / (String)"appIdentifier", SwitchActionForApp);
 
                     var httpConfig = new HttpConfiguration();
                     SuperscribeConfig.Register(httpConfig, engine);

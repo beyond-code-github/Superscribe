@@ -14,7 +14,7 @@
             var provider = request.GetRouteDataProvider();
             var info = provider.GetData(request);
 
-            if (info.ExtraneousMatch || info.IncompleteMatch || !info.FinalFunctionExecuted || info.Response is FinalFunction.ExecuteAndContinue)
+            if (info.ExtraneousMatch || !info.FinalFunctionExecuted || info.Response is FinalFunction.ExecuteAndContinue)
             {
                 return base.SendAsync(request, cancellationToken);
             }

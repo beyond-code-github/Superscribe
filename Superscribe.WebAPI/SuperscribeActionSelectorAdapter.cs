@@ -26,7 +26,7 @@
             var provider = controllerContext.Request.GetRouteDataProvider();
             var info = provider.GetData(controllerContext.Request);
 
-            if (info.ExtraneousMatch || info.IncompleteMatch)
+            if (info.ExtraneousMatch)
             {
                 return this.baseActionSelector.SelectAction(controllerContext);
             }

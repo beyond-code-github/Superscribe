@@ -11,9 +11,7 @@
         public IDictionary<string, object> Environment { get; set; }
         
         public object Response { get; set; }
-
-        public bool IncompleteMatch { get; set; }
-
+        
         public bool ExtraneousMatch { get; set; }
         
         public bool NoMatchingFinalFunction { get; set; }
