@@ -37,6 +37,13 @@
                 return;
             }
 
+            if (routeData.NoMatchingFinalFunction)
+            {
+                environment.SetResponseStatusCode(405);
+                environment.WriteResponse("405 - No final function was configured for this method");
+                return;
+            }
+
             // Set status code
             if (routeData.StatusCode > 0)
             {

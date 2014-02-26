@@ -119,12 +119,19 @@
                 }
 
                 var nextMatch = this.FindNextMatch(info, this.PeekNextSegment(), match.Edges);
-                if (nextMatch == null
-                    && (this.HasFinalsButNoneMatchTheCurrentMethod(match)
-                        || this.HasNoMatchingFinalButRemainingNonOptionalEdges(match)))
+                if (nextMatch == null)
                 {
-                    info.IncompleteMatch = true;
-                    return;
+                    if (this.HasNoMatchingFinalButRemainingNonOptionalEdges(match))
+                    {
+                        info.IncompleteMatch = true;
+                        return;
+                    }
+
+                    if (this.HasFinalsButNoneMatchTheCurrentMethod(match))
+                    {
+                        info.NoMatchingFinalFunction = true;
+                        return;
+                    }
                 }
 
                 match = nextMatch;

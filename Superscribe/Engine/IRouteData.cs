@@ -19,5 +19,6 @@
         string Method { get; set; }
 
         string Url { get; set; }
+        bool NoMatchingFinalFunction { get; set; }
     }
 }

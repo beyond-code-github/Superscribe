@@ -8,8 +8,6 @@
     using global::Owin;
 
     using Superscribe.Owin.Engine;
-    using Superscribe.Owin.Extensions;
-    using Superscribe.Owin.Pipelining;
 
     public class OwinRouter
     {

@@ -15,13 +15,15 @@
         public bool IncompleteMatch { get; set; }
 
         public bool ExtraneousMatch { get; set; }
+        
+        public bool NoMatchingFinalFunction { get; set; }
 
         public bool FinalFunctionExecuted { get; set; }
 
         public string Method { get; set; }
 
         public string Url { get; set; }
-
+        
         public RouteData()
         {
             this.Environment = new Dictionary<string, object>();
