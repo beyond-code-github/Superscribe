@@ -9,7 +9,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Superscribe action\controller selectors and module handler for Asp.Net Web API 2</description>
     <dependencies>
-	  <dependency id="Superscribe" version="0.4.1" />	
+	  <dependency id="Superscribe" version="0.4.3" />
 	  <dependency id="Microsoft.AspNet.WebApi.Core" version="5.1.1" />
     <dependency id="Microsoft.Net.Http" version="2.2.18" />
     </dependencies>
@@ -17,5 +17,6 @@
   </metadata>
   <files>
     <file src="bin\net45\Release\Superscribe.WebApi2.dll" target="lib\net45\Superscribe.WebApi2.dll" />
+    <file src="bin\net45\Release\Superscribe.WebApi2.pdb" target="lib\net45\Superscribe.WebApi2.pdb" />
   </files>
 </package>
