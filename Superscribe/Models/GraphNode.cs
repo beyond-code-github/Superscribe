@@ -140,7 +140,7 @@
             return nextNode;
         }
         
-        private GraphNode MatchAsRegex()
+        public GraphNode MatchAsRegex()
         {
             this.Pattern = new Regex(this.Template);
             return this;
@@ -306,16 +306,18 @@
             {
                 return false;
             }
+            
             if (ReferenceEquals(this, other))
             {
                 return true;
             }
-            if (other.GetType() != this.GetType())
+            
+            if (this.ActivationFunctionChanged || other.ActivationFunctionChanged)
             {
                 return false;
             }
 
-            if (this.ActivationFunctionChanged || other.ActivationFunctionChanged)
+            if (!other.GetType().IsInstanceOfType(this) && !this.GetType().IsInstanceOfType(other))
             {
                 return false;
             }

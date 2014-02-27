@@ -10,7 +10,10 @@
         {
             get
             {
-                return new ControllerNode { Pattern = new Regex("^[a-zA-Z0-9_]*$") };
+                var node = new ControllerNode("^[a-zA-Z0-9_]*$");
+                node.MatchAsRegex();
+
+                return node;
             }
         }
 

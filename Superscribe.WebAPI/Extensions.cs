@@ -16,7 +16,7 @@
         /// </summary>
         public static ControllerNode Controller(this string pattern)
         {
-            return new ControllerNode { Template = pattern };
+            return new ControllerNode(pattern);
         }
 
         /// <summary>
@@ -24,7 +24,7 @@
         /// </summary>
         public static ControllerNode Controller(this string pattern, string controllerName)
         {
-            return new ControllerNode { Template = pattern, ControllerName = controllerName };
+            return new ControllerNode(pattern) { ControllerName = controllerName };
         }
 
         /// <summary>
