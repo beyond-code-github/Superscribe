@@ -53,9 +53,7 @@
                     builder.UseSuperscribeRouter(engine);
                     builder.UseWebApi(httpConfig).WithSuperscribe(httpConfig, engine);
                 });
-
-
-
+            
             client = owinTestServer.HttpClient;
             client.DefaultRequestHeaders.Add("accept", "text/html");
         };

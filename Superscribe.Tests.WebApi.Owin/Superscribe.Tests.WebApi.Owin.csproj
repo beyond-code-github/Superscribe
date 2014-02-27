@@ -37,6 +37,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.3.2.0\lib\net40\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.WebApi">
+      <HintPath>..\packages\Autofac.WebApi2.3.2.0\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetDoodle.Owin.Dependencies">
+      <HintPath>..\packages\DotNetDoodle.Owin.Dependencies.0.2.1-pre01\lib\net45\DotNetDoodle.Owin.Dependencies.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetDoodle.Owin.Dependencies.Adapters.WebApi">
+      <HintPath>..\packages\DotNetDoodle.Owin.Dependencies.Adapters.WebApi.0.2.1-pre01\lib\net45\DotNetDoodle.Owin.Dependencies.Adapters.WebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetDoodle.Owin.Dependencies.Autofac">
+      <HintPath>..\packages\DotNetDoodle.Owin.Dependencies.Autofac.0.2.1-pre01\lib\net45\DotNetDoodle.Owin.Dependencies.Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="Machine.Specifications">
       <HintPath>..\packages\Machine.Specifications.0.5.16\lib\net40\Machine.Specifications.dll</HintPath>
     </Reference>
@@ -86,9 +101,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ApiDependencies.cs" />
     <Compile Include="AppsController.cs" />
+    <Compile Include="PipelineTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository.cs" />
     <Compile Include="Tests.cs" />
+    <Compile Include="ValuesController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
