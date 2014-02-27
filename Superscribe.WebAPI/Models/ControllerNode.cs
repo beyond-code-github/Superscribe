@@ -2,13 +2,14 @@
 {
     using Superscribe.Models;
 
-    public class ControllerNode : GraphNode
+    public class ControllerNode : ConstantNode
     {
-        public ControllerNode()
+        public ControllerNode(string value)
+            : base(value)
         {
-            this.ActionFunction = (data, segment) => data.Environment[Constants.ControllerNamePropertyKey] = !string.IsNullOrEmpty(this.ControllerName)
+            this.ActionFunctions.Add("Set_controler", (data, segment) => data.Environment[Constants.ControllerNamePropertyKey] = !string.IsNullOrEmpty(this.ControllerName)
                         ? this.ControllerName
-                        : segment;
+                        : segment);
         }
 
         public string ControllerName { get; set; }

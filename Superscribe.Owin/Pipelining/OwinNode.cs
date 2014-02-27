@@ -26,14 +26,8 @@
             this.Middleware = new List<Middleware>();
             this.Properties = new Dictionary<string, object>();
 
-            var existingAction = node.ActionFunction;
-            node.ActionFunction = (o, s) =>
+            node.ActionFunctions.Add("Pipeline", (o, s) =>
             {
-                if (existingAction != null)
-                {
-                    existingAction(o, s);
-                }
-
                 var routeData = o as OwinRouteData;
                 Debug.Assert(routeData != null, "routeData != null");
 
@@ -41,7 +35,7 @@
                 {
                     routeData.Pipeline.Add(middleware);
                 }
-            };
+            });
         }
 
         public static implicit operator GraphNode(OwinNode owinNode)

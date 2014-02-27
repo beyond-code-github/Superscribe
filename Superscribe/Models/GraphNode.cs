@@ -13,7 +13,7 @@
     {
         protected Func<RouteData, string, bool> activationFunction;
 
-        protected Action<RouteData, string> actionFunction;
+        protected IDictionary<string, Action<RouteData, string>> actionFunctions;
 
         /// <summary>
         /// Base constructor for superscribe states
@@ -23,6 +23,7 @@
             this.Edges = new ConcurrentQueue<GraphNode>();
             this.QueryString = new ConcurrentQueue<GraphNode>();
             this.FinalFunctions = new List<FinalFunction>();
+            this.ActionFunctions = new Dictionary<string, Action<RouteData, string>>();
 
             this.activationFunction = (routedata, segment) =>
             {
@@ -64,15 +65,15 @@
 
         public object Result { get; set; }
 
-        public Action<RouteData, string> ActionFunction
+        public IDictionary<string, Action<RouteData, string>> ActionFunctions
         {
             get
             {
-                return this.actionFunction;
+                return this.actionFunctions;
             }
             set
             {
-                this.actionFunction = value;
+                this.actionFunctions = value;
             }
         }
 
@@ -103,12 +104,14 @@
             {
                 if (existingNode.Equals(nextNode))
                 {
-                    var existingAction = existingNode.actionFunction;
-                    if (existingAction == null)
+                    foreach (var pair in nextNode.ActionFunctions)
                     {
-                        existingNode.actionFunction = nextNode.ActionFunction;
+                        if (!existingNode.ActionFunctions.ContainsKey(pair.Key))
+                        {
+                            existingNode.ActionFunctions.Add(pair);
+                        }
                     }
-
+                    
                     foreach (var final in nextNode.FinalFunctions)
                     {
                         if (existingNode.FinalFunctions.All(o => o.Method != final.Method))

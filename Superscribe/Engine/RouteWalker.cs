@@ -89,9 +89,9 @@
             FinalFunction onComplete = null;
             while (match != null)
             {
-                if (match.ActionFunction != null)
+                foreach (var action in match.ActionFunctions.Values)
                 {
-                    match.ActionFunction(info, this.PeekNextSegment());
+                    action(info, this.PeekNextSegment());
                 }
 
                 if (this.RemainingSegments.Any())

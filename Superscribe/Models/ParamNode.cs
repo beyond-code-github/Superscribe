@@ -10,7 +10,7 @@
 
         protected ParamNode()
         {
-            this.actionFunction = (data, segment) => data.Parameters.Add(this.Name, this.value);
+            this.ActionFunctions.Add(string.Format("Set_param_{0}", this.Name), (data, segment) => data.Parameters.Add(this.Name, this.value));
 
             this.activationFunction = (data, segment) =>
             {

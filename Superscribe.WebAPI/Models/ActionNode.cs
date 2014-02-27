@@ -6,9 +6,9 @@
     {
         public ActionNode()
         {
-            this.ActionFunction = (data, segment) => data.Environment[Constants.ActionNamePropertyKey] = !string.IsNullOrEmpty(this.ActionName)
+            this.ActionFunctions.Add("Set_action", (data, segment) => data.Environment[Constants.ActionNamePropertyKey] = !string.IsNullOrEmpty(this.ActionName)
                         ? this.ActionName
-                        : segment;
+                        : segment);
         }
 
         public string ActionName { get; set; }
