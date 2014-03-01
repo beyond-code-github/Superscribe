@@ -1,6 +1,6 @@
 ---
 layout: default
-title:  Features
+title:  Documentation
 ---
 
 <div class="block">
@@ -18,78 +18,119 @@ title:  Features
 	<div class="tab-content col-md-8">
       <div class="tab-pane active col-sm-12 col-md-12" id="fluentapi">
       	<h3 class="visible-phone">Defining routes using superscribe's fluent interface</h3>
-      	<p>This section starts with a disclaimer. In practice you won't want to write routes using the Fluent API, as they won't look very nice and will be quite verbose; instead you'll be using the DSL wherever possible. However, to work with Superscribe effectively and to lessen any learning curves, it is useful to understand what the DSL is doing behind the scenes. As a result, this section should be considered required reading before continuing to the later topics</p>
-        <h3 class="title visible-phone">The ʃ Class & SuperscribeNode</h3>
-        <p>Superscribe's features are all accessed via the ʃ class, a member of the core library. Graph based routing definitions are constructed using strongly typed nodes and then stored as a graph. The <code class="prettyprint lang-cs">ʃ.Base</code> property is the root node of the graph... it matches the root '/' url, and is the parent for any susequent definitions.</p>
-        <p>ʃ.Base is of type SuperscribeNode... this is the base class for all route segment definitions and contains Superscribe's bread and butter functionality. If we want to respond to a request to '/', we need to provide ʃ.Base with a Final Function:</p>
+      	<p>This section starts with a disclaimer. In practice you won't want to write routes using the Fluent API, as they won't look very nice and will be quite verbose; instead you'll be using the simplified syntax wherever possible. However, to work with Superscribe effectively and to lessen any learning curves, it is useful to understand what is going on behind the scenes. As a result, this section should be considered required reading before continuing to the later topics</p>
+        <h4>The IRouteEngine interface</h4>
+        <p>Superscribe's features are all accessed via an instance of a class that implements <em>IRouteEngine</em>. There are currently two Route Engine implementations, one for WebApi, and one for OWIN. You can obtain an instance using the static factory classes provided, as follows:</p>
         <pre class="prettyprint lang-cs">
 
-    ʃ.Base.FinalFunctions.Add(new FinalFunction("GET", _ => @"
+    var engine = RouteEngineFactory.Create(); 
+    // or...
+    var engine = OwinRouteEngineFactory.Create();
+        </pre>
+        <p>You can have as many instances of <em>IRouteEngine</em> as you like, and they will operate indenpendently. Usually - as in most examples on this site - only one is needed (although it is possible to transfer control from one to another when moving between frameworks or application layers).</p>
+        <h4>The GraphNode class and Final Functions</h4>
+        <p>Graph Based Routing definitions are constructed using strongly typed nodes and then stored as a graph. Within each instance of a <em>RouteEngine</em> there is a <strong>Base node</strong> that represents the root '/' url and is also the parent for any susequent route definitions.</p>
+        <p>The base node is accesible via the <em>.Base</em> property of the Route Engine, and is an instance of type <em>GraphNode</em>. All other nodes in Superscribe derive from this class, and is the building block of all route definitions.</p>
+        <p>For example, if we want to respond to a request to '/', we need to provide the base node with a <strong>Final Function</strong>:</p>
+        <pre class="prettyprint lang-cs">
+
+    var engine = RouteEngineFactory.Create(); 
+    engine.Base.FinalFunctions.Add(new FinalFunction("GET", o => @"
         Welcome to Superscribe 
         &lta href='/Hello/World'&gtSay hello...&lt/a&gt
     "));
 
     // "/" -> "Welcome to Superscribe..."
 		</pre>
-		<p>This will respond the the '/' uri with a message and a link. To respond to the link uri, we simply extend our definition:</p>
+		<p>A Final Function is associated with an HTTP method and executed when routing finishes at a particular node. Multiple final functions can be supplied, each responding to a different HTTP method. In this case we have configured Superscribe to respond to a GET request to '/', returning a message and a link.</p>
+        <p>To respond to the uri in the link, we need to add some more nodes to our graph:</p>
 		<pre class="prettyprint lang-cs">
 
     var helloRoute = new ConstantNode("Hello").Slash(new ConstantNode("World"));
-    helloRoute.FinalFunctions.Add(new FinalFunction("GET", _ => "Hello World"));
+    helloRoute.FinalFunctions.Add(new FinalFunction("GET", o => "Hello World"));
 
-    ʃ.Base.Zip(helloRoute.Base());
+    engine.Base.Zip(helloRoute.Base());
 
     // "/Hello/World" -> "Hello World"
 		</pre>
-		<p>The above sample exposes three SuperscribeNode functions... Slash, Zip and Base, as well as a new subclass of SuperscribeNode, the ConstantNode. These work as follows:
+		<p>The above sample introduces some of the methods that the <em>GraphNode</em> class provides... <em>Slash</em>, <em>Zip</em> and <em>Base</em>, as well as a new subclass of <em>GraphNode</em>, the <em>ConstantNode</em>. These work as follows:
 			<ul>
 				<li>The <strong>ConstantNode</strong> as it's name suggests, will only match a route segment that is identical to the value passed to it in the constructor</li>
 				<li>The <strong>Slash</strong> function creates an edge between two nodes and then returns the child node.</li>
-				<li>The <strong>Base</strong> function returns the topmost parent of a node. (remember, .Slash returns the child "World" node but we want to create an edge in ʃ.Base that points to the "Hello" node.</li>
-				<li>Finally, the <strong>Zip</strong> function performs a similar function to .Slash but with one important difference... it will combine any identical notes (See the next code block for an example).</li>
+				<li>The <strong>Base</strong> function returns the topmost parent of a node. (remember, .Slash returns the child "World" node but we want to create an edge in the base node that points to the "Hello" node.</li>
+				<li>Finally, the <strong>Zip</strong> function performs a similar function to .Slash but with one important difference... it will combine any equivilent nodes (See the next code block for an example).</li>
 			</ul>
 		</p>
-		<h3 class="title visible-phone">Optional Nodes</h3>
-		<p>Combined, the samples above create an app that will respond to '/' and '/Hello/World', but not 'Hello':</p>
+		<h4>Final Functions and Frameworks/Handlers</h4>
+		<p>When running using the Superscribe Handler middleware for OWIN, the samples above create an app that will respond to '/' and '/Hello/World', but not 'Hello':</p>
 		<pre class="prettyprint lang-cs">
 
-    // "/Hello" -> 404 - Route was incomplete
+    // "/Hello" -> 405 - No final function was configured for this method
 		</pre>
-		<p>This is because the "Hello" node only has one edge, and it is not optional. To change this, we call the fluent method Optional() on the "World" node:
-		<pre class="prettyprint lang-cs">
+		<p>This is because the "Hello" node itself does not provide a Final Function, and the Superscribe Handler has no other way of responding to the request. The following snippet shows how we can assign one, and demonstrates the behavior of the <em>.Zip</em> function to combine the two 'Hello' nodes into one:
+		</p>
+         <pre class="prettyprint lang-cs">
 
-    var helloRoute = new ConstantNode("Hello").Slash(new ConstantNode("World")).Optional();
-    helloRoute.FinalFunctions.Add(new FinalFunction("GET", _ => "Hello World"));
-
-    ʃ.Base.Zip(helloRoute.Base());
-
-    // "/Hello" -> "Welcome to Superscribe..."
-		</pre>
-		<p>This might not be the behavior you'd expect, but if we look at the Graph Based Routing spec all becomes clear: </p>
-		<div class="well well-mini pull-center">
-          <em>"Once route parsing is complete, the Final function of the last node is executed. If the last node does not provide one, the engine must execute the final function of the last travelled node that did."</em>
-        </div>
-		<p>This behavior isn't entirely useless... we can use an Action Function to set some values which then become available to our final function and influence it's behavior as we'll see in the next section. A better way of making the Superscribe engine treat 'Hello' as optional in this situation is to assign it a Final Function of it's own:</p>
-        <pre class="prettyprint lang-cs">
+    var engine = RouteEngineFactory.Create(); 
 
     var helloRoute = new ConstantNode("Hello").Slash(new ConstantNode("World"));
-    helloRoute.FinalFunctions.Add(new FinalFunction("GET", _ => "Hello World"));
+    helloRoute.FinalFunctions.Add(new FinalFunction("GET", o => "Hello World"));
 
-	var justHelloRoute = new ConstantNode("Hello");
-	justHelloRoute.FinalFunctions.Add(new FinalFunction("GET", _ => "Hello... maybe"));
+    var justHelloRoute = new ConstantNode("Hello");
+    justHelloRoute.FinalFunctions.Add(new FinalFunction("GET", o => "Hello... maybe"));
 
-    ʃ.Base.Zip(helloRoute.Base());
-    ʃ.Base.Zip(justHelloRoute.Base());
+    engine.Base.Zip(helloRoute.Base());
+    engine.Base.Zip(justHelloRoute.Base());
 
     // "/Hello" -> "Hello... maybe"
     // "/Hello/World" -> "Hello World"
-		</pre>
-        <p>Note the usage of Zip() in this sample to combine the two 'Hello' nodes into one. Another except from the Graph Based Routing spec reveals how this change creates the optional behavior.</p>
-        <div class="well well-mini pull-center">
-          <em>"If the next match is null, the incomplete match flag will be set unless a) there are no edges on the current node or b) all edges on the current node are optional, or c) The current node has a final function defined for the current method"</em>
-        </div>
-        <h4>Parameters and the RouteData object</h4>
-        <p>We've touched on Action Functions briefly above, but their usefulness becomes clear when we need to capture parameters. Superscribe provides a generic node class that provides a ready made parameter capture action. With this subclass of SuperscribeNode we can capture any data type we might need:</p>
+        </pre>
+        <p>It is worth noting that the Route Engine never responds to requests directly, it is up to the framework or handler middleware to perform that task. This affords the maximum amount of flexibility, for example although a final function is mandatory when we use the Superscribe Owin Handler, when using Superscribe with Web Api we rely on it's internal pipeline to service the request and route to a controller/action accordingly. 
+        </p>
+        <h4>The RouteData object</h4>
+		<p>What the engine does provide however is a set of results and flags in the form of the <em>RouteData</em> object that any framework or middleware is free to make use of as it likes. The <em>RouteData</em> object is an instance of a class implementing the <em>IRouteData</em> interface:</p>
+        <pre class="prettyprint lang-cs">
+
+    public interface IRouteData
+    {
+        string Url { get; set; }
+        string Method { get; set; }        
+        dynamic Parameters { get; set; }
+        IDictionary<string, object> Environment { get; set; }
+        object Response { get; set; }        
+        bool ExtraneousMatch { get; set; }
+        bool FinalFunctionExecuted { get; set; }
+        bool NoMatchingFinalFunction { get; set; }
+    }
+        </pre>
+        <p>The <em>RouteData</em> object gets passed in to each final function, providing it with any context it needs to respond to the request. The result of the final function is assigned to the <em>Response</em> property so that the framework or handler can use it when building any response message.</p>
+        <p>Some of the properties are self-descriptive, but the others are as follows:</p> 
+        <ul>
+            <li><strong>Parameters</strong> - A dynamic dictionary containg name/value pairs representing all the parameters and querystring values that were matched during routing.</li>
+            <li><strong>Environment</strong> - When dealing directly with Owin, the <em>Environment</em> property will provide a reference to the Owin environment dictionary. In the case of Web Api, it will provide a dictionary exposing any specific properties such as the request context, or resolved action/controller names.</li>
+            <li><strong>ExtraneousMatch</strong> - The engine ran out of nodes but did not process all the route segments</li>
+            <li><strong>FinalFunctionExecuted</strong> - All segments were consumed, and a final function was matched and executed</li>
+            <li><strong>NoMatchingFinalFunction</strong> - Indicates that although all segments were consumed and the find node did provide one or more final functions - none of them matched the request method (GET, POST, etc)</li>
+        </ul>
+        <h4>Activation Functions</h4>
+        <p>All nodes come with an <strong>Activation Function</strong>. An Activation Function returns a boolean that determines whether or not the node is a match for the current segment. During matching, the engine will examine each edge of a node in turn until it finds one that matches the next segment... i.e the Activation Function returns true.
+        <p><em>GraphNodes</em> come with a default activation function that caters towards both explicit and regex matches. The following shows the default Activation Function of the <em>GraphNode</em>, along with it's signature. When instantiating a <em>ConstantNode</em> for example, the <em>Template</em> will be set by the constructor. If a <em>Pattern</em> is set on a node, then a Regex match is performed.<p>
+        <pre class="prettyprint lang-cs">
+        
+    this.activationFunction = (routedata, segment) =>
+    {
+        if (this.Pattern != null)
+        {
+            return this.Pattern.IsMatch(segment);
+        }
+
+        return string.Equals(this.Template, segment, StringComparison.OrdinalIgnoreCase);
+    };
+        </pre>
+        <h4>Action Functions and Parameters</h4>
+        <p><strong>Action functions</strong> are a bit like Final Functions, but they are executed as each route segment is matched and are not able to directly influence the response. They do however have access to the <em>RouteData</em> object and are able to write to the <em>Environment</em> dictionary</p>
+        <p>A node can have any number of action functions, each associated with a unique string key. Unlike their Final counterparts they are not specific to any HTTP method (although this behavior is easily achieved). When equivilent nodes are combined using <em>.Zip</em>, their sets of Action Functions will also be combined so long as keys remain unique.</p>
+        <p>We've already mentioned how Superscribe provides access to parameters, but Action Functions are the mechanism by which they are captured. Superscribe provides a generic class called <em>ParamNode&lt;T&gt;</em> that derives from <em>GraphNode</em> and provides a ready made parameter capture action. We can use this to capture any data type we might need:</p>
         <ul>
         	<li><strong>Integer</strong> ParamNode&lt;int&gt;</li>
         	<li><strong>Long</strong> ParamNode&lt;long&gt;</li>
@@ -97,21 +138,21 @@ title:  Features
         	<li><strong>Boolean</strong> ParamNode&lt;bool&gt;</li>
         	<li><strong>Guid</strong> ParamNode&lt;Guid&gt;</li>
         </ul>
-        <p>These nodes also come with an activation function that uses TryParse to determine whether or not the current route segment is a match for our parameter. This is not something that is easy to do using traditional routing constraints, but becomes easy with Graph Based Routing.</p>
+        <p>For efficiency, the <em>ParamNode</em> Activation Function evaluates the current segment using TryParse, and then stores the result for the Action Function to pick up. This is not something that is easy to do using traditional route constraints, but becomes easy with Graph Based Routing.</p>
         <p>An example of parameter capture with Superscribe is as follows:</p>
         <pre class="prettyprint lang-cs">
 
-    var helloRoute = new ConstantNode("Hello").Slash(new ParamNode<string>("Name"));
-    helloRoute.FinalFunctions.Add(new FinalFunction("GET", _ => "Hello " + _.Parameters.Name));
+    var engine = RouteEngineFactory.Create(); 
 
-    ʃ.Base.Zip(helloRoute.Base());
+    var helloRoute = new ConstantNode("Hello").Slash(new ParamNode&lt;string&gt;("Name"));
+    helloRoute.FinalFunctions.Add(new FinalFunction("GET", o => "Hello " + o.Parameters.Name));
+
+    engine.Base.Zip(helloRoute.Base());
 
     // "/Hello/Kathryn" -> "Hello Kathryn"
 		</pre>
-		<p>The ParamNode&lt;T&gt; takes a string as a parameter... the captured value is then added to a dynamic dictionary using this string as the key. The parameters dictionary is available to all our final function via the RouteData object, represented as _ in our example. Any querystring parameters are also added to this dictionary.</p>
-		<p>The RouteData object is more than just a container for paramters however. It also provides us with dependency injection and model binding functionality, as well as direct access to the response and request context. Finally, it also acts as a place we can store any abritary data that we need to use later on in the routing pipeline.</p>
 		<h4>Custom Nodes</h4>
-		<p>In addition to leveraging the various subclasses of SuperscribeNode, we can also derive our own custom nodes, giving us full control over it's Action and Activation Functions. Consider the following custom node that matches and captures only even parameters:</p>
+		<p>In addition to leveraging the various subclasses of <em>GraphNode</em>, we can also derive our own custom nodes, giving us full control over it's Action and Activation Functions. Consider the following custom node that matches and captures only even parameters:</p>
 		<pre class="prettyprint lang-cs">
 
 	public class EvenNumberNode : SuperscribeNode
@@ -126,7 +167,7 @@ title:  Features
                 return false;
             };
 
-            this.actionFunction = (routeData, value) => {
+            this.actionFunctions.Add("Set_" + name, (routeData, value) => {
                 int parsed;
                 if (int.TryParse(value, out parsed))
                     routeData.Parameters.Add(name, parsed);                
@@ -134,18 +175,20 @@ title:  Features
         }
     }
 		</pre>
-		<p>The EvenNumberNode duplicates the functionality of ParamNode&lt;int&gt; but with an added match condition. This example is a little contrivied; it's not a particularly useful Activation Function and we could easily derive from ParamNode and re-use it's Action Function instead of adding our own. Having said that, it's a good example of the flexibility of Graph Based Routing.</p>
-		<p>Using the node in an app is just the same as with the other nodes we've seen:</p>
+		<p>The <em>EvenNumberNode</em> duplicates the functionality of <em>ParamNode&lt;int&gt;</em> but with an added match condition. This example is a little contrivied; it's not a particularly useful Activation Function and we could easily derive from <em>ParamNode</em> and re-use it's Action Function instead of adding our own. Having said that, it's a good example of the flexibility of Graph Based Routing.</p>
+		<p>Using our custom node in a route definition is just the same as with any of the other node types. Any traditional route constraint can be modelled in this way, along with many more that are not possible with traditional routing.</p>
 		<pre class="prettyprint lang-cs">
+
+    var engine = RouteEngineFactory.Create();
 
     var productIdRoute = new ConstantNode("Products").Slash(new EvenNumberNode("Id"));
     productIdRoute.FinalFunctions.Add(
-    	new FinalFunction("GET", _ => "Product info for id: " + _.Parameters.Id));
+    	new FinalFunction("GET", o => "Product info for id: " + o.Parameters.Id));
 
-    ʃ.Base.Zip(productIdRoute.Base());
+    engine.Base.Zip(productIdRoute.Base());
 
     // "/Products/12" -> "Product info for id: 12"
-    // "/Products/13" -> "404 - Route was incomplete"
+    // "/Products/13" -> "404 - Extraneous Match"
 		</pre>
 	  </div>
 	  <div class="tab-pane col-sm-12 col-md-12" id="dsl">
@@ -310,7 +353,7 @@ title:  Features
         }
     }
         </pre>
-        <p>Each call to this.Get, or any of the other method helpers ensures that the route graph is still constructed efficiently. Behind the scenes each route is 'Zipped' together (see the Fluent Api section) so that identical segments will be merged. In the above example, we end up with a single "Hello" node with two edges.</p>
+        <p>Each call to this.Get, or any of the other method helpers ensures that the route graph is still constructed efficiently. Behind the scenes each route is 'Zipped' together (see the Fluent Api section) so that equivilent nodes will be merged. In the above example, we end up with a single "Hello" node with two edges.</p>
         <p>Finally you'll notice we've also got access to the route glue ʅ as a property of SuperscribeModule which works in the usual way.</p>
         <div class="well well-mini pull-center">
           <em>It is still possible to compose routes from parts within modules using the route glue, but doing so can go against the ethos of modules which is to make it easy to see what route a particualr handler serves.</em>

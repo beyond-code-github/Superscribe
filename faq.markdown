@@ -30,22 +30,6 @@ title:  FAQ
 	<li><em>/Debug/Api/Apps</em> - same route with tracing enabled</li>
 </ul>
 <h3 class="visible-phone">
-  Q: How do I type ʅ and ʃ?
-</h3>
-<p><strong>A:</strong> You can enable enhanced alt-codes in Windows 7 & 8 <a href="http://en.wikipedia.org/wiki/Unicode_input#Hexadecimal_code_input">using the instructions here.</a> Once you've done that, you can hold Alt and type +285 for ʅ, and +283 for ʃ. Mac OS also supports typing unicode characters by four digit hexadecmial code using the Option key (replace the + with 0).
-</p>
-<h3 class="visible-phone">
-  Q: I still don't like those characters, can't you change them?
-</h3>
-<p><strong>A:</strong> You can copy and paste these aliases at the top of any source code file in order to provide different names for types if you wish (although it will make the DSL a little less neat)
-</p>
-<pre class="prettyprint">
-    using Core = Superscribe.ʃ;
-    using SuperInt = Superscribe.Models.ʃInt;
-    using SuperString = Superscribe.Models.ʃString;
-    using SuperBool = Superscribe.Models.ʃBool;
-</pre>
-<h3 class="visible-phone">
   Q: Can I use Superscribe with Asp.Net MVC?
 </h3>
 <p><strong>A:</strong> Not at present. We'll be looking into whether or not this is possible in the new year so stay tuned.
