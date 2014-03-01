@@ -46,17 +46,18 @@ title:  Home
         <div class="nuget-badge">
           <p><code>PM&gt; Install-Package Superscribe.Owin</code></p>
         </div>
-        <h3 class="title visible-phone">Web API</h3>
+        <h3 class="title visible-phone">Web Api</h3>
         <div class="nuget-badge">
           <p><code>PM&gt; Install-Package Superscribe.WebApi</code></p>
         </div>
-        <h3 class="title visible-phone">Web API - OWIN Hosted</h3>
+        <h3 class="title visible-phone">Web Api - OWIN Hosted</h3>
         <div class="nuget-badge">
           <p><code>PM&gt; Install-Package Superscribe.WebApi.Owin</code></p>
         </div>
       </div>
       <div class="tab-pane col-sm-12 col-md-12" id="define">
-        <h3 class="title visible-phone">Web API</h3>
+        <h3 class="title visible-phone">Web Api</h3>
+        <p>Superscribe integrates seamlessly with Asp.Net Web Api, working nicely alongside any existing attribute or traditonal routes.</p>
         <pre class="prettyprint lang-cs">
 
   public static class WebApiConfig
@@ -64,11 +65,14 @@ title:  Home
       public static void Register(HttpConfiguration config)
       {
           var define = SuperscribeConfig.Register(config);
+          // or for module support use: .RegisterModules(config);
+
           define.Route("api" / Any.Controller / (Int)"id");
       }
   }
         </pre>
         <h3 class="title visible-phone">Modules</h3>
+        <p>Any classes in your app that derive from SuperscribeModule or SuperscribeOwinModule will be automatically picked up and wired into your routing.</p>
         <pre class="prettyprint lang-cs">
 
   // Web Api
@@ -90,6 +94,7 @@ title:  Home
   }
         </pre>
         <h3 class="title visible-phone">OWIN Router</h3>
+        <p>Let your routing decide which middleware to include in your OWIN pipeline.</p>
         <pre class="prettyprint lang-cs">
 
   public class Startup
@@ -108,6 +113,7 @@ title:  Home
   }
         </pre>   
         <h3 class="title visible-phone">OWIN Handler</h3>
+        <p>Bulky web frameworks just slowing you down? With Superscribe you can respond to simple requests without one.</p>
         <pre class="prettyprint lang-cs">
 
   public class Startup
@@ -118,7 +124,7 @@ title:  Home
           app.UseSuperscribeRouter(define)
               .UseSuperscribeHandler(define);
 
-          define.Route("hello/world", o => "Hello World");
+          define.Get("Hello/World", o => "Hello World");
       }
   }
         </pre>       
