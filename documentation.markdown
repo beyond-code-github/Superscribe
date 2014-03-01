@@ -157,21 +157,18 @@ title:  Documentation
 
 	public class EvenNumberNode : SuperscribeNode
     {
+        private int parsed;
+
         public EvenNumberNode(string name)
         {
-            this.activationFunction = (routeData, value) => {
-                int parsed;
-                if (int.TryParse(value, out parsed))
+            this.activationFunction = (routeData, segment) => {
+                if (int.TryParse(segment, out this.parsed))
                     return parsed % 2 == 0; // Only match even numbers
 
                 return false;
             };
 
-            this.actionFunctions.Add("Set_" + name, (routeData, value) => {
-                int parsed;
-                if (int.TryParse(value, out parsed))
-                    routeData.Parameters.Add(name, parsed);                
-            };
+            this.ActionFunctions.Add("Set_" + name, (routeData, segment) => routeData.Parameters.Add(name, this.parsed);
         }
     }
 		</pre>
@@ -313,7 +310,7 @@ title:  Documentation
 	  </div>
        <div class="tab-pane col-sm-12 col-md-12" id="modules">
         <h3 class="visible-phone">Handling routes with Modules</h3>
-        <p>Asp.Net Web Api uses controllers and actions because it was originally derived from the MVC framework and although things have moved on since then, it still shares some of the same constructs. With Graph based routing we can break free of these restrictions and handle our routes using whatever classes we wish. A great example of this comes in the form of modules, inspired by the Ruby web framework Sinatra, and the .Net framework NancyFX</p>
+        <p>Asp.Net Web Api uses controllers and actions because it was originally derived from the MVC framework and although things have moved on since then, it still shares some of the same constructs. With Graph Based Routing we are free to break away from these restrictions and handle our routes using whatever classes we wish. A great example of this comes in the form of modules, inspired by the Ruby web framework Sinatra, and the .Net framework NancyFX</p>
         <h3 class="title visible-phone">Assembly Scanning</h3>
         <p>When the module configuration is activated on app startup, Superscribe scans your assemblies for classes that derive from <em>SuperscribeModule</em> and then instantiates them in turn. All route handlers for modules are defined in the constructor, so this process results in all of our route definitions being added to the graph. Modules can be enabled in Superscribe.WebApi with the following config:</p>
         <pre class="prettyprint lang-cs">
