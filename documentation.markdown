@@ -10,7 +10,7 @@ title:  Documentation
   <div class="tabbable tabs-left vertical-tabs bold-tabs row">
     <ul class="nav nav-tabs nav-stacked col-md-4">
       <li class="active"> <a href="#fluentapi" data-toggle="tab">Fluent API<small>Define hierarchical and strongly typed routes with Superscribe</small><i class="icon-angle-right"></i></a> </li>
-      <li> <a href="#dsl" data-toggle="tab">DSL<small>Shorthand syntax for defining routes that are concise and easy to maintain</small><i class="icon-angle-right"></i></a> </li>
+      <li> <a href="#dsl" data-toggle="tab">Simple-syntax<small>Shorthands for defining routes that are concise and easy to maintain</small><i class="icon-angle-right"></i></a> </li>
       <li> <a href="#modules" data-toggle="tab">Modules<small>Inspired by NancyFX, a great way to keep your definitions and your handlers together</small><i class="icon-angle-right"></i></a> </li>
       <li> <a href="#webapi" data-toggle="tab">Superscribe.WebAPI<small>Specific syntax to help you match routes and then invoke controllers and actions</small><i class="icon-angle-right"></i></a> </li>
       <li> <a href="#owin" data-toggle="tab">Superscribe.OWIN<small>Branch your pipeline during routing and hand control to any OWIN middleware</small><i class="icon-angle-right"></i></a> </li>
@@ -18,7 +18,7 @@ title:  Documentation
 	<div class="tab-content col-md-8">
       <div class="tab-pane active col-sm-12 col-md-12" id="fluentapi">
       	<h3 class="visible-phone">Defining routes using superscribe's fluent interface</h3>
-      	<p>This section starts with a disclaimer. In practice you won't want to write routes using the Fluent API, as they won't look very nice and will be quite verbose; instead you'll be using the simplified syntax wherever possible. However, to work with Superscribe effectively and to lessen any learning curves, it is useful to understand what is going on behind the scenes. As a result, this section should be considered required reading before continuing to the later topics</p>
+      	<p>This section starts with a disclaimer. In practice you won't want to write routes using the Fluent API, as they won't look very nice and will be quite verbose; instead you'll be using the simple-syntax wherever possible. However, to work with Superscribe effectively and to lessen any learning curves, it is useful to understand what is going on behind the scenes. As a result, this section should be considered required reading before continuing to the later topics</p>
         <h4>The IRouteEngine interface</h4>
         <p>Superscribe's features are all accessed via an instance of a class that implements <em>IRouteEngine</em>. There are currently two Route Engine implementations, one for WebApi, and one for OWIN. You can obtain an instance using the static factory classes provided, as follows:</p>
         <pre class="prettyprint lang-cs">
@@ -163,12 +163,15 @@ title:  Documentation
         {
             this.activationFunction = (routeData, segment) => {
                 if (int.TryParse(segment, out this.parsed))
+                {
                     return parsed % 2 == 0; // Only match even numbers
+                }
 
                 return false;
             };
 
-            this.ActionFunctions.Add("Set_" + name, (routeData, segment) => routeData.Parameters.Add(name, this.parsed);
+            this.ActionFunctions.Add("Set_" + name, 
+                (routeData, segment) => routeData.Parameters.Add(name, this.parsed);
         }
     }
 		</pre>
@@ -189,124 +192,139 @@ title:  Documentation
 		</pre>
 	  </div>
 	  <div class="tab-pane col-sm-12 col-md-12" id="dsl">
-        <h3>Defining routes with the DSL</h3>
-        <p>As mentioned in the previous section, defining routing using the fluent API is not ideal for a number of reasons. Built on top of the fluent API is a simple domain specific language... valid C# code made using a combination of lambdas, casts and operator overloads. The syntax provided by the DSL is designed to be terse and minimal, so you can get on with the important business of designing your routes.</p>
+        <h3>Defining routes with Superscribe simple-syntax</h3>
+        <p>As mentioned in the previous section, defining routing using the fluent API is not ideal for a number of reasons. Built on top of the fluent API is a simple domain specific language... valid C# code made using a combination of lambdas, casts and operator overloads.</p>
+        <p>The simple-syntax provided by Superscribe is designed to be terse and minimal, so you can get on with the important business of designing your routes. In this section we'll translate an example from the Fluent Api to use the simple-syntax, stage by stage to show which statements are equivilent.</p>
         <div class="well well-mini pull-center">
           <em>If you haven't already read the Fluent API section, it is reccomended that you do so before continuing so you are familiar with some of the terms and concepts used.</em>
         </div>
-        <h3 class="title visible-phone">Shorthand operators and ʃ.Route</h3>
-        <p>When dealing with the fluent API, we defined routes by manually instantiating subclasses of SuperscribeNode, created edges with Slash() and then attached them to the base node using Base() and ʃ.Zip():</p>
+        <h3 class="title visible-phone">The .Route family</h3>
+        <p>When using the Fluent API, we defined routes by manually instantiating subclasses of <em>GraphNode</em>, created edges with <em>Slash()</em> and then attached them to the base node using <em>.Base()</em> and <em>.Zip()</em>:</p>
         <pre class="prettyprint lang-cs">
+
+    var engine = RouteEngineFactory.Create();
 
     var helloRoute = new ConstantNode("Hello").Slash(new ConstantNode("World"));
-    helloRoute.FinalFunctions.Add(new FinalFunction("GET", _ => "Hello World"));
+    helloRoute.FinalFunctions.Add(new FinalFunction("GET", o => "Hello World"));
 
-    ʃ.Base.Zip(helloRoute.Base());
+    engine.Base.Zip(helloRoute.Base());
 
     // "/Hello/World" -> "Hello World"
         </pre>
-        <p>The DSL provides a shorthand way of doing this by using the ʃ.Route method:</p>
+        <p>First of all, Superscribe provides a shorthand way of attaching routes to the base node using the <em>.Route</em> method:</p>
         <pre class="prettyprint lang-cs">
+
+    // engine.Base.Zip(helloRoute.Base()); becomes ->
+    engine.Route(helloRoute);
+        </pre>
+        <p>As well as being slightly shorter, this method will also call <em>.Base</em> for us. So far so good, but it isn't much of an improvement... we can still do a bit more. To apply a final function matching the 'GET' method, we can supply it as an argument to one of <em>.Route</em>'s sister methods:</p>
+        <pre class="prettyprint lang-cs">
+    
+    var engine = RouteEngineFactory.Create();
 
     var helloRoute = new ConstantNode("Hello").Slash(new ConstantNode("World"));
-    helloRoute.FinalFunctions.Add(new FinalFunction("GET", _ => "Hello World"));
-
-    ʃ.Route(ʅ => ʅ / helloRoute.Base());
+    engine.Get(helloRoute, o => "Hello World");
 
     // "/Hello/World" -> "Hello World"
         </pre>
-        <p>This isn't much of an improvement but we can still do more:<p>
-        <ul> 
-            <li>Instead of calling .Slash we can use the shorthand operator '/'</li>
-            <li>To apply a final function to the "World node we can use the shorthand operator '*':</li>
-            <li>Finally instead of calling Base(), we can use the '+' prefix:</li>
-        </ul>
+        <p><em>.Get</em> performs the same function as <em>.Route</em> but will also add our final function to the end of the chain, and apply the 'GET' modifier to it. Superscribe provides methods for each of the main Http Methods - GET, POST, PUT, PATCH and DELETE. You'll only really want to use <em>.Route</em> if the framework you're using to handle requests also takes care of Http Methods for you (such as Web Api).</p>
+        <h4>Shorthand operators</h4>
+        <p>Instead of calling <em>.Slash</em> we can use the shorthand operator '/':</p>
         <pre class="prettyprint lang-cs">
+    
+    var engine = RouteEngineFactory.Create();
 
-    var helloRoute = new ConstantNode("Hello") / new ConstantNode("World") * (o => "Hello World");
-    ʃ.Route(ʅ => ʅ / +helloRoute);
+    var helloRoute = new ConstantNode("Hello") / new ConstantNode("World");
+    engine.Get(helloRoute, o => "Hello World");
 
     // "/Hello/World" -> "Hello World"
         </pre>
-        <p>We've got one more trick up our sleeve... an implicit cast from string to SuperscribeNode provides a way to simplify the instantiation of our constant nodes:</p>
+        <p>Next up, an implicit cast from string to <em>GraphNode</em> provides a way to simplify the instantiation of our constant nodes:</p>
         <pre class="prettyprint lang-cs">
-
-    ʃ.Route(ʅ => ʅ / "Hello" / "World" * (o => "Hello World"));
+    
+    var engine = RouteEngineFactory.Create();
+    engine.Get(r => r / "Hello" / "World", o => "Hello World"));
 
     // "/Hello/World" -> "Hello World"
         </pre>
-        <p>Much more concise. Note that in this case we don't need to use the '+' prefix or call Base() as the route is defined as one unbroken chain of operators.</p>
-        <h3 class="title visible-phone">Route Glue</h3>
-        <p>When calling ʃ.Route, the ʅ parameter is known as the Route Glue. It's so called because we can use it to attach nodes to the base instead of doing this directly. In this last example however we have a problem... when using any of the Superscribe shorthand operators, at least one of the operands must be a SuperscribeNode. If we try to assign part of our route to a variable as we did with the fluent API we run into trouble as both operands are strings and the expression won't compile.</p>
-        <p>We solve this by using the Route Glue in another way... this time to attach several notes together and form a partial route:</p>
+        <p>When calling any of the methods in the <em>.Route</em> family though, we sometimes encounter a problem. In order to use the Superscribe shorthand operators, at least one of the operands must be a <em>GraphNode</em>.</p>
+        <p>In the above example, we solve this by using an overload that takes a lambda with an 'r' parameter. This parameter represents the base node, and so allows the operator chain to resolve itself succesfully. This overload is available to every method in the <em>.Route</em> family.</p>
+        <p>Finally for this example, Superscribe has one more trick up it's sleeve. Another overload takes a traditional string-based route, parses it, and creates a graph for us. This gives us a really concise final route definition that still behaves exactly like the original:</p>
         <pre class="prettyprint lang-cs">
-
-    var helloRoute = ʃ.ʅ / "Hello" / "World" * (o => "Hello World"));
-    ʃ.Route(ʅ => ʅ / +helloRoute );
+    
+    var define = RouteEngineFactory.Create();
+    define.Get("Hello/World", o => "Hello World"));
 
     // "/Hello/World" -> "Hello World"
         </pre>
-        <div class="well well-mini pull-center">
-          <em>When using Superscribe modules, there's an even more concise way to access the Route Glue. See the section on Modules for more information.</em>
-        </div>
-        <h3 class="title visible-phone">SuperscribeNode shorthands</h3>
-        <p>Creating a ConstantNode from a string isn't the only way we can take advantage of casting to build routes. In the fluent API section we discovered how to capture parameters using ParamNode<T>:</p>
+        <p>Note that here we've renamed the 'engine' variable to 'define' which gives us the added bonus of reading really nicely. This is optional of course.</p>
+        <h3 class="title visible-phone">GraphNode shorthands</h3>
+        <p>Creating a <em>ConstantNode</em> from a string isn't the only way we can take advantage of casting to build routes. In the Fluent API section we demonstrated how Superscribe capture parameters using <em>ParamNode&lt;T&gt;</em>:</p>
         <pre class="prettyprint lang-cs">
 
-    var helloRoute = new ConstantNode("Hello").Slash(new ParamNode<string>("Name"));
-    helloRoute.FinalFunctions.Add(new FinalFunction("GET", _ => "Hello " + _.Parameters.Name));
+    var engine = RouteEngineFactory.Create();
 
-    ʃ.Base.Zip(helloRoute.Base());
+    var helloRoute = new ConstantNode("Hello").Slash(new ParamNode&lt;string&gt;("Name"));
+    helloRoute.FinalFunctions.Add(new FinalFunction("GET", o => "Hello " + o.Parameters.Name));
+
+    engine.Base.Zip(helloRoute.Base());
 
     // "/Hello/Kathryn" -> "Hello Kathryn"
         </pre>
-        <p>Now here's the DSL version:</p>
+        <p>Now here's the simple-syntax version:</p>
         <pre class="prettyprint lang-cs">
-
-    ʃ.Route(ʅ => ʅ / "Hello" / (ʃString)"Name" * (o => "Hello " + o.Parameters.Name));
+    
+    var define = RouteEngineFactory.Create();
+    define.Get("Hello" / (String)"Name", o => "Hello " + o.Parameters.Name);
 
     // "/Hello/Kathryn" -> "Hello Kathryn"
         </pre>
-        <p>Quite simply, ʃString is a subclass of ParamNode<string> with an extra explicit cast operator... the sole purpose of which is to provide us with this much nicer syntax. There are others for each of the primary data types supported by superscribe:</p>
+        <p>The Superscribe <em>String</em> class derives from <em>ParamNode&lt;string&gt;</em> and adds an extra explicit cast operator, the sole purpose of which is to provide us with this much nicer syntax. There are other such shorthands for each of the primary data types supported by Superscribe:</p>
         <ul>
-            <li><strong>Integer</strong> (ʃInt)</li>
-            <li><strong>Long</strong> (ʃLong)</li>
-            <li><strong>String</strong>(ʃString)</li>
+            <li><strong>Integer</strong> (Int)</li>
+            <li><strong>Long</strong> (Long)</li>
+            <li><strong>String</strong> (String)</li>
             <li><strong>Boolean</strong> (Bool)</li>
         </ul>
-        <p>And of course, because all Superscribe syntax is strongly typed we can create our own shorthands. Here's an example for Guid:</p>
+        <p>And of course, because all Superscribe nodes are strongly typed and derive from <em>GraphNode</em>, it's easy to create our own shorthands. Here's an example for Guid:</p>
         <pre class="prettyprint lang-cs">
 
-    public class ʃGuid : ParamNode&lt;Guid&gt;
+    public class GuidNode : ParamNode&lt;Guid&gt;
     {
-        public ʃGuid(string name) : base(name) { }
+        public GuidNode(string name) : base(name) { }
 
-        public static explicit operator ʃGuid(string name)
+        public static explicit operator GuidNode(string name)
         {
-            return new ʃGuid(name);
+            return new GuidNode(name);
         }
     }
         </pre>
-        <h3 class="title visible-phone">Providing options and making choices</h3>
-        <p>Using the fluent API and the Zip() function we were able to compose our route graph by combining several complete routes. This is the preferred approach when routes are defined close to where they are handled, but for those who like to define their routes centrally it can seem like a lot of duplicated code. With the Superscribe DSL we have a new way of building our graph by specifying multiple edges at once:
+        <h3 class="title visible-phone">Beyond the basics</h3>
+        <p>Using the Fluent API and the <em>.Zip</em> function we were able to compose our route graph by combining several complete routes. This still works when using the simple-syntax, as each call to one of the <em>.Route</em> family of methods will automatically call <em>.Zip</em> for us. This is demonstrated in this example modified from one of the Web Api samples:</p>
+        <pre class="prettyprint lang-cs">
+
+    var define = RouteEngineFactory.Create();
+    
+    define.Get ("api" / "Blogs" / (Int)"blogid" / "Posts", o => // Handle blogposts get...);
+    define.Post("api" / "Blogs" / (Int)"blogid" / "Posts", o => // Handle blogposts post...);
+    define.Get ("api" / "Blogs" / (Int)"blogid" / "Tags",  o => // Handle blogtags get...);
+    define.Post("api" / "Blogs" / (Int)"blogid" / "Tags",  o => // Handle blogtags post...);
+        </pre>
+        <p>
+            There's another way of achieving this same result. As all route definitions in Superscribe are strongly typed, it's possible to assign routes or parts of routes to variables which allow us to re-use compose definitions in useful and interesting ways:
         </p>
         <pre class="prettyprint lang-cs">
 
-    ʃ.Route(ʅ => 
-        ʅ / "Products"      * (o => / "List all products" ) / (
-              ʅ / "Sale"            * (o => "List Products on sale")
-            | ʅ / "BestSellers"     * (o => "List Bestsellers")
-            | ʅ / (ʃInt)"Id"        * (o => "Product #" + o.Params.Id");
-    ));
+    var define = RouteEngineFactory.Create();
+    
+    var blog = define.Route("api" / "Blogs" / (Int)"blogid");
 
-    // "/Products/" -> "List Products"
-    // "/Products/Sale" -> "List Products on sale"
-    // "/Products/BestSellers" -> "List Bestsellers"
-    // "/Products/13" -> "Product #13"
+    define.Get (blog / "Posts", o => // Handle blogposts get...);
+    define.Post(blog / "Posts", o => // Handle blogposts post...);
+    define.Get (blog / "Tags",  o => // Handle blogtags get...);
+    define.Post(blog / "Tags",  o => // Handle blogtags post...);
         </pre>
-        <p>
-            Once again the RouteGlue helps us out in order to attach each of our edges the the parent node, in this case "Products". We've also kept code and noise to a minimum and ended up with some nice neat definitions.
-        </p>
+        <p>Note also how we're defining the re-usable component of our route definitions using the original <em>.Route</em> method as it allows us to define a route with no Final Functions or method modifiers.</p>
 	  </div>
        <div class="tab-pane col-sm-12 col-md-12" id="modules">
         <h3 class="visible-phone">Handling routes with Modules</h3>
