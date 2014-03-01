@@ -100,10 +100,10 @@ title:  Home
           app.UseSuperscribeRouter(define);
 
           // Set up a branch that will include auth middleware when going through /admin
-          define.Pipeline("Api/Admin").Use<AuthMiddleware>();
+          define.Pipeline("Api/Admin").Use&lt;AuthMiddleware&gt;();
 
           // Set up a branch that will swap out repositories with in-memory versions for testing
-          define.Pipeline("Api/Debug").Use<DebugDependencies>();
+          define.Pipeline("Api/Debug").Use&lt;DebugDependencies&gt;();
       }
   }
         </pre>   
