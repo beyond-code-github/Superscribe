@@ -24,7 +24,7 @@ title:  Home
     <div class="feature col-sm-6 col-md-3">
       <img src="img/icons/Infinity-Loop.png" alt="Feature 4" class="img-responsive" />
       <h3 class="title">No <span class="de-em">Limits</span></h3>
-      <p>Execute arbitrary code as part of your routing pipeline to match routes, make choices or return responses using our powerful DSL... the possibilities are endless!</p>
+      <p>Execute arbitrary code as part of your routing pipeline to match routes, make choices or return responses using simple syntax... the possibilities are endless!</p>
     </div>
   </div>
 </div>
@@ -64,13 +64,14 @@ title:  Home
       public static void Register(HttpConfiguration config)
       {
           var define = SuperscribeConfig.Register(config);
-          define.Route("api" / Any.Controller / -(Int)"id");
+          define.Route("api" / Any.Controller / (Int)"id");
       }
   }
         </pre>
         <h3 class="title visible-phone">Modules</h3>
         <pre class="prettyprint lang-cs">
 
+  // Web Api
   public class HelloWorldModule : SuperscribeModule
   {
       public HelloWorldModule()
@@ -79,6 +80,7 @@ title:  Home
       }
   }
 
+  // OWIN
   public class HelloWorldModule : SuperscribeOwinModule
   {
       public HelloWorldModule()
@@ -97,9 +99,11 @@ title:  Home
           var define = OwinRouteEngineFactory.Create();
           app.UseSuperscribeRouter(define);
 
-          // Set up a route that will respond to both Web Api and Nancy 
-          define.Pipeline("api/webapi").UseWebApi(httpconfig);
-          define.Pipeline("api/nancy").UseNancy();
+          // Set up a branch that will include auth middleware when going through /admin
+          define.Pipeline("Api/Admin").Use<AuthMiddleware>();
+
+          // Set up a branch that will swap out repositories with in-memory versions for testing
+          define.Pipeline("Api/Debug").Use<DebugDependencies>();
       }
   }
         </pre>   
@@ -111,7 +115,8 @@ title:  Home
       public void Configuration(IAppBuilder app)
       {
           var define = OwinRouteEngineFactory.Create();
-          app.UseSuperscribeRouter(define).UseSuperscribeHandler(define);
+          app.UseSuperscribeRouter(define)
+              .UseSuperscribeHandler(define);
 
           define.Route("hello/world", o => "Hello World");
       }
