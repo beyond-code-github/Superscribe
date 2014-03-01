@@ -10,7 +10,7 @@ title:  Documentation
   <div class="tabbable tabs-left vertical-tabs bold-tabs row">
     <ul class="nav nav-tabs nav-stacked col-md-4">
       <li class="active"> <a href="#fluentapi" data-toggle="tab">Fluent API<small>Define hierarchical and strongly typed routes with Superscribe</small><i class="icon-angle-right"></i></a> </li>
-      <li> <a href="#dsl" data-toggle="tab">Simple-syntax<small>Shorthands for defining routes that are concise and easy to maintain</small><i class="icon-angle-right"></i></a> </li>
+      <li> <a href="#simple" data-toggle="tab">Simple-syntax<small>Shorthands for defining routes that are concise and easy to maintain</small><i class="icon-angle-right"></i></a> </li>
       <li> <a href="#modules" data-toggle="tab">Modules<small>Inspired by NancyFX, a great way to keep your definitions and your handlers together</small><i class="icon-angle-right"></i></a> </li>
       <li> <a href="#webapi" data-toggle="tab">Superscribe.WebAPI<small>Specific syntax to help you match routes and then invoke controllers and actions</small><i class="icon-angle-right"></i></a> </li>
       <li> <a href="#owin" data-toggle="tab">Superscribe.OWIN<small>Branch your pipeline during routing and hand control to any OWIN middleware</small><i class="icon-angle-right"></i></a> </li>
@@ -191,7 +191,7 @@ title:  Documentation
     // "/Products/13" -> "404 - Extraneous Match"
 		</pre>
 	  </div>
-	  <div class="tab-pane col-sm-12 col-md-12" id="dsl">
+	  <div class="tab-pane col-sm-12 col-md-12" id="simple">
         <h3>Defining routes with Superscribe simple-syntax</h3>
         <p>As mentioned in the previous section, defining routing using the fluent API is not ideal for a number of reasons. Built on top of the fluent API is a simple domain specific language... valid C# code made using a combination of lambdas, casts and operator overloads.</p>
         <p>The simple-syntax provided by Superscribe is designed to be terse and minimal, so you can get on with the important business of designing your routes. In this section we'll translate an example from the Fluent Api to use the simple-syntax, stage by stage to show which statements are equivilent.</p>
