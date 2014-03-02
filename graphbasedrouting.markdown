@@ -86,13 +86,14 @@ title:  Features
   queue RemainingSegments;
 
   FUNCTION WalkRoute (string route, string method, dictionary routedata)  
+    SET routedata Url TO route parameter value
+    SET routedata Method TO method parameter value
+
     FOR EACH querystring parameter IN route
       SET routedata.Parameters dictionary entry for [parameter.name] TO parameter.value
 
     remove querystring from route
     SET RemainingSegments TO array of route split by '/'
-    SET routedata Route TO route parameter value
-    SET routedata Method TO method parameter value
 
     CALL WalkRouteLoop WITH routedata, basenode
   END FUNCTION
