@@ -24,6 +24,12 @@ title:  Examples
 					<i class="icon-angle-right"></i>
 				</a>
 			</li>
+            <li>
+                <a href="#webapibasic" data-toggle="tab">
+                    Web Api - Basic<small>How to replicate the default route with Superscribe (Web Api)</small>
+                    <i class="icon-angle-right"></i>
+                </a>
+            </li>
 			<li>
 				<a href="#webapimultiplecollections" data-toggle="tab">
 					Multiple Collections Per Controller<small>Shows how to route multiple collection resources to the same controller (Web Api)</small>
@@ -33,6 +39,12 @@ title:  Examples
             <li>
                 <a href="#alongsidetraditionalrouting" data-toggle="tab">
                     Combine with other Routing<small>Using Superscribe routes and modules alongside traditional/attribue routing (Web Api)</small>
+                    <i class="icon-angle-right"></i>
+                </a>
+            </li>
+            <li>
+                <a href="#webapionowin" data-toggle="tab">
+                    Web Api on Owin<small>How to set up Superscribe to work with Web Api when using Owin hosting (Web Api, Owin)</small>
                     <i class="icon-angle-right"></i>
                 </a>
             </li>
@@ -66,6 +78,12 @@ title:  Examples
 					<i class="icon-angle-right"></i>
 				</a>
 			</li>
+            <li>
+                <a href="#owindependencyinjection" data-toggle="tab">
+                    Configuring Dependencies per Request<small>Using .Pipeline() to configure dependency injection based on routes (WebApi, Owin)</small>
+                    <i class="icon-angle-right"></i>
+                </a>
+            </li>
 		</ul>    
 		<div class="tab-content col-md-8">
 		  <div class="tab-pane active col-sm-12 col-md-12" id="fluentapi">
@@ -85,12 +103,12 @@ title:  Examples
                 return false;
             };
 
-            this.actionFunction = (routeData, value) =>
+            this.ActionFunctions.Add("Set_" + name, (routeData, value) =>
             {
                 int parsed;
                 if (int.TryParse(value, out parsed))
                     routeData.Parameters.Add(name, parsed);
-            };
+            });
         }
     }
 			</pre>
@@ -132,8 +150,8 @@ title:  Examples
         {
             define = RouteEngineFactory.Create();
 
-            define.Route(r => r / "Hello" / "World", o => "Hello World!");
-            define.Route(r => r / "Hello" / (String)"Name", o => "Hello " + o.Parameters.Name);
+            define.Route("Hello/World", o => "Hello World!");
+            define.Route("Hello" / (String)"Name", o => "Hello " + o.Parameters.Name);
         }
         
         [TestMethod]
@@ -157,6 +175,40 @@ title:  Examples
     }
 				</pre>
 		  	</div>
+            <div class="tab-pane col-sm-12 col-md-12" id="webapibasic">
+                <h3>Using Superscribe with Asp.Net Web Api</h3>
+                <pre class="prettyprint">
+
+    public static class WebApiConfig
+    {
+        public static void Register(HttpConfiguration config)
+        {
+            var engine = SuperscribeConfig.Register(config);
+            engine.Route("api" / Any.Controller / (Int)"id");
+        }
+    }
+                </pre>
+                <pre class="prettyprint">
+
+    public class ValuesController : ApiController
+    {
+        public IEnumerable&lt;string&gt; Get()
+        {
+            return new[] { "Value1", "Value2" };
+        }
+
+        public string Get(int id)
+        {
+            return "Value" + id;
+        }
+
+        public string Post(int id)
+        {
+            return "Post id: " + id;
+        }
+    }
+                </pre>
+            </div>
 		  	<div class="tab-pane col-sm-12 col-md-12" id="webapimultiplecollections">
 	  			<h3>Multiple collection resources per controller in Asp.Net Web Api</h3>
 				<pre class="prettyprint">
@@ -165,17 +217,17 @@ title:  Examples
     {
         public static void Register(HttpConfiguration config)
         {
-            config.Formatters.Remove(config.Formatters.XmlFormatter);
+            onfig.Formatters.Remove(config.Formatters.XmlFormatter);
 
             var define = SuperscribeConfig.Register(config);
 
-            var blogs = define.Route(r => r / "api" / "Blogs".Controller() / -(Int)"blogid");
+            var blogs = define.Route("api" / "Blogs".Controller() / (Int)"blogid");
 
-            define.Get(blogs / "Posts".Action("GetBlogPosts"));
-            define.Get(blogs / "Tags".Action("GetBlogTags"));
+            define.Get(blogs / "Posts", To.Action("GetBlogPosts"));
+            define.Get(blogs / "Tags", To.Action("GetBlogTags"));
 
-            define.Post(blogs / "Posts".Action("PostBlogPost"));
-            define.Post(blogs / "Tags".Action("PostBlogTag"));
+            define.Post(blogs / "Posts", To.Action("PostBlogPost"));
+            define.Post(blogs / "Tags", To.Action("PostBlogTag"));
         }
     }
 				</pre>
@@ -287,7 +339,46 @@ title:  Examples
         }
     }                                    
                 </pre>
-            </div><div class="tab-pane col-sm-12 col-md-12" id="owinframeworkhandover">
+            </div>
+            <div class="tab-pane col-sm-12 col-md-12" id="webapionowin">
+                <h3>Using Web Api on Owin with Superscribe Router</h3>    
+                <div class="well well-mini pull-center"><em>For this example you'll need to install the <strong>Superscribe.WebApi.Owin</strong> package from nuget.</em></div>
+                <pre class="prettyprint">
+
+    public class ValuesController : ApiController
+    {
+        public IEnumerable&lt;string&gt; Get()
+        {
+            return new string[] { "value1", "value2" };
+        }
+
+        public string Get(int id)
+        {
+            return "value";
+        }
+    }
+                </pre>
+                <pre class="prettyprint">
+
+    public class Startup
+    {
+        public void Configuration(IAppBuilder app)
+        {
+            var define = OwinRouteEngineFactory.Create();
+            var httpconfig = new HttpConfiguration();
+            
+            SuperscribeConfig.RegisterModules(httpconfig, define);
+
+            define.Route("values".Controller());
+            
+            app.UseSuperscribeRouter(define)
+                .UseWebApi(httpconfig)
+                .WithSuperscribe(httpconfig, define);
+        }
+    }            
+                </pre>
+            </div>
+            <div class="tab-pane col-sm-12 col-md-12" id="owinframeworkhandover">
 	  			<h3>Handing control from Supersribe to web frameworks for handling requests</h3>	  			
 				<pre class="prettyprint">
 
@@ -407,6 +498,7 @@ title:  Examples
         public void Configuration(IAppBuilder app)
         {
             var options = new SuperscribeOwinOptions();
+            options.MediaTypeHandlers.Remove("text/html");
             options.MediaTypeHandlers.Add("application/json", new MediaTypeHandler
             {
                    Write = (env, o) => env.WriteResponse(JsonConvert.SerializeObject(o)),
@@ -422,6 +514,9 @@ title:  Examples
                    }
                });
 
+            // Replace text/html with json handler so example works in a browser
+            options.MediaTypeHandlers.Add("text/html", options.MediaTypeHandlers["application/json"]);
+
             var engine = OwinRouteEngineFactory.Create(options);
 
             app.UseSuperscribeRouter(engine)
@@ -434,23 +529,21 @@ title:  Examples
 	  			<h3>Using parameters captured during routing in other Middleware</h3>	  							
 				<pre class="prettyprint">
 
-	public class AddName
+	public class SayHello
     {
         private readonly Func&lt;IDictionary&lt;string, object&gt;, Task&gt; next;
 
-        public AddName(Func&lt;IDictionary&lt;string, object&gt;, Task&gt; next)
+        public SayHello(Func&lt;IDictionary&lt;string, object&gt;, Task&gt; next)
         {
             this.next = next;
         }
 
         public async Task Invoke(IDictionary&lt;string, object&gt; environment)
         {
-            await this.next(environment);
-
             var parameters = environment["route.Parameters"] as IDictionary&lt;string, object&gt;;
             if (parameters != null &amp;&amp; parameters.ContainsKey("Name"))
             {
-                await environment.WriteResponse(" " + parameters["Name"]);    
+                await environment.WriteResponse("Hello " + parameters["Name"]);    
             }
         }
     }
@@ -463,11 +556,10 @@ title:  Examples
         {
             var define = OwinRouteEngineFactory.Create();
 
+            define.Route("Hello" / (String)"Name", o => "Hello");
+
             app.UseSuperscribeRouter(define)
-                .Use(typeof(AddName))
-                .UseSuperscribeHandler(define);
-            
-            define.Route(r => r / "Hello" / (String)"Name", o => "Hello");
+                .Use&lt;SayHello&gt;();
         }
     }
 				</pre>
@@ -515,7 +607,111 @@ title:  Examples
         }
     }
 				</pre>
-			</div>			
+			</div>		
+            <div class="tab-pane col-sm-12 col-md-12" id="owindependencyinjection">
+                <h3>Use Superscribe with DotNetDoodle.Owin.Dependencies to configure your dependency container based on your routes</h3>              
+                <div class="well well-mini pull-center"><em>For this example you'll need to install <strong>DotNetDoodle.Owin.Dependencies</strong> and package from nuget.For more information on DotNetDoodle.Owin.Dependencies, please see <a href="http://www.tugberkugurlu.com/archive/owin-dependencies--an-ioc-container-adapter-into-owin-pipeline">this post by Tuberk Ugurlu.</a></em></div>
+                <pre class="prettyprint">	
+    public class ValuesController : ApiController
+    {
+        private readonly IRepository repository;
+
+        public ValuesController(IRepository repository)
+        {
+            this.repository = repository;
+        }
+
+        public IEnumerable&lt;string&gt; Get()
+        {
+            return this.repository.Values();
+        }
+    }           
+                </pre>
+                <pre class="prettyprint">   
+    public interface IRepository
+    {
+        IEnumerable&lt;string&gt; Values();
+    }
+
+    public class Repository : IRepository
+    {
+        public IEnumerable&lt;string&gt; Values()
+        {
+            return new[] { "value1", "value2" };
+        }
+    }
+
+    public class ApiRepository : IRepository
+    {
+        public IEnumerable&lt;string&gt; Values()
+        {
+            return new[] { "value3", "value4" };
+        }
+    }
+                </pre>
+                <pre class="prettyprint">  
+    public class Startup
+    {
+        public void Configuration(IAppBuilder appBuilder)
+        {
+            var engine = OwinRouteEngineFactory.Create();
+
+            var httpconfig = new HttpConfiguration();
+            httpconfig.Formatters.Remove(httpconfig.Formatters.XmlFormatter);
+            SuperscribeConfig.Register(httpconfig, engine);
+
+            engine.Route("Values".Controller());
+            engine.Route("Api" / "Values".Controller());
+
+            engine.Pipeline("Api").Use&lt;ApiDependencies&gt;();
+
+            appBuilder.UseAutofacContainer(this.RegisterServices())
+                .UseSuperscribeRouter(engine)
+                .UseWebApiWithContainer(httpconfig)
+                .WithSuperscribe(httpconfig, engine);
+        }
+
+        public IContainer RegisterServices()
+        {
+            var builder = new ContainerBuilder();
+
+            builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+            builder.RegisterOwinApplicationContainer();
+
+            builder.RegisterType&lt;Repository&gt;()
+                   .As&lt;IRepository&gt;()
+                   .InstancePerLifetimeScope();
+            
+            return builder.Build();
+        }
+    }
+                </pre>
+                <pre class="prettyprint">
+                
+    public class ApiDependencies
+    {
+        private readonly Func&lt;IDictionary&lt;string, object&gt;, Task&gt; next;
+
+        public ApiDependencies(Func&lt;IDictionary&lt;string, object&gt;, Task&gt; next)
+        {
+            this.next = next;
+        }
+
+        public async Task Invoke(IDictionary&lt;string, object&gt; environment)
+        {
+            var container = environment.GetRequestContainer() as ILifetimeScope;
+            var newBuilder = new ContainerBuilder();
+            newBuilder.RegisterType&lt;ApiRepository&gt;()
+                   .As&lt;IRepository&gt;()
+                   .InstancePerLifetimeScope();
+
+            newBuilder.Update(container.ComponentRegistry);
+
+            await this.next(environment);
+        }
+    }                    
+                </pre>
+            </div>
 		</div>
 	</div>
 </div>
