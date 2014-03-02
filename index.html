@@ -42,7 +42,7 @@ title:  Home
         <div class="nuget-badge">
           <p><code>PM&gt; Install-Package Superscribe</code></p>
         </div>
-        <h3 class="title visible-phone">OWIN</h3>
+        <h3 class="title visible-phone">Owin</h3>
         <div class="nuget-badge">
           <p><code>PM&gt; Install-Package Superscribe.Owin</code></p>
         </div>
@@ -50,7 +50,7 @@ title:  Home
         <div class="nuget-badge">
           <p><code>PM&gt; Install-Package Superscribe.WebApi</code></p>
         </div>
-        <h3 class="title visible-phone">Web Api - OWIN Hosted</h3>
+        <h3 class="title visible-phone">Web Api - Owin Hosted</h3>
         <div class="nuget-badge">
           <p><code>PM&gt; Install-Package Superscribe.WebApi.Owin</code></p>
         </div>
@@ -84,17 +84,17 @@ title:  Home
       }
   }
 
-  // OWIN
+  // Owin
   public class HelloWorldModule : SuperscribeOwinModule
   {
       public HelloWorldModule()
       {
-          this.Get["/"] = o => "Hello OWIN!";
+          this.Get["/"] = o => "Hello Owin!";
       }
   }
         </pre>
-        <h3 class="title visible-phone">OWIN Router</h3>
-        <p>Let your routing decide which middleware to include in your OWIN pipeline.</p>
+        <h3 class="title visible-phone">Owin Router</h3>
+        <p>Let your routing decide which middleware to include in your Owin pipeline.</p>
         <pre class="prettyprint lang-cs">
 
   public class Startup
@@ -112,7 +112,7 @@ title:  Home
       }
   }
         </pre>   
-        <h3 class="title visible-phone">OWIN Handler</h3>
+        <h3 class="title visible-phone">Owin Handler</h3>
         <p>Bulky web frameworks just slowing you down? With Superscribe you can respond to simple requests without one.</p>
         <pre class="prettyprint lang-cs">
 

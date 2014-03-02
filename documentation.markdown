@@ -20,7 +20,7 @@ title:  Documentation
       	<h3 class="visible-phone">Defining routes using superscribe's fluent interface</h3>
       	<p>This section starts with a disclaimer. In practice you won't want to write routes using the Fluent API, as they won't look very nice and will be quite verbose; instead you'll be using the simple-syntax wherever possible. However, to work with Superscribe effectively and to lessen any learning curves, it is useful to understand what is going on behind the scenes. As a result, this section should be considered required reading before continuing to the later topics</p>
         <h4>The IRouteEngine interface</h4>
-        <p>Superscribe's features are all accessed via an instance of a class that implements <em>IRouteEngine</em>. There are currently two Route Engine implementations, one for WebApi, and one for OWIN. You can obtain an instance using the static factory classes provided, as follows:</p>
+        <p>Superscribe's features are all accessed via an instance of a class that implements <em>IRouteEngine</em>. There are currently two Route Engine implementations, one for WebApi, and one for Owin. You can obtain an instance using the static factory classes provided, as follows:</p>
         <pre class="prettyprint lang-cs">
 
     var engine = RouteEngineFactory.Create(); 
@@ -62,7 +62,7 @@ title:  Documentation
 			</ul>
 		</p>
 		<h4>Final Functions and Frameworks/Handlers</h4>
-		<p>When running using the Superscribe Handler middleware for OWIN, the samples above create an app that will respond to '/' and '/Hello/World', but not 'Hello':</p>
+		<p>When running using the Superscribe Handler middleware for Owin, the samples above create an app that will respond to '/' and '/Hello/World', but not 'Hello':</p>
 		<pre class="prettyprint lang-cs">
 
     // "/Hello" -> 405 - No final function was configured for this method
@@ -328,6 +328,7 @@ title:  Documentation
 	  </div>
       <div class="tab-pane col-sm-12 col-md-12" id="webapi">
         <h3 class="visible-phone">Replacing Asp.Net Web Api routing with Superscribe</h3>
+        <div class="well well-mini pull-center"><em>Please note that Superscribe only supports <strong>Asp.Net Web Api 2.1</strong> and above</em></div>
         <p>Ask most developers what could be improved about Asp.Net Web Api and they'll probably mention the routing. This has been improved considerably by the introduction of attribute routing in Web Api 2, but attribute routing isn't for everyone. Some like to define all the routes for an application in one place. Superscribe.WebApi allows us to define routes centrally using Supersribe simple-syntax and a few Web Api specific nodes.</p>
         <h3 class="title visible-phone">Controller Selection</h3>
         <p>The following route recreates the behavior of the default rouing you get when creating a new project:</p>
@@ -447,6 +448,7 @@ title:  Documentation
       </div>
       <div class="tab-pane col-sm-12 col-md-12" id="webapimodules">
         <h3 class="visible-phone">Handling routes with Modules in Asp.Net Web Api</h3>
+        <div class="well well-mini pull-center"><em>Please note that Superscribe only supports <strong>Asp.Net Web Api 2.1</strong> and above</em></div>
         <p>Asp.Net Web Api uses controllers and actions because it was originally derived from the MVC framework and although things have moved on since then, it still shares some of the same constructs. With Superscribe we are free to break away from these restrictions and handle our routes using whatever classes we wish.</p>
         <p>Superscribe allows you to do this in the form of modules, a great web app construct inspired by the Ruby web framework Sinatra and the .Net framework NancyFX.</p>
         <h3 class="title visible-phone">Assembly Scanning</h3>
@@ -531,7 +533,7 @@ title:  Documentation
         <p>Now we've got all the ingredients we need to build our app using modules. Web Api is still taking care of content negotiation for us and we can easily build in other aspects such as validation as needed. We can also take control over the response as we need to by returning <em>HttpResponseMessage</em> just as we would in a regular controller.</p>
       </div>
       <div class="tab-pane col-sm-12 col-md-12" id="owin">
-        <h3 class="visible-phone">OWIN Middleware Routing and Request Handling</h3>
+        <h3 class="visible-phone">Owin Middleware Routing and Request Handling</h3>
         <p>Superscribe introduces the concept of routing as middleware - for Owin that means you can add the Superscribe Route middleware into your application to perform routing for you and then re-use the results anywhere in your application.</p>
         <o>Even if you have two or more different middleware or frameworks that require it, you only ever need to perform routing once. Because routing can be made to occur early, you can even use it to branch the pipeline and introduce other middleware depending on the url. This is an extremely powerful feature.</p>
         <p>For simple API requests that just respond to a route with XML or Json, a fully fledged Web Framework can end up just being bloat your application doesn't need. With Superscribe you can respond to requests directly in Owin just by wiring in your content negotiation logic.</p>

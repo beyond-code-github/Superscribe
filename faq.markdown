@@ -17,7 +17,7 @@ title:  FAQ
 <h3 class="visible-phone">
   Q: How does Superscribe implement Graph Based Routing?
 </h3>
-<p><strong>A:</strong> At it's core, Superscribe provides a fully compliant Graph Based Routing implementation written in C#. It also goes one step further than this, providing a DSL for creating definitions quickly and easily, as well as helpers for dealing with OWIN pipelines and Asp.Net Web Api which are not part of  Graph Based Routing itself.
+<p><strong>A:</strong> At it's core, Superscribe provides a fully compliant Graph Based Routing implementation written in C#. It also goes one step further than this, providing a DSL for creating definitions quickly and easily, as well as helpers for dealing with Owin pipelines and Asp.Net Web Api which are not part of  Graph Based Routing itself.
 </p>
 <h3 class="visible-phone">
   Q: Why bother with a graph? What's wrong with a tree?
@@ -37,6 +37,6 @@ title:  FAQ
 <h3 class="visible-phone">
   Q: Can I use Superscribe with Nancy FX?
 </h3>
-<p><strong>A:</strong> At present you can use OWIN routing to hand off from your middleware pipeline to Nancy but then Nancy's routing will take over. Work is under development to allow Nancy to re-use the results of Supersribes route parsing, so watch this space.
+<p><strong>A:</strong> At present you can use Owin routing to hand off from your middleware pipeline to Nancy but then Nancy's routing will take over. Work is under development to allow Nancy to re-use the results of Supersribes route parsing, so watch this space.
 </p>
 </div>

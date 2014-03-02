@@ -13,12 +13,13 @@ title:  Features
     	<li> <a href="#testing" data-toggle="tab">Easy unit testing<small>Invoke the superscribe routing engine in isolation from the rest of your app</small><i class="icon-angle-right"></i></a> </li>     	
       	<li> <a href="#modules" data-toggle="tab">Bring Nancy style modules to Web API<small>All the benefits of the code-centric approach combined with graph based routing</small><i class="icon-angle-right"></i></a> </li>   
         <li> <a href="#routingasmiddleware" data-toggle="tab">Routing as middleware<small>Perform routing once, then re-use the results in any compatible middleware or framework</small><i class="icon-angle-right"></i></a> </li>
-      	<li> <a href="#owinpipeline" data-toggle="tab">OWIN pipeline branching<small>Let your routing choose which middleware to include</small><i class="icon-angle-right"></i></a> </li>
-      	<li> <a href="#owinhandler" data-toggle="tab">Handle requests directly in OWIN<small>Implement lean endpoints with no need for a web framework</small><i class="icon-angle-right"></i></a> </li>
+      	<li> <a href="#owinpipeline" data-toggle="tab">Owin pipeline branching<small>Let your routing choose which middleware to include</small><i class="icon-angle-right"></i></a> </li>
+      	<li> <a href="#owinhandler" data-toggle="tab">Handle requests directly in Owin<small>Implement lean endpoints with no need for a web framework</small><i class="icon-angle-right"></i></a> </li>
     </ul>
 	<div class="tab-content col-md-8">
       <div class="tab-pane active col-sm-12 col-md-12" id="webapi">
       	<h3>Simplify your Asp.Net Web API Routes</h3>
+        <div class="well well-mini pull-center"><em>Please note that Superscribe only supports <strong>Asp.Net Web Api 2.1</strong> and above</em></div>
       	<p>Routing in Web API is based on legacy MVC logic, and although Attribute Routing improves things greatly it's still not a catch-all fix. Many route combinations are very difficult to implement, such as multiple actions, with the same parameters, mapped to the same http verbs. Superscribe solves all these problems by allowing you to be more descriptive with much less code.</p>
       	<p>Here's a comparison of Web API verus Superscribe for an app that serves the following urls:</p>
       	<pre class="prettyprint lang-cs">
@@ -222,9 +223,9 @@ title:  Features
     }
         </pre></div>    
       <div class="tab-pane col-sm-12 col-md-12" id="owinpipeline">
-        <h3>Combine your routing and OWIN pipelines</h3>
+        <h3>Combine your routing and Owin pipelines</h3>
         <p>
-        	With the Superscribe.Owin package, your routing routing pipeline and your OWIN pipeline become one. Superscribe provides <em>Superscribe Router</em> for middleware routing and branching.
+        	With the Superscribe.Owin package, your routing routing pipeline and your Owin pipeline become one. Superscribe provides <em>Superscribe Router</em> for middleware routing and branching.
         </p>
         <h3 class="title">Superscribe Router</h3>
         <pre class="prettyprint lang-cs">
@@ -251,7 +252,7 @@ title:  Features
 	}
 		</pre></div>	
       <div class="tab-pane col-sm-12 col-md-12" id="owinhandler">
-        <h3>Handle requests directly in OWIN</h3>
+        <h3>Handle requests directly in Owin</h3>
         <p>
         	For those situations when simplicity and raw speed are key, <em>Superscribe Handler</em> allows you to respond to requests without the need for a bulky web framework.
         </p>
@@ -272,7 +273,7 @@ title:  Features
 	}
 		</pre>
         <p>
-            You can use modules to respond to OWIN requests too:
+            You can use modules to respond to Owin requests too:
         </p>
         <pre class="prettyprint lang-cs">
 
@@ -280,7 +281,7 @@ title:  Features
     {
         public HelloWorldModule()
         {
-          this.Get["/"] = o => "Hello OWIN!";
+          this.Get["/"] = o => "Hello Owin!";
         }
     }
         </pre>	  

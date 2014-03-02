@@ -177,6 +177,7 @@ title:  Examples
 		  	</div>
             <div class="tab-pane col-sm-12 col-md-12" id="webapibasic">
                 <h3>Using Superscribe with Asp.Net Web Api</h3>
+                <div class="well well-mini pull-center"><em>Please note that Superscribe only supports <strong>Asp.Net Web Api 2.1</strong> and above</em></div>
                 <pre class="prettyprint">
 
     public static class WebApiConfig
@@ -211,6 +212,7 @@ title:  Examples
             </div>
 		  	<div class="tab-pane col-sm-12 col-md-12" id="webapimultiplecollections">
 	  			<h3>Multiple collection resources per controller in Asp.Net Web Api</h3>
+                <div class="well well-mini pull-center"><em>Please note that Superscribe only supports <strong>Asp.Net Web Api 2.1</strong> and above</em></div>
 				<pre class="prettyprint">
 
 	public static class WebApiConfig
@@ -274,6 +276,7 @@ title:  Examples
 		  	</div>
 			<div class="tab-pane col-sm-12 col-md-12" id="alongsidetraditionalrouting">
                 <h3>Using Superscribe routes and modules alongside traditional/attribue routing in Asp.Net Web Api</h3>
+                <div class="well well-mini pull-center"><em>Please note that Superscribe only supports <strong>Asp.Net Web Api 2.1</strong> and above</em></div>
                 <pre class="prettyprint">
 
     public class ValuesController : ApiController
@@ -342,6 +345,7 @@ title:  Examples
             </div>
             <div class="tab-pane col-sm-12 col-md-12" id="webapionowin">
                 <h3>Using Web Api on Owin with Superscribe Router</h3>    
+                <div class="well well-mini pull-center"><em>Please note that Superscribe only supports <strong>Asp.Net Web Api 2.1</strong> and above</em></div>
                 <div class="well well-mini pull-center"><em>For this example you'll need to install the <strong>Superscribe.WebApi.Owin</strong> package from nuget.</em></div>
                 <pre class="prettyprint">
 
@@ -609,8 +613,9 @@ title:  Examples
 				</pre>
 			</div>		
             <div class="tab-pane col-sm-12 col-md-12" id="owindependencyinjection">
-                <h3>Use Superscribe with DotNetDoodle.Owin.Dependencies to configure your dependency container based on your routes</h3>              
-                <div class="well well-mini pull-center"><em>For this example you'll need to install <strong>DotNetDoodle.Owin.Dependencies</strong> and package from nuget.For more information on DotNetDoodle.Owin.Dependencies, please see <a href="http://www.tugberkugurlu.com/archive/owin-dependencies--an-ioc-container-adapter-into-owin-pipeline">this post by Tuberk Ugurlu.</a></em></div>
+                <h3>Use Superscribe with DotNetDoodle.Owin.Dependencies to configure your dependency container based on your routes</h3>     
+                <div class="well well-mini pull-center"><em>Please note that Superscribe only supports <strong>Asp.Net Web Api 2.1</strong> and above</em></div>         
+                <div class="well well-mini pull-center"><em>For this example you'll need to install <strong>DotNetDoodle.Owin.Dependencies</strong> and package from nuget. For more information on DotNetDoodle.Owin.Dependencies, please see <a href="http://www.tugberkugurlu.com/archive/owin-dependencies--an-ioc-container-adapter-into-owin-pipeline">this post by Tuberk Ugurlu.</a></em></div>
                 <pre class="prettyprint">	
     public class ValuesController : ApiController
     {
@@ -687,7 +692,7 @@ title:  Examples
     }
                 </pre>
                 <pre class="prettyprint">
-                
+
     public class ApiDependencies
     {
         private readonly Func&lt;IDictionary&lt;string, object&gt;, Task&gt; next;
