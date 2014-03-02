@@ -487,7 +487,7 @@ title:  Documentation
         {
             this.Get["Hello/World"] = o => "Hello World!";
 
-            this.Get["Hello" / (ʃString)"Name"] = o => "Hello " + o.Parameters.Name;
+            this.Get["Hello" / (String)"Name"] = o => "Hello " + o.Parameters.Name;
         }
     }
         </pre>
