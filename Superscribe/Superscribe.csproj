@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="Cache\CacheEntry.cs" />
     <Compile Include="Cache\RouteCache.cs" />
+    <Compile Include="Cache\UselessCache.cs" />
     <Compile Include="Engine\IModuleRouteData.cs" />
     <Compile Include="Engine\IRouteData.cs" />
     <Compile Include="Engine\IRouteDataProvider.cs" />
