@@ -35,47 +35,42 @@ title:  Features
         </div>
         <h3 class="visible-phone title">The three types of Function</h3>
         <p>
-          Flow through the routing pipeline is controlled by three methods that can be assigned to nodes. These can contain any code at all so long as they conform to the required interface, and are known as the Graph Based Routing <strong>Functions</strong>. Between them, these Functions allow the routing pipeline to take actions, determine whether or not a node is a match for the current segment, and even respond to the Http request once matching has finished.</p>
+          Flow through the routing pipeline is controlled by three methods that can be assigned to nodes. These can contain any code at all so long as they conform to the required interface, and are known as the Graph Based Routing <strong>Functions</strong>. Between them, these Functions allow the routing pipeline to take actions, determine whether or not a node is a match for the current segment, and set values that a framework or handler can use to repsond to the http request once matching has finished.</p>
         <p>
           Data can be passed between nodes using an object called the <strong>RouteData</strong>, which is passed as a parameter to each function, along with the current segment. This Data is a read-write dictionary or property bag that can store any information required. The following Functions are available:
         </p>
         <ul>
           <li><strong>Activation Function</strong> - Returns a boolean true or false indicating if this node is a match for the current segment</li>
           <li><strong>Action Function</strong> - Executes some code upon a succesful match, such as parameter capture</li>
-          <li><strong>Final Function</strong> - Run when route matching is complete, and allows us to respond to the http request. Final functions can be Normal or Exclusive</li>
+          <li><strong>Final Function</strong> - Run when route matching finishes at a given node.</li>
         </ul>
-        <p>Final Functions are only executed once matching has finished succesfully. If routing finishes on a node that does not define a final function, then Graph Based Routing dictates that we execute the last <em>non-exclusive</em> Final Function that was encountered.</p>
+        <p>Final Functions are only executed once matching has finished succesfully. If routing finishes on a node that does not define one then no final function is executed, and a flag is set on the route data accordingly (see match result flags below).</p>
         <h3 class="visible-phone title">The Matching Process</h3>
         <p>Graph Nodes, their constraints, and Functions form a simple state machine, which can then be used to perform the matching process as seen in this example from Asp.Net Web API:</p>
         <ul>
           <li>Default Web API routing case:<p><em>/api/{controller}/{id}</em></p></li>
         </ul>
         <img src="img/basicstatemachine.png" />
-        <p>In addition to the behaviors emergent from the presence of the three Functions, there are also a handful of other constraints that are applied to produce this behavior:</p>
-        <ul>
-          <li><strong>Nodes can be optional</strong> - Matching will only be considered complete if there are no more segments and no more edges, unless at least one of the edges is optional.</li>
-          <li><strong>Nodes have allowed methods</strong> - Nodes with allowed http methods set will only be matched if their allow list contains the method of the current request.
-          <li><strong>Final Functions have allowed methods</strong> - Same as above, final functions will only be executed if their allowed method list permits it.
+        <p>In addition to the behaviors emergent from the presence of the three Functions, Final Functions can also have allowed methods. A final function with an allowed method will only be executed if this matched the incoming Http Method of the request.
         </ul>
         <h3 class="visible-phone title">Parameters and the Querystring</h3>
         <p>
-          In Graph Based Routing, parameter capture is the responsibility of Action Functions defined against nodes that represent values. They are then added them to the <strong>Parameters</strong> Dictionary which sits on the <strong>RouteData</strong> object so they become available to subsequent nodes and final function. No provision is made in the implementation itself to capture parameters at this time, with the exception of the Querystring.</p>
+          In Graph Based Routing, parameter capture is the responsibility of Action Functions defined against nodes that represent values. They are then added them to the <strong>Parameters</strong> Dictionary which sits on the <strong>RouteData</strong> object so they become available to subsequent nodes and Final Functions. No provision is made in the implementation itself to capture parameters at this time, with the exception of the Querystring.</p>
         <p>
           Because Querystring parameters can come in any order, they cannot be treated as graph nodes for the purposes of matching. Any compatible Graph Based Routing implementation will decode and store all querystring parameters <strong>prior to matching</strong> the remainder of the URL. This means that all nodes have access to querystring values, and if matching based on these values is required this can be performed accordingly in the relevant Activation Function.
         </p>
-        <h3 class="visible-phone title">Incomplete and Extraneous Matches</h3>
+        <h3 class="visible-phone title">Match Result Flags</h3>
         <p>
-        Graph Based Routing implementations can set one of two flags to indicate that there was an error while matching. It is then up to the code invoking the implementation to deal with the error as it sees fit. These are:</p> 
+        Graph Based Routing implementations must not respond to requests themselves, but can set a number of flags on the RouteData object to indicate certain scenarios. It is then up to the framework or code handling the request to deal with these flags as they see fit:</p> 
         <ul>
           <li>
-            <strong>Incomplete Match</strong> - All segments have been consumed but there are still edges present in the current node. This flag will only be set if:
-            <ul>
-              <li>The node has a Final Function assigned and...</li>
-              <li>Has no one optional edges</li>
-            </ul>
+            <strong>Extraneous Match</strong> - There are no more edges present in the current node, but we still have route segments remaining to match
           </li>
           <li>
-            <strong>Extraneous Match</strong> - There are no more edges present in the current node, but we still have route segments remaining to match
+            <strong>Final Function Executed</strong> - All segments were consumed, and a final function was matched and executed
+          </li>
+          <li>
+            <strong>No Matching Final Function</strong> - Indicates that although all segments were consumed and the find node did provide one or more final functions - none of them matched the request method.
           </li>
         </ul>
         <br/>
@@ -89,7 +84,6 @@ title:  Features
          <pre class="prettyprint">
 
   queue RemainingSegments;
-  string Method;
 
   FUNCTION WalkRoute (string route, string method, dictionary routedata)  
     FOR EACH querystring parameter IN route
@@ -97,7 +91,8 @@ title:  Features
 
     remove querystring from route
     SET RemainingSegments TO array of route split by '/'
-    SET Method TO method parameter value
+    SET routedata Route TO route parameter value
+    SET routedata Method TO method parameter value
 
     CALL WalkRouteLoop WITH routedata, basenode
   END FUNCTION
@@ -110,17 +105,14 @@ title:  Features
       IF match has an Action Function THEN CALL Action Function WITH routedata, current segment
       IF there are remaining segments THEN DEQUEUE the current segment FROM RemainingSegments
 
-      IF oncomplete IS set AND oncomplete IS exclusive THEN  SET oncomplete TO null
-      IF match has any final functions defined for the current method THEN
+      SET oncomplete TO null
+      IF match has a final functions defined for the current method THEN
         SET oncomplete TO final function for this method
 
       SET nextmatch to result of CALL FindNextMatch WITH routedata, current segment, match.Edges
       IF nextmatch IS null
-        AND current match has no Final Function for this method
-        AND current match has edges
-        AND current match has no optional edges THEN
-
-          SET IncompleteMatch flag to true
+        AND current match has Final Functions but none match this method THEN
+          SET NoMatchingFinalFunction flag to true
           EXIT FUNCTION
       END IF
 
@@ -128,14 +120,16 @@ title:  Features
     END WHILE
 
     IF there are still remaining segments THEN SET ExtraneousMatch flag to true
-    IF oncomplete IS set CALL oncomplete WITH routedata
+    IF oncomplete IS set THEN
+      CALL oncomplete WITH routedata
+      SET FinalFunctionExecuted flag to true
+    END IF
   END FUNCTION
 
 
   FUNCTION FindNextMatch (routedata, string segment, list edges)    
     FOR EACH potential next match IN edges
-      IF the potential match allows the current http method
-        AND the potential match Activation Function returns true THEN
+      IF the potential match Activation Function returns true THEN
           SET match to potential match
       ELSE
           SET match to null
