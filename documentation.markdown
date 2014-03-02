@@ -11,7 +11,7 @@ title:  Documentation
     <ul class="nav nav-tabs nav-stacked col-md-4">
       <li class="active"> <a href="#fluentapi" data-toggle="tab">Fluent API<small>Define hierarchical and strongly typed routes with Superscribe</small><i class="icon-angle-right"></i></a> </li>
       <li> <a href="#simple" data-toggle="tab">Simple-syntax<small>Shorthands for defining routes that are concise and easy to maintain</small><i class="icon-angle-right"></i></a> </li>
-      <li> <a href="#modules" data-toggle="tab">Modules<small>Inspired by NancyFX, a great way to keep your definitions and your handlers together</small><i class="icon-angle-right"></i></a> </li>
+      <li> <a href="#webapimodules" data-toggle="tab">Web Api Modules<small>Inspired by NancyFX, a great way to keep your definitions and your handlers together</small><i class="icon-angle-right"></i></a> </li>
       <li> <a href="#webapi" data-toggle="tab">Superscribe.WebAPI<small>Specific syntax to help you match routes and then invoke controllers and actions</small><i class="icon-angle-right"></i></a> </li>
       <li> <a href="#owin" data-toggle="tab">Superscribe.OWIN<small>Branch your pipeline during routing and hand control to any OWIN middleware</small><i class="icon-angle-right"></i></a> </li>
     </ul>    
@@ -326,11 +326,13 @@ title:  Documentation
         </pre>
         <p>Note also how we're defining the re-usable component of our route definitions using the original <em>.Route</em> method as it allows us to define a route with no Final Functions or method modifiers.</p>
 	  </div>
-       <div class="tab-pane col-sm-12 col-md-12" id="modules">
-        <h3 class="visible-phone">Handling routes with Modules</h3>
-        <p>Asp.Net Web Api uses controllers and actions because it was originally derived from the MVC framework and although things have moved on since then, it still shares some of the same constructs. With Graph Based Routing we are free to break away from these restrictions and handle our routes using whatever classes we wish. A great example of this comes in the form of modules, inspired by the Ruby web framework Sinatra, and the .Net framework NancyFX</p>
+       <div class="tab-pane col-sm-12 col-md-12" id="webapimodules">
+        <h3 class="visible-phone">Handling routes with Modules in Asp.Net Web Api</h3>
+        <p>Asp.Net Web Api uses controllers and actions because it was originally derived from the MVC framework and although things have moved on since then, it still shares some of the same constructs. With Superscribe we are free to break away from these restrictions and handle our routes using whatever classes we wish.</p>
+        <p>Superscribe allows you to do this in the form of modules, a great web app construct inspired by the Ruby web framework Sinatra and the .Net framework NancyFX.</p>
         <h3 class="title visible-phone">Assembly Scanning</h3>
-        <p>When the module configuration is activated on app startup, Superscribe scans your assemblies for classes that derive from <em>SuperscribeModule</em> and then instantiates them in turn. All route handlers for modules are defined in the constructor, so this process results in all of our route definitions being added to the graph. Modules can be enabled in Superscribe.WebApi with the following config:</p>
+        <p>When the module configuration is activated on app startup, Superscribe scans your assemblies for classes that derive from <em>SuperscribeModule</em> and then instantiates them in turn. All route handlers for modules are defined in the constructor, so this process results in all of our route definitions being added to the graph.</p>
+        <p>Modules can be enabled in Superscribe.WebApi with the following config:</p>
         <pre class="prettyprint lang-cs">
 
     public static class WebApiConfig
@@ -353,36 +355,35 @@ title:  Documentation
     }
         </pre>
         <p>The primary difference when routing with modules compared to traditional Web API is that we don't get any of the action selection logic that maps requests to actions, so we have to be prescriptive about our http methods and every definition must be assigned a final function.</p>
-        <p>In addition to Get[], SuperscribeModule also exposes properties for Put, Post, Patch and Delete methods. Each one takes an indexer within which we can use a subset of the Superscribe DSL syntax. Note from the previous example, to use these indexers to attach routes to ʃ.Base we simply pass "/".</p>
+        <p>In addition to Get[], SuperscribeModule also exposes properties for Put, Post, Patch and Delete methods. Each one takes an indexer within which we can use the Superscribe simple-syntax. As you can see in this example, we are using the Get indexer to configure our app respond to the "/" route.</p>
         <h3 class="title visible-phone">Building the Route Graph</h3>
-        <p>One aspect of the DSL that is no longer appropriate when dealing with modules is the ability to specify multiple edges at once using the options syntax. Instead, we have to repeat the whole route for each handler:</p>
+        <p>Just like when we defined routes using the <em>.Route</em> family of methods, to build complex definitions we have to repeat parts of the route for some handlers:</p>
         <pre class="prettyprint lang-cs">
 
     public class HelloWorldModule : SuperscribeModule
     {
         public HelloWorldModule()
         {
-            this.Get[ʅ / "Hello" / "World"] = o => "Hello World!";
+            this.Get["Hello/World"] = o => "Hello World!";
 
-            this.Get[ʅ / "Hello" / (ʃString)"Name"] = o => "Hello " + o.Parameters.Name;
+            this.Get["Hello" / (ʃString)"Name"] = o => "Hello " + o.Parameters.Name;
         }
     }
         </pre>
         <p>Each call to this.Get, or any of the other method helpers ensures that the route graph is still constructed efficiently. Behind the scenes each route is 'Zipped' together (see the Fluent Api section) so that equivilent nodes will be merged. In the above example, we end up with a single "Hello" node with two edges.</p>
-        <p>Finally you'll notice we've also got access to the route glue ʅ as a property of SuperscribeModule which works in the usual way.</p>
         <div class="well well-mini pull-center">
-          <em>It is still possible to compose routes from parts within modules using the route glue, but doing so can go against the ethos of modules which is to make it easy to see what route a particualr handler serves.</em>
+          <em>It is still possible to compose routes from parts within modules, but doing so can go against the ethos of modules which is to make it easy to see what route a particualr handler serves, so use with caution.</em>
         </div>
         <h3 class="title visible-phone">Model Binding and Dependencies</h3>
-        <p>When we used the fluent api or DSL directly, we accessed parameters in our final function via the RouteData object and it's Parameters dictionary. We've still got that feature within our modules, but the RouteData object is now of type ModuleRouteData instead. This gives us more flexibility to do the things that controller/action selection would usually take care of</p>
-        <p>One of the most useful of these is model binding... taking data from the request body or querystring and mapping it to a strongly typed model. We're still working on top of Web Api behind the scenes so we can achieve the same result quite easily using the ModuleRouteData .Bind() function:</p>
+        <p>When we configured routes using the Fluent Api or the simple-syntax, we accessed parameters in our Final Function via the <em>RouteData</em> object and it's Parameters dictionary. We've still got that feature within our modules, and in fact the route data object contains a few helper methods that give us the ability to do things in Web Api that controller/action selection would usually take care of.</p>
+        <p>The first of these is model binding - taking data from the request body or querystring and mapping it to a strongly typed model. We're still working on top of Web Api behind the scenes so Superscribe provides the ability to invoke the standard model binder via the <em>.Bind</em> function:</p>
         <pre class="prettyprint lang-cs">
 
     public class ProductsModule : SuperscribeModule
     {
         public ProductsModule()
         {
-            this.Post[ʅ / "Produts"] = o => 
+            this.Post["Produts"] = o => 
             {
                 var model = o.Bind&lt;Product&gt;();               
                 // do something with product
@@ -390,14 +391,14 @@ title:  Documentation
         }
     }
         </pre>
-        <p>If we want to actually store our Product then we also need to access the database, and the best way to do that and keep things loosely coupled is to inject a dependency. For that we can use the .Require function which simply wraps up the standard Web Api DepedencyResolver:</p>
+        <p>Secondly, if we want to actually store our Product then we also need to access the database, and the best way to do that and keep things loosely coupled is to inject a dependency. For that we can use the <em>.Require</em> function which when used with Web Api modules is just a wrapper for the standard Web Api DepedencyResolver:</p>
          <pre class="prettyprint lang-cs">
 
     public class ProductsModule : SuperscribeModule
     {
         public ProductsModule()
         {
-            this.Post[ʅ / "Produts"] = o => 
+            this.Post["Produts"] = o => 
             {
                 var repository = o.Require&lt;IProductsRepository&gt;();
                 var model = o.Bind&lt;Product&gt;();
@@ -408,40 +409,42 @@ title:  Documentation
         }
     }
         </pre>
-        <p>Now we've got all the ingredients we need to build our app using modules... Web Api is still taking care of content negotiation for us and we can easily build in other aspects such as validation as needed. We can also take control over the response as we need to by returning HttpResponseMessage just as we would in a regular controller.</p>
+        <p>Now we've got all the ingredients we need to build our app using modules. Web Api is still taking care of content negotiation for us and we can easily build in other aspects such as validation as needed. We can also take control over the response as we need to by returning <em>HttpResponseMessage</em> just as we would in a regular controller.</p>
       </div>
       <div class="tab-pane col-sm-12 col-md-12" id="webapi">
         <h3 class="visible-phone">Replacing Asp.Net Web Api routing with Superscribe</h3>
-        <p>Ask most developers what could be improved about Asp.Net Web Api and they'll probably mention the routing. In recent months this has been improved considerably by the introduction of attribute routing in Web Api 2. But attribute routing isn't for everyone, some of us like to define all the routes for our application  one place.Superscribe.WebApi allows us to define routes using the Supersribe DSL along with a few Web Api specific nodes.</p>
+        <p>Ask most developers what could be improved about Asp.Net Web Api and they'll probably mention the routing. This has been improved considerably by the introduction of attribute routing in Web Api 2, but attribute routing isn't for everyone. Some like to define all the routes for an application in one place. Superscribe.WebApi allows us to define routes centrally using Supersribe simple-syntax and a few Web Api specific nodes.</p>
         <h3 class="title visible-phone">Controller Selection</h3>
-        <p>The following recreates the behavior of the default rouing you get when creating a new project:</p>
+        <p>The following route recreates the behavior of the default rouing you get when creating a new project:</p>
         <pre class="prettyprint lang-cs">
 
     public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
         {
-            SuperscribeConfig.Register(config);
+            var define = SuperscribeConfig.Register(config);
 
-            ʃ.Route(() => "api" / ʃ.Controller / -(ʃInt)"id");
+            ʃ.Route("api" / Any.Controller / (Int)"id");
         }
     }
         </pre>
         <p>
-            Here we've used a Web Api specific node, ʃ.Controller. This node will match any alpha numeric segment, and then set a parameter called ControllerName accordingly. Once route parsing has completed succesfully, Superscribe will pass this value and any parameters across to Asp.Net and then the process of selecting an action continues as per normal (You can view a <a href="http://www.asp.net/web-api/overview/web-api-routing-and-actions/routing-and-action-selection">summary of this logic here</a>)
+            Here we've used a Web Api specific node provided by a static constructor property called <em>Any.Controller</em>. This node will match any alpha numeric segment, and then add an entry to the RouteData environment dictionary accordingly. Once route parsing has completed succesfully, Superscribe will pass this value and any parameters across to Asp.Net and then the process of selecting an action continues as per normal (You can view a <a href="http://www.asp.net/web-api/overview/web-api-routing-and-actions/routing-and-action-selection">summary of this logic here</a>)
         </p>
-        <p>Web Api is still doing the bulk of the work, Superscribe is just passing it the information it needs; as a result we don't usually need to specify final functions against our nodes. We still can if we want to, but we don't have as much flexibility with the Response as we do when we use Modules.</p>
-        <p>Suppose our controller name doesn't match the format "&lt;segment&gt;Controller". In this case we can match a specific segment value and set the controller name ourselves:</p>
+        <p>Web Api is still doing the bulk of the work, Superscribe is just passing it the information it needs; as a result we don't usually need to specify a Final Function for our nodes. We can still do this if we want to, but we don't have as much flexibility with the Response as we do when responding to a route directly.</p>
+        <h3 class="title visible-phone">Custom Controller Mappings</h3>
+        <p>Suppose our controller name doesn't match the format "&lt;segment&gt;Controller". In this case we can match a specific segment value and set the controller name ourselves by providing it's actual name as a parameter to the <em>.Controller</em> shorthand:</p>
         <pre class="prettyprint lang-cs">
 
     public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
         {
-            SuperscribeConfig.Register(config);
+            var define = SuperscribeConfig.Register(config);
 
-            ʃ.Route(() => "api" / (
-                  "Blogs".Controller() / -(ʃInt)"id" / "Tags".Controller("BlogTags"));
+            define.Route("api" / "Blogs".Controller());
+            define.Route("api" / "Blogs".Controller() / (Int)"id");
+            define.Route("api" / "Blogs" / (Int)"id" / "Tags".Controller("BlogTags"));
         }
     }
 
@@ -449,34 +452,48 @@ title:  Documentation
     // /api/Blogs/123/
     // /api/Blogs/123/Tags
         </pre>
-        <p>By specifying "Blogs" to our first controller node, we change it's behavior from a regex match to a literal comparison. Superscribe will still use the segment value to set the ControllerName, but the matching will be much faster. If the engine then goes on to match the "Tags" node, then this will overwrite the ControllerName with "BlogTags" instead.</p>
+        <p>By using the <em>.Controller</em> shorthand syntax with "Blogs" as our first node, we change the behavior from a regex match to a literal comparison. Superscribe will still use the segment value to set the Controller name but the matching process in this case will be much faster.</p>
+        <p>By using <em>.Route</em> directly instead of <em>.Get</em> or <em>.Post</em> etc we ensure that the built in Action Selection logic in Web Api will be able to work correctly for any Http Method, although you can still use these to be more selective with matching if required.</p>
+        <p>The above example uses three seperate calls to <em>.Route</em>, for ease of understanding, however the same route graph can be constructed using a single line. You may not choose to use this approach in a line of business application, but it can be useful when hacking things together:</p>
+        <pre class="prettyprint lang-cs">
+
+    define.Route("api" / "Blogs".Controller() / (Int)"id" / "Tags".Controller("BlogTags"));
+        
+    // /api/Blogs/
+    // /api/Blogs/123/
+    // /api/Blogs/123/Tags
+        </pre>
+        <p>This works because the Web Api handler that Superscribe uses does not care which node route matching finishes on, so long as it has consumed all the route segments. It is up to Web Api itself to determine if the route maps to a valid controller/action based on the information given to it.</p>
+        <p>You'll also notice that the definition contains two instances of te <em>.Controller</em> shorthand. This is also not a problem as if the route matching process reaches the second "Tags" controller node, this will simply overwrite the Controller set by the previous node before it gets passed to Web Api.</p>
         <h3 class="title visible-phone">Action Selection</h3>
-        <p>ʃ.Controller has a partner in crime - ʃ.Action. This behaves in the same way as it's counterpart but instead it sets a parameter called ActionName. This allows us to be very specific about which action should handle our request in a similar way to you would in MVC.</p>
-        <p>Say we have a controller called products that only handles read only resources for a few categories. There aren't many of them and they're all bespoke, so we just want to hard code an action for each:</p>
+        <p><em>Any.Controller</em> has a partner in crime in the form of <em>Any.Action</em>. This behaves in the same way as it's counterpart but instead it adds an entry to the RouteData enivonment dictionary which tells Web Api explicitly which action to select.</p>
+        <p>In this example we have a controller called products that handles <strong>read only</strong> resources for a few categories. There aren't many of them and they're all bespoke so rather than having seperate controllers, we just want to hard code an action for each:</p>
         <pre class="prettyprint lang-cs">
 
     public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
         {
-            SuperscribeConfig.Register(config);
+            var define = SuperscribeConfig.Register(config);
 
-            ʃ.Route(() => "api" / "Products".Controller() / ʃ.Action() / -(ʃInt)"id");
+            define.Get("api" / "Products".Controller() / Any.Action() / (ʃInt)"id");
         }
     }
       </pre>
-      <p>This is a nice stopgap to get us up and running in this situation. Note we can also match literals and override the ActionName just as we did with ControllerName:</p>
+      <p>We can also match literals and choose an action in situations where the segment does not directly match the action name. This works in a similar way to the controllers example above, but with the key difference that the action name is set via a shorthand <strong>Final Function</strong>:</p>
       <pre class="prettyprint lang-cs">
 
     public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
         {
-            SuperscribeConfig.Register(config);
+            var define = SuperscribeConfig.Register(config);
 
-            ʃ.Route(ʅ => "api" / "Products".Controller() / (
-                  ʅ / -"BestSellers".Action("GetBestSellers") 
-                | ʅ / -"TopTen".Action("GetTopTen"));
+            define.Get("api" / "Products".Controller());
+            define.Get("api" / "Products".Controller() 
+                                / "BestSellers", To.Action("GetBestSellers"));
+            define.Get("api" / "Products".Controller() 
+                                / "TopTen", To.Action("GetTopTen"));
         }
     }
 
@@ -484,35 +501,35 @@ title:  Documentation
     // /api/Products/BestSellers
     // /api/Products/TopTen
       </pre>
-      <div class="well well-mini pull-center">
-          <em>Most of the time you shouldn't need to set the ActionName directly. However there are situations where Web Api is not able to figure out what action should handle our request and we use this approach to be more explicit and give it a helping hand.</em>
-      </div>
-      <h3 class="title visible-phone">Http Methods</h3>
-      <p>This is the area that provides most of the headache when using traditional Web Api routing. Although usually Web Api will select actions based on methods according to convention or attributes, generally things fall down when trying to cater for multiple actions that handle the same verb within a single controller. By making choices based on http methods in our routing pipeline, we can achieve a finer level of control and avoid these issues:</p>
+      <p><em>To.Action()</em> provides a ready made Final function that will set the action name explicitly. Using a Final Function in this way encourages readability of routes and prevents the developer from creating spaghetti like definitions that are hard to reason about.</p>
+      <h3 class="title visible-phone">Actions and Http Methods</h3>
+      <p>Most of the time you don't need to choose actions explicity, however there are some situations where Web Api is not able to figure things out for itself and Superscribe provides an easy way for us to give it a helping hand.</p>
+      <p>One example of this when using traditional Web Api routing is when trying to cater for multiple actions that handle the same verb within a single controller, particularly with multiple collection resources. If the method signatures of our actions contain the same parameters, then Web Api cannot tell them apart and will throw an ambiguous match exception.</p>
+      <p>By using the <em>.Route</em> family of methods to controll the Http Methods assocaited with the Final Functions that set our actions, we can achieve a much finer level of control while still keeping our route definitions terse and maintainable:</p>
       <pre class="prettyprint lang-cs">
 
     public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
         {
-            SuperscribeConfig.Register(config);
+            var define = SuperscribeConfig.Register(config);
 
-            ʃ.Route(ʅ => "api" / "Blog".Controller() / (
-                    | ʅ["GET"] / (
-                          ʅ / "Posts".Action("GetBlogPosts") / -(ʃInt)"id" 
-                        | ʅ / "Tags".Action("GetBlogTags") / -(ʃInt)"id")
-                    | ʅ["POST"] / (
-                          ʅ / "Posts".Action("PostBlogPost") / (ʃInt)"id" 
-                        | ʅ / "Tags".Action("PostBlogTag") / (ʃInt)"id")));
+            var blogs = define.Route("api" / "Blogs".Controller() / (Int)"blogid");
+
+            define.Get(blogs / "Posts", To.Action("GetBlogPosts"));
+            define.Get(blogs / "Tags", To.Action("GetBlogTags"));
+
+            define.Post(blogs / "Posts", To.Action("PostBlogPost"));
+            define.Post(blogs / "Tags", To.Action("PostBlogTag"));
         }
     }
 
-    // GET ->  /api/Blog/Posts
-    // GET ->  /api/Blog/Posts/12
-    // GET ->  /api/Blog/Tags
-    // GET ->  /api/Blog/Tags/34
-    // POST -> /api/Blog/Posts/56
-    // POST -> /api/Blog/Tags/78
+    // GET ->  /api/Blogs
+    // GET ->  /api/Blogs/1
+    // GET ->  /api/Blogs/1/Posts
+    // GET ->  /api/Blogs/1/Tags
+    // POST -> /api/Blogs/1/Posts
+    // POST -> /api/Blogs/1/Tags
         </pre>
       </div>
       <div class="tab-pane col-sm-12 col-md-12" id="owin">
