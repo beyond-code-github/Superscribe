@@ -98,7 +98,7 @@
                 {
                     this.RemainingSegments.Dequeue();
                 }
-                
+
                 if (onComplete != null)
                 {
                     if (onComplete.IsExclusive)
@@ -157,5 +157,7 @@
             return match.FinalFunctions.Count > 0
                    && !match.FinalFunctions.Any(o => string.IsNullOrEmpty(o.Method) || o.Method == this.Method);
         }
+
+
     }
 }

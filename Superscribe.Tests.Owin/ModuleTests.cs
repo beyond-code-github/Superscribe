@@ -19,6 +19,8 @@
         public Module()
         {
             this.Get["Hello"] = o => "Hello World";
+
+            this.Get["Hello/Another"] = o => "Hello Another";
         }
     }
 
@@ -68,6 +70,14 @@
 
         private It should_wire_up_get_handlers =
             () => responseMessage.Content.ReadAsStringAsync().Result.ShouldEqual("Hello World");
+    }
+
+    public class When_hitting_a_string_route : ModuleTests
+    {
+        private Because of = () => responseMessage = client.GetAsync("http://localhost/Hello/Another").Await();
+
+        private It should_wire_up_get_handlers =
+            () => responseMessage.Content.ReadAsStringAsync().Result.ShouldEqual("Hello Another");
     }
 
     public class When_hitting_a_route_that_is_incomplete: ModuleTests

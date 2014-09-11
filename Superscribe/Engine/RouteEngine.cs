@@ -8,15 +8,10 @@
     public class RouteEngine : IRouteEngine
     {
         private readonly GraphNode @base = new GraphNode();
-
-        protected readonly IStringRouteParser stringRouteParser;
-
-        protected readonly Func<GraphNode, IRouteWalker> routeWalkerFactory;
-
-        public RouteEngine(IStringRouteParser stringRouteParser, Func<GraphNode, IRouteWalker> routeWalkerFactory)
+        
+        public RouteEngine(SuperscribeOptions options)
         {
-            this.stringRouteParser = stringRouteParser;
-            this.routeWalkerFactory = routeWalkerFactory;
+            this.Config = options;
         }
 
         public GraphNode Base
@@ -27,14 +22,16 @@
             }
         }
 
+        public SuperscribeOptions Config { get; private set; }
+
         public IRouteWalker Walker()
         {
-            return routeWalkerFactory(this.Base);
+            return this.Config.RouteWalkerFactory(this.Base);
         }
 
         public GraphNode Route(string routeTemplate)
         {
-            var node = this.stringRouteParser.MapToGraph(routeTemplate);
+            var node = this.Config.StringRouteParser.MapToGraph(routeTemplate);
             if (node != null)
             {
                 this.Base.Zip(node.Base());
@@ -47,7 +44,7 @@
         public GraphNode Route(string config, Func<dynamic, object> func)
         {
             var finalNode = this.Base;
-            var node = this.stringRouteParser.MapToGraph(config);
+            var node = this.Config.StringRouteParser.MapToGraph(config);
 
             if (node != null)
             {
@@ -168,7 +165,7 @@
         private GraphNode MethodNode(string routeTemplate, Func<dynamic, object> func, string method)
         {
             var finalNode = this.Base;
-            var node = this.stringRouteParser.MapToGraph(routeTemplate);
+            var node = this.Config.StringRouteParser.MapToGraph(routeTemplate);
 
             if (node != null)
             {

@@ -5,6 +5,7 @@
 
     using Superscribe.Engine;
     using Superscribe.Models;
+    using Superscribe.Utils;
 
     public class MethodSet<T>
         where T: IModuleRouteData
@@ -13,6 +14,8 @@
 
         private IRouteEngine engine;
 
+        private IStringRouteParser parser;
+
         private readonly List<Func<GraphNode>> bindings = new List<Func<GraphNode>>();
 
         private readonly List<FinalFunction> baseFinals = new List<FinalFunction>();
@@ -20,6 +23,7 @@
         public void Initialise(IRouteEngine routeEngine)
         {
             this.engine = routeEngine;
+            this.parser = routeEngine.Config.StringRouteParser;
 
             foreach (var final in this.baseFinals)
             {
@@ -48,9 +52,13 @@
                 }
                 else
                 {
-                    var node = new ConstantNode(s);
-                    node.FinalFunctions.Add(new ExclusiveFinalFunction(this.method, f => value(f)));
-                    this.bindings.Add(() => node);
+                    this.bindings.Add(
+                        () =>
+                            {
+                                var node = parser.MapToGraph(s);
+                                node.FinalFunctions.Add(new ExclusiveFinalFunction(this.method, f => value(f)));
+                                return node;
+                            });
                 }
             }
         }

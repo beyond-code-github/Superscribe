@@ -4,7 +4,7 @@
     {
         public static IRouteEngine Create(SuperscribeOptions options)
         {
-            var engine = new RouteEngine(options.StringRouteParser, options.RouteWalkerFactory);
+            var engine = new RouteEngine(options);
             return engine;
         }
 

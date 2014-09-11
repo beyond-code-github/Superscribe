@@ -11,12 +11,12 @@
     public class OwinRouteEngine : RouteEngine, IOwinRouteEngine
     {
         public OwinRouteEngine(SuperscribeOwinOptions options)
-            : base(options.StringRouteParser, options.RouteWalkerFactory)
+            : base(options)
         {
             this.Config = options;
         }
         
-        public SuperscribeOwinOptions Config { get; private set; }
+        new public SuperscribeOwinOptions Config { get; private set; }
 
         public OwinNode Pipeline(Func<RouteGlue, GraphNode> config, Func<IAppBuilder, IAppBuilder> func, params object[] args)
         {
@@ -36,7 +36,7 @@
 
         public OwinNode Pipeline(string routeTemplate)
         {
-            var node = this.stringRouteParser.MapToGraph(routeTemplate);
+            var node = this.Config.StringRouteParser.MapToGraph(routeTemplate);
 
             if (node != null)
             {

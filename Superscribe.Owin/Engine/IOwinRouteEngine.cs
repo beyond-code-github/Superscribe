@@ -10,7 +10,7 @@
 
     public interface IOwinRouteEngine : IRouteEngine
     {
-        SuperscribeOwinOptions Config { get; }
+        new SuperscribeOwinOptions Config { get; }
 
         OwinNode Pipeline(Func<RouteGlue, GraphNode> config, Func<IAppBuilder, IAppBuilder> func, params object[] args);
 

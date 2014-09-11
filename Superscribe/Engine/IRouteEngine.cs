@@ -7,7 +7,9 @@
     public interface IRouteEngine
     {
         GraphNode Base { get; }
-        
+
+        SuperscribeOptions Config { get; }
+
         IRouteWalker Walker();
 
         GraphNode Route(string routeTemplate);
