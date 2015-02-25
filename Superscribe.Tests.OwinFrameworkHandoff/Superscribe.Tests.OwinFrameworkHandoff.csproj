@@ -124,10 +124,6 @@
       <Project>{D3C05E1D-4C04-4942-A14F-BE6C8D39A8EF}</Project>
       <Name>Superscribe.Owin</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Superscribe\Superscribe.csproj">
-      <Project>{0882D762-CA4D-48A5-956E-2121DECE000E}</Project>
-      <Name>Superscribe</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

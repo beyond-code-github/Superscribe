@@ -101,10 +101,6 @@
       <Project>{2295d548-7a8f-4ec0-8fab-2cac81763aad}</Project>
       <Name>Superscribe.WebAPI2</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Superscribe\Superscribe.csproj">
-      <Project>{0882d762-ca4d-48a5-956e-2121dece000e}</Project>
-      <Name>Superscribe</Name>
-    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

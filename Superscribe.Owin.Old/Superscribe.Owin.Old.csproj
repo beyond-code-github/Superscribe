@@ -43,31 +43,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
-    <Compile Include="Engine\IOwinRouteEngine.cs" />
-    <Compile Include="Engine\OwinRouteDataProvider.cs" />
-    <Compile Include="Engine\OwinRouteEngine.cs" />
-    <Compile Include="Engine\OwinRouteEngineFactory.cs" />
-    <Compile Include="Pipelining\Middleware.cs" />
-    <Compile Include="Components\RedirectMiddleware.cs" />
-    <Compile Include="Extensions\EnvironmentExtensions.cs" />
-    <Compile Include="Components\OwinHandler.cs" />
-    <Compile Include="Components\OwinRouter.cs" />
-    <Compile Include="Extensions\ConnegHelpers.cs" />
-    <Compile Include="MediaTypeHandler.cs" />
-    <Compile Include="OwinRouteData.cs" />
-    <Compile Include="Pipelining\OwinNode.cs" />
-    <Compile Include="Pipelining\OwinNodeFuture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Extensions\StartupExtensions.cs" />
-    <Compile Include="SuperscribeOwinOptions.cs" />
-    <Compile Include="SuperscribeOwinModule.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Superscribe\Superscribe.csproj">
-      <Project>{0882D762-CA4D-48A5-956E-2121DECE000E}</Project>
-      <Name>Superscribe</Name>
-    </ProjectReference>
+    <Compile Include="StartupExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

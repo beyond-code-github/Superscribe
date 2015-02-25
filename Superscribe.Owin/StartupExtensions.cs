@@ -1,23 +1,21 @@
-﻿namespace Superscribe.Owin.Extensions
+﻿using System;
+using System.Linq;
+using Microsoft.AspNet.Builder;
+using Superscribe.Components;
+using Superscribe.Engine;
+
+namespace Superscribe.Owin
 {
-    using System;
-    using System.Linq;
-
-    using global::Owin;
-
-    using Superscribe.Owin.Components;
-    using Superscribe.Owin.Engine;
-
     public static class StartupExtensions
     {
-        public static IAppBuilder UseSuperscribeRouter(
-            this IAppBuilder builder, IOwinRouteEngine engine)
+        public static IApplicationBuilder UseSuperscribeRouter(
+            this IApplicationBuilder builder, IOwinRouteEngine engine)
         {
             return SuperscribeRouter(builder, engine);
         }
 
-        public static IAppBuilder UseSuperscribeHandler(
-            this IAppBuilder builder, IOwinRouteEngine engine)
+        public static IApplicationBuilder UseSuperscribeHandler(
+            this IApplicationBuilder builder, IOwinRouteEngine engine)
         {
             if (engine.Config.ScanForModules)
             {
@@ -36,7 +34,7 @@
             return builder.Use(typeof(OwinHandler), engine);
         }
 
-        private static IAppBuilder SuperscribeRouter(IAppBuilder builder, IOwinRouteEngine engine)
+        private static IApplicationBuilder SuperscribeRouter(IApplicationBuilder builder, IOwinRouteEngine engine)
         {
             return builder.Use(typeof(OwinRouter), builder, engine);
         }

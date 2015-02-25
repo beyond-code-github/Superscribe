@@ -73,10 +73,6 @@
       <Project>{2295D548-7A8F-4EC0-8FAB-2CAC81763AAD}</Project>
       <Name>Superscribe.WebAPI2</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Superscribe\Superscribe.csproj">
-      <Project>{0882D762-CA4D-48A5-956E-2121DECE000E}</Project>
-      <Name>Superscribe</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
