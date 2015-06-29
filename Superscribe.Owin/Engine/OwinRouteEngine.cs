@@ -15,8 +15,8 @@
         {
             this.Config = options;
         }
-        
-        new public SuperscribeOwinOptions Config { get; private set; }
+
+        public new SuperscribeOwinOptions Config { get; private set; }
 
         public OwinNode Pipeline(Func<RouteGlue, GraphNode> config, Func<IAppBuilder, IAppBuilder> func, params object[] args)
         {

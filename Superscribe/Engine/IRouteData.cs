@@ -4,10 +4,6 @@
 
     public interface IRouteData
     {
-        string Method { get; set; }
-
-        string Url { get; set; }
-
         dynamic Parameters { get; set; }
 
         IDictionary<string, object> Environment { get; set; }

@@ -26,12 +26,37 @@
 
         public async Task Invoke(IDictionary<string, object> environment)
         {
+            var headers = (IDictionary<string, string[]>)environment["owin.RequestHeaders"];
+            
             var path = environment["owin.RequestPath"].ToString();
             var method = environment["owin.RequestMethod"].ToString();
-            
-            var routeData = new OwinRouteData { Environment = environment, Config = engine.Config };
+
+            string[] accepts;
+            string[] contentType;
+            headers.TryGetValue("accepts", out accepts);
+            headers.TryGetValue("content-type", out contentType);
+
+            var parts = path.Split('?');
+            if (parts.Length > 0)
+            {
+                path = parts[0];
+            }
+
+            var querystring = string.Empty;
+            if (parts.Length > 1)
+            {
+                querystring = parts[1];
+            }
+
+            environment[Constants.RequestPathEnvironmentKey] = path;
+            environment[Constants.RequestQuerystringEnvironmentKey] = querystring;
+            environment[Constants.RequestMethodEnvironmentKey] = method;
+            environment[Constants.AcceptsEnvironmentKey] = accepts;
+            environment[Constants.ContentTypeEnvironmentKey] = contentType;
+
+            var routeData = new OwinRouteData { Environment = environment, Config = this.engine.Config };
             var walker = this.engine.Walker();
-            var data = walker.WalkRoute(path, method, routeData);
+            var data = walker.WalkRoute(environment, routeData);
 
             environment["superscribe.RouteData"] = data;
             environment["route.Parameters"] = routeData.Parameters;
@@ -40,7 +65,7 @@
 
             if (routeData.Pipeline.Any())
             {
-                IAppBuilder branch = this.builder.New();
+                var branch = this.builder.New();
                 foreach (var middleware in routeData.Pipeline)
                 {
                     var func = middleware.Obj as Func<IAppBuilder, IAppBuilder>;

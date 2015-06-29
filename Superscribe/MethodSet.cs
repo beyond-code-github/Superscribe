@@ -5,36 +5,21 @@
 
     using Superscribe.Engine;
     using Superscribe.Models;
+    using Superscribe.Models.Filters;
     using Superscribe.Utils;
 
     public class MethodSet<T>
-        where T: IModuleRouteData
+        where T : IModuleRouteData
     {
+        private readonly List<Func<GraphNode>> bindings = new List<Func<GraphNode>>();
+
+        private readonly List<FinalFunction> baseFinals = new List<FinalFunction>();
+
         private readonly string method;
 
         private IRouteEngine engine;
 
         private IStringRouteParser parser;
-
-        private readonly List<Func<GraphNode>> bindings = new List<Func<GraphNode>>();
-
-        private readonly List<FinalFunction> baseFinals = new List<FinalFunction>();
-
-        public void Initialise(IRouteEngine routeEngine)
-        {
-            this.engine = routeEngine;
-            this.parser = routeEngine.Config.StringRouteParser;
-
-            foreach (var final in this.baseFinals)
-            {
-                engine.Base.FinalFunctions.Add(final);
-            }
-
-            foreach (var binding in bindings)
-            {
-                this.ApplyBinding(binding);    
-            }
-        }
 
         public MethodSet(string method)
         {
@@ -47,7 +32,7 @@
             {
                 if (s == "/")
                 {
-                    this.baseFinals.Add(new ExclusiveFinalFunction(this.method, f => value(f)));
+                    this.baseFinals.Add(new ExclusiveFinalFunction(f => value(f), new MethodFilter(this.method)));
                     
                 }
                 else
@@ -55,8 +40,8 @@
                     this.bindings.Add(
                         () =>
                             {
-                                var node = parser.MapToGraph(s);
-                                node.FinalFunctions.Add(new ExclusiveFinalFunction(this.method, f => value(f)));
+                                var node = this.parser.MapToGraph(s);
+                                node.FinalFunctions.Add(new ExclusiveFinalFunction(f => value(f), new MethodFilter(this.method)));
                                 return node;
                             });
                 }
@@ -69,6 +54,22 @@
             {
                 s = s * (f => value(f));
                 this.bindings.Add(() => s.Base());
+            }
+        }
+
+        public void Initialise(IRouteEngine routeEngine)
+        {
+            this.engine = routeEngine;
+            this.parser = routeEngine.Config.StringRouteParser;
+
+            foreach (var final in this.baseFinals)
+            {
+                this.engine.Base.FinalFunctions.Add(final);
+            }
+
+            foreach (var binding in this.bindings)
+            {
+                this.ApplyBinding(binding);    
             }
         }
 

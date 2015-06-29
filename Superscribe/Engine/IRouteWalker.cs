@@ -6,12 +6,8 @@ namespace Superscribe.Engine
     {
         bool ParamConversionError { get; }
 
-        string Route { get; set; }
-
-        string Method { get; set; }
-
         Queue<string> RemainingSegments { get; }
-        
-        RouteData WalkRoute(string route, string method, RouteData info);
+
+        RouteData WalkRoute(IDictionary<string, object> environment, RouteData info);
     }
 }

@@ -2,6 +2,7 @@
 {
     using System;
 
+    using Superscribe.Models.Filters;
     using Superscribe.Utils;
 
     public class RouteGlue
@@ -16,6 +17,14 @@
         }
 
         public string Method { get; set; }
+
+        public RouteGlue this[string method]
+        {
+            get
+            {
+                return new RouteGlue(method);
+            }
+        }
 
         public static GraphNode operator /(RouteGlue state, string other)
         {
@@ -41,16 +50,8 @@
 
         public static FinalFunction operator *(RouteGlue state, Func<dynamic, object> other)
         {
-            var function = new FinalFunction { Method = state.Method, Function = other };
+            var function = new FinalFunction(other, new MethodFilter(state.Method));
             return function;
-        }
-
-        public RouteGlue this[string method]
-        {
-            get
-            {
-                return new RouteGlue(method);
-            }
         }
     }
 }

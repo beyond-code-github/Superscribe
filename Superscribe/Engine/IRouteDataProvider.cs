@@ -1,9 +1,10 @@
 ﻿namespace Superscribe.Engine
 {
     using System;
+    using System.Collections.Generic;
 
     public interface IRouteDataProvider
     {
-        IRouteData GetData(string url, string method, Func<RouteData> factory);
+        IRouteData GetData(IDictionary<string, object> environment, Func<RouteData> factory);
     }
 }

@@ -4,8 +4,9 @@
     using System.Web.Http.Dependencies;
 
     using Superscribe.Engine;
-    using Superscribe.Owin;
     using Superscribe.WebApi.Dependencies;
+
+    using Constants = Superscribe.Constants;
 
     public static class RequestExtensions
     {

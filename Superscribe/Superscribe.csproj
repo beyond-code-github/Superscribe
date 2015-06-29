@@ -36,6 +36,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="Models\Filters\DomainModelFilter.cs" />
+    <Compile Include="Models\Filters\Filter.cs" />
+    <Compile Include="Models\Filters\MethodFilter.cs" />
+    <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="When.cs" />
     <Compile Include="Cache\CacheEntry.cs" />
     <Compile Include="Cache\RouteCache.cs" />
     <Compile Include="Cache\UselessCache.cs" />

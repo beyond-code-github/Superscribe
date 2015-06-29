@@ -2,6 +2,10 @@
 namespace Superscribe.Models
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Superscribe.Models.Filters;
 
     public class ExclusiveFinalFunction : FinalFunction
     {
@@ -9,8 +13,8 @@ namespace Superscribe.Models
         {
         }
 
-        public ExclusiveFinalFunction(string method, Func<dynamic, object> func)
-            : base(method, func)
+        public ExclusiveFinalFunction(Func<dynamic, object> func, params Filter[] filters)
+            : base(func, filters)
         {
         }
 
@@ -25,17 +29,15 @@ namespace Superscribe.Models
 
     public class FinalFunction
     {
-        public class ExecuteAndContinue
-        {
-        }
-
         public FinalFunction()
         {
+            this.Filters = new List<Filter>();
         }
 
-        public FinalFunction(string method, Func<dynamic, object> func)
+        public FinalFunction(Func<dynamic, object> func, params Filter[] filters)
         {
-            this.Method = method;
+            this.Filters = new List<Filter>();
+            this.Filters.AddRange(filters);
             this.Function = func;
         }
 
@@ -47,10 +49,10 @@ namespace Superscribe.Models
             }
         }
 
-        public string Method { get; set; }
+        public List<Filter> Filters { get; set; }
 
         public Func<dynamic, object> Function { get; set; }
-        
+
         public static FinalFunctionList operator |(FinalFunction function, FinalFunction other)
         {
             return new FinalFunctionList { function, other };
@@ -60,6 +62,15 @@ namespace Superscribe.Models
         {
             functions.Add(other);
             return functions;
+        }
+
+        public bool MatchesFilter(IDictionary<string, object> environment)
+        {
+            return this.Filters.All(o => o.IsMatch(environment));
+        }
+
+        public class ExecuteAndContinue
+        {
         }
     }
 }

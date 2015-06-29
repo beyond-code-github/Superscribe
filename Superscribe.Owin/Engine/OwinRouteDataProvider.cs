@@ -1,6 +1,7 @@
 ﻿namespace Superscribe.Owin.Engine
 {
     using System;
+    using System.Collections.Generic;
 
     using Superscribe.Engine;
 
@@ -13,7 +14,7 @@
             this.data = data;
         }
 
-        public IRouteData GetData(string uri, string method, Func<RouteData> factory)
+        public IRouteData GetData(IDictionary<string, object> environment, Func<RouteData> factory)
         {
             return this.data;
         }

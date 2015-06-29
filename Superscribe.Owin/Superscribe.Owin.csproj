@@ -43,7 +43,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
     <Compile Include="Engine\IOwinRouteEngine.cs" />
     <Compile Include="Engine\OwinRouteDataProvider.cs" />
     <Compile Include="Engine\OwinRouteEngine.cs" />

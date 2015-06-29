@@ -244,7 +244,7 @@
         private Establish context = () => 
         {
             subject.Get(r => r / "Api" / "Product", GetProduct);
-            subject.Post(r => r / "Api" /  "Product", UpdateProduct);
+            subject.Post(r => r / "Api" / "Product", UpdateProduct);
         };
 
         private Because of = () =>

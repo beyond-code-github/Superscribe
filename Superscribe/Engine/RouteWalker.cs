@@ -21,20 +21,40 @@
 
         public bool ParamConversionError { get; private set; }
 
-        public string Route { get; set; }
-
-        public string Method { get; set; }
+        public IDictionary<string, object> Environment { get; set; }
 
         public Queue<string> RemainingSegments { get; private set; }
 
-        public RouteData WalkRoute(string route, string method, RouteData info)
+        private string Route
         {
-            string querystring = null;
-            this.Method = info.Method = method;
-            this.Route = info.Url = route;
+            get
+            {
+                return this.Environment[Constants.RequestPathEnvironmentKey].ToString();
+            }
+        }
+
+        private string Querystring
+        {
+            get
+            {
+                return this.Environment[Constants.RequestQuerystringEnvironmentKey].ToString();
+            }
+        }
+
+        private string Method
+        {
+            get
+            {
+                return this.Environment[Constants.RequestMethodEnvironmentKey].ToString();
+            }
+        }
+
+        public RouteData WalkRoute(IDictionary<string, object> environment, RouteData info)
+        {
+            this.Environment = environment;
 
             CacheEntry<RouteData> cacheEntry;
-            if (routeCache.TryGet(method + "-" + route, out cacheEntry))
+            if (this.routeCache.TryGet(this.Method + "-" + this.Route, out cacheEntry))
             {
                 info = cacheEntry.Info;
                 info.Response = cacheEntry.OnComplete(info);
@@ -43,21 +63,10 @@
 
                 return info;
             }
-
-            var parts = route.Split('?');
-            if (parts.Length > 0)
+            
+            if (!string.IsNullOrEmpty(this.Querystring))
             {
-                route = parts[0];
-            }
-
-            if (parts.Length > 1)
-            {
-                querystring = parts[1];
-            }
-
-            if (!string.IsNullOrEmpty(querystring))
-            {
-                var queries = querystring.Split('&');
+                var queries = this.Querystring.Split('&');
                 foreach (var query in queries)
                 {
                     if (query.Contains("="))
@@ -68,7 +77,7 @@
                 }
             }
 
-            this.RemainingSegments = new Queue<string>(route.Split('/'));
+            this.RemainingSegments = new Queue<string>(this.Route.Split('/'));
             this.WalkRoute(info, this.baseNode);
 
             return info;
@@ -109,9 +118,7 @@
 
                 if (match.FinalFunctions.Count > 0)
                 {
-                    var function = match.FinalFunctions.FirstOrDefault(o => o.Method == this.Method)
-                                   ?? match.FinalFunctions.FirstOrDefault(o => string.IsNullOrEmpty(o.Method));
-
+                    var function = match.FinalFunctions.FirstOrDefault(o => o.MatchesFilter(this.Environment));
                     if (function != null)
                     {
                         onComplete = function;
@@ -139,7 +146,7 @@
 
             if (onComplete != null)
             {
-                routeCache.Store(this.Method + "-" + this.Route, new CacheEntry<RouteData> { Info = info, OnComplete = onComplete.Function });
+                this.routeCache.Store(this.Method + "-" + this.Route, new CacheEntry<RouteData> { Info = info, OnComplete = onComplete.Function });
                 info.Response = onComplete.Function(info);
                 info.FinalFunctionExecuted = true;
             }
@@ -155,9 +162,7 @@
         private bool HasFinalsButNoneMatchTheCurrentMethod(GraphNode match)
         {
             return match.FinalFunctions.Count > 0
-                   && !match.FinalFunctions.Any(o => string.IsNullOrEmpty(o.Method) || o.Method == this.Method);
+                   && !match.FinalFunctions.Any(o => o.MatchesFilter(this.Environment));
         }
-
-
     }
 }

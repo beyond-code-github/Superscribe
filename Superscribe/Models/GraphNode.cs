@@ -114,7 +114,7 @@
                     
                     foreach (var final in nextNode.FinalFunctions)
                     {
-                        if (existingNode.FinalFunctions.All(o => o.Method != final.Method))
+                        if (!existingNode.FinalFunctions.Contains(final))
                         {
                             existingNode.FinalFunctions.Add(final);
                         }
@@ -356,6 +356,5 @@
         }
 
         #endregion
-
     }
 }
