@@ -25,7 +25,9 @@
 
             var modules = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
                            from type in assembly.GetTypes()
-                           where typeof(SuperscribeModule).IsAssignableFrom(type) && type != typeof(SuperscribeModule)
+                           where !type.IsAbstract
+                           && typeof(SuperscribeModule).IsAssignableFrom(type)
+                           && type != typeof(SuperscribeModule)
                            select new { Type = type }).ToList();
 
             foreach (var module in modules)
